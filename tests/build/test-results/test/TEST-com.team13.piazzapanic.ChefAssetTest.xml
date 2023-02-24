@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.team13.piazzapanic.ChefAssetTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-02-24T13:25:50" hostname="ADI" time="0.006">
+  <properties/>
+  <testcase name="testChefIdentifierAssetExists" classname="com.team13.piazzapanic.ChefAssetTest" time="0.006"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
