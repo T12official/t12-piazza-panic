@@ -109,4 +109,11 @@ public abstract class Ingredient extends Sprite {
             return 0;
         }
     }
+
+    public boolean equals(Object obj) {
+        if (obj.getClass().equals(this.getClass())){
+            return ((Ingredient) obj).cookTime == this.cookTime && ((Ingredient) obj).prepareTime == this.prepareTime;
+        }
+        return false;
+    }
 }
