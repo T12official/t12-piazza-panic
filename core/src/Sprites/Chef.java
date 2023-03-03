@@ -578,6 +578,14 @@ public class Chef extends Sprite {
             }
         }
     }
+
+    public float getNotificationY() {
+        return notificationY;
+    }
+
+    public float getNotificationX() {
+        return notificationX;
+    }
 }
 
 
