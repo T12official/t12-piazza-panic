@@ -7,27 +7,28 @@ import Recipe.Order;
 import Tools.B2WorldCreator;
 import Tools.WorldContactListener;
 
-import com.badlogic.gdx.Game;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-import com.team13.piazzapanic.GameOver;
 
 /**
  * The PlayScreen class is responsible for displaying the game to the user and handling the user's interactions.
@@ -53,7 +54,7 @@ public class PlayScreen implements Screen {
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
     private final HUD hud;
-    private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);;
+    private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);
     private float orderTime = 1;
     private boolean isActiveOrder = false;
     private GameOver gameover;
@@ -114,6 +115,8 @@ public class PlayScreen implements Screen {
 
         chef1 = new Chef(this.world, 31.5F,65);
         chef2 = new Chef(this.world, 128,65);
+
+
         controlledChef = chef1;
         world.setContactListener(new WorldContactListener());
         controlledChef.notificationSetBounds("Down");
@@ -281,7 +284,7 @@ public class PlayScreen implements Screen {
                                 break;
                             case "Sprites.CompletedDishStation":
                                 if (controlledChef.getInHandsRecipe() != null){
-                                    if(controlledChef.getInHandsRecipe().getClass().equals(ordersArray.get(0).recipe.getClass())){
+                                    if(controlledChef.getInHandsRecipe() == ordersArray.get(0).recipe){
                                         //TODO UPDATE CHANGE LOG FOR THIS
                                         if (orderTime == 0){
                                             hud.decrementReps();
@@ -374,7 +377,7 @@ public class PlayScreen implements Screen {
 
      @param delta The time in seconds since the last frame.
      */
-    public void setTAimer(){
+    public void setTimer(){
 
         idleGametimer = TimeUtils.millis();
 
@@ -411,6 +414,8 @@ public class PlayScreen implements Screen {
 
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+        Gdx.input.setInputProcessor(hud.stage);
+        hud.stage.addActor(getButton("Shop"));
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
 
@@ -424,8 +429,6 @@ public class PlayScreen implements Screen {
             hud.stage.addActor(orderTimer);
             if (orderTime > 0){ orderTime -= 0.01f;}
             else {orderTime = 0;}
-
-
 
             orderTimer.setPercentage(orderTime);
         }
@@ -459,6 +462,45 @@ public class PlayScreen implements Screen {
             chef2.displayIngDynamic(game.batch);
         }
         game.batch.end();
+    }
+
+    /**
+
+     This returns a button with application listener.
+
+     When button is pressed it will call the function specified in the clicked function
+
+     @param message The message you want to display on the button
+     */
+    private Actor getButton(String message) {
+        Skin skin = new Skin();
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        skin.add("white", new Texture(pixmap));
+
+        skin.add("default", new BitmapFont());
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
+
+        TextButton button = new TextButton(message, skin);
+        button.setScale((float) 0.6);
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+                System.out.println("Clicked! Is checked: ");
+                game.goToGameOver();
+            }
+        });
+        return button;
+
+
     }
 
     @Override

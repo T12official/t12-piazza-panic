@@ -18,4 +18,9 @@ public class SaladRecipe extends Recipe {
         ingredients.add(new Onion(0,0));
         completedImg = new Texture("Food/Salad.png");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((Recipe) obj).getClass().equals(this.getClass());
+    }
 }

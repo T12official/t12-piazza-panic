@@ -23,4 +23,9 @@ public class BurgerRecipe extends Recipe{
         ingredients.add(new Steak(0,0));
         completedImg = new Texture("Food/Burger.png");
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((Recipe) obj).getClass().equals(this.getClass());
+    }
 }

@@ -71,12 +71,12 @@ public class MainGame extends Game {
 			setScreen(startScreen);
 		}
 
-	if (isGameOver){
-		setScreen(gameover);
-	}
-	if (goToIdle){
-		setScreen(idleGame);
-	}
+		if (isGameOver){
+			setScreen(gameover);
+		}
+		if (goToIdle){
+			setScreen(idleGame);
+		}
 
 	}
 
@@ -95,6 +95,6 @@ public class MainGame extends Game {
 	}
 	public void disableIdle(){
 		goToIdle = false;
-		playScreen.setTAimer();
+		playScreen.setTimer();
 	}
 }
