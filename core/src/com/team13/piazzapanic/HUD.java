@@ -1,6 +1,6 @@
 package com.team13.piazzapanic;
 
-import com.badlogic.gdx.Gdx;
+import Tools.Overlay;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -14,12 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
+import java.awt.*;
 
 
 public class HUD implements Disposable {
@@ -55,11 +55,17 @@ public class HUD implements Disposable {
         timeStr = String.format("%d", worldTimerM) + " : " + String.format("%d", worldTimerS);
         float fontX = 0.5F;
         float fontY = 0.3F;
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        //textButtonStyle.font = Font.ITALIC;
+        textButtonStyle.fontColor = Color.WHITE;
+
 
         BitmapFont font = new BitmapFont();
         font.getData().setScale(fontX, fontY);
         Viewport viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
+
+
 
         table = new Table();
         table.left().top();
@@ -88,6 +94,8 @@ public class HUD implements Disposable {
 
         table.left().top();
         stage.addActor(table);
+
+        //stage.addActor(new TextButton("Custom Btn ", textButtonStyle));
     }
 
     /**
