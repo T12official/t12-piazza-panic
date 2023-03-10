@@ -13,11 +13,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(GdxTestRunner.class)
 public class StationTests {
     public World world = new World(new Vector2(0, 0), true);
     public TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
     public TiledMap map = mapLoader.load("Kitchen.tmx");
+    public Chef chef = new Chef (world, 0, 0);
     @Test
     public void checkBunsStationHasIngredient() {
         BunsStation bunsStation = new BunsStation(world, map, new BodyDef(), new Rectangle());

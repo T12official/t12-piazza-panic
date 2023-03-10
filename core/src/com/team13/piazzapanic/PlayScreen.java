@@ -16,10 +16,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -60,6 +58,7 @@ public class PlayScreen implements Screen {
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
     public final HUD hud;
+    private final TextButton button;
     private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);;
     private float orderTime = 1;
     private boolean isActiveOrder = false;
@@ -117,7 +116,7 @@ public class PlayScreen implements Screen {
         map = mapLoader.load("Kitchen.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
         gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
-
+        button = (TextButton) getButton("shop");
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
 
@@ -223,18 +222,6 @@ public class PlayScreen implements Screen {
 
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
-            kitchenEdit.readFile();
-            kitchenEdit.editCVSFile(2,8, "6");
-                TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
-            AssetManager manager = new AssetManager();
-            TmxMapLoader loader = new TmxMapLoader(); manager.setLoader(TiledMap.class, loader); manager.load("assets/mytexture.png", TiledMap.class);
-
-            map = mapLoader.load("assets/KitchenTemp.tmx");
-
-
-
-            renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
-            gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
             idleGametimer = TimeUtils.millis();
                 if(controlledChef.getTouchingTile() != null){
                     InteractiveTileObject tile = (InteractiveTileObject) controlledChef.getTouchingTile().getUserData();
@@ -411,12 +398,6 @@ public class PlayScreen implements Screen {
 
 
     public void render(float delta){
-
-
-
-
-
-
         update(delta);
 
         if (TimeUtils.timeSinceMillis(idleGametimer) > 20000){
@@ -445,7 +426,7 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         Gdx.input.setInputProcessor(hud.stage);
-        hud.stage.addActor(getButton("Shop"));
+        hud.stage.addActor(button);
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
 
@@ -502,7 +483,7 @@ public class PlayScreen implements Screen {
 
      @param message The message you want to display on the button
      */
-    private Actor getButton(String message) {
+    private TextButton getButton(String message) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
