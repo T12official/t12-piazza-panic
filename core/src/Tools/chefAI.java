@@ -44,7 +44,7 @@ public class chefAI {
     public String pickMovementDirection(){
         int[] myData = convertPosToXY(game.chef1.getNotificationX(), game.chef1.getNotificationY());
         if (myData[0] == targetx && myData[1] == targetY || myData[0] == 0){
-            System.out.println("i arrived at my target node");
+            //System.out.println("i arrived at my target node");
             targetx = targetsPoints[targetVal][1];
             targetY = targetsPoints[targetVal][0];
             targetVal ++;
@@ -55,7 +55,7 @@ public class chefAI {
         List<String> targets = defineShortestPath(myData[1], myData[0], targetx, targetY);
         int tarX = Integer.parseInt( targets.get(targets.size() - 1).split(",")[1]);
         int tarY = Integer.parseInt( targets.get(targets.size() - 1).split(",")[0]);
-        System.out.println(String.format("my target was %d %d :::: %d %d ", tarX, tarY, myData[0], myData[1]));
+        //System.out.println(String.format("my target was %d %d :::: %d %d ", tarX, tarY, myData[0], myData[1]));
         if (tarX < myData[0]){return "a";}
         if (tarX > myData[0]){return "d";}
         if (tarY > myData[1]){return "s";}
@@ -66,7 +66,7 @@ public class chefAI {
 
     public String returnKeyboardInput() {
         //System.out.println(String.format("chef x: %f chef y: %f ",game.chef1.getX(), game.chef1.getX() )); ;
-        System.out.println(String.format("chef x: %f chef y: %f ",game.chef1.getNotificationX(), game.chef1.getNotificationY() ));
+       // System.out.println(String.format("chef x: %f chef y: %f ",game.chef1.getNotificationX(), game.chef1.getNotificationY() ));
         convertPosToXY(game.chef1.getNotificationX(), game.chef1.getNotificationY());
         //System.out.println("\n\n" + game.map.getLayers().get(0).getObjects(). + "\n\n");
         return pickMovementDirection();

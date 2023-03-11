@@ -60,8 +60,8 @@ public class StartScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
         backgroundSprite.draw(game.batch);
-        orderBar a  = new  orderBar(30,30,50,5, Color.RED);
-        a.draw(game.batch, 1);
+        //orderBar a  = new  orderBar(30,30,50,5, Color.RED);
+        //a.draw(game.batch, 1);
         game.batch.end();
     }
 

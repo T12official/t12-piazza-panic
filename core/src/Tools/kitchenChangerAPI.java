@@ -32,10 +32,10 @@ public class kitchenChangerAPI {
                 fileContent += "\n";
 
             }
-            System.out.println(fileContent);
+            //System.out.println(fileContent);
         }
         catch (Exception err){
-            System.out.println(err.getMessage());
+            //System.out.println(err.getMessage());
         }
     }
 
@@ -57,9 +57,10 @@ public class kitchenChangerAPI {
                         sb.append(lined[i] + ",");
                     }
 
-
+                    System.out.println(sb.toString() + "apples");
                     newData += sb.toString();
                     newData += "\n";
+                    System.out.println(newData + "apples");
                     line++;
 
 
@@ -77,7 +78,7 @@ public class kitchenChangerAPI {
 
         }
         catch (Exception err){
-            System.out.println(err.getMessage());
+            //System.out.println(err.getMessage());
         }
 
         handle.writeString(newData, false);

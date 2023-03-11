@@ -33,6 +33,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 
 /**
  * The PlayScreen class is responsible for displaying the game to the user and handling the user's interactions.
@@ -59,6 +60,9 @@ public class PlayScreen implements Screen {
     private final Viewport gameport;
     public final HUD hud;
     private final TextButton button;
+    private final TextButton button2;
+    private final TextButton buttonPans;
+
     private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);;
     private float orderTime = 1;
     private boolean isActiveOrder = false;
@@ -87,6 +91,9 @@ public class PlayScreen implements Screen {
     private float timeSeconds = 0f;
 
     private float timeSecondsCount = 0f;
+    private boolean activateShop = false;
+    private int addictionPanCount = 0;
+    private int additionChopCount = 0;
 
     /**
      * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
@@ -98,6 +105,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(MainGame game){
         kitchenEdit = new kitchenChangerAPI();
+        kitchenEdit.readFile();
         idleGametimer = TimeUtils.millis();
         this.game = game;
         gameover = new GameOver(game);
@@ -117,6 +125,8 @@ public class PlayScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
         gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
         button = (TextButton) getButton("shop");
+        button2 = (TextButton) getButton("chop");
+        buttonPans = (TextButton) getButton("pan");
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
 
@@ -426,7 +436,20 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         Gdx.input.setInputProcessor(hud.stage);
+
         hud.stage.addActor(button);
+        if (activateShop){
+            button2.setX(50);
+            hud.stage.addActor(button2);
+            buttonPans.setX(50);
+            buttonPans.setY(20);
+            hud.stage.addActor(buttonPans);
+        }
+        else {
+            buttonPans.remove();
+            button2.remove();
+        }
+
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
 
@@ -483,7 +506,7 @@ public class PlayScreen implements Screen {
 
      @param message The message you want to display on the button
      */
-    private TextButton getButton(String message) {
+    private TextButton getButton(final String message) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -505,13 +528,41 @@ public class PlayScreen implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
+
+                switch(message){
+                    case "shop":
+                        System.out.println("shopping");
+                        activateShop = !activateShop;
+                        break;
+                    case "chop":
+                        System.out.println("buying chopping baords");
+                        kitchenEdit.editCVSFile(2, 4, "2");
+                        //additionChopCount++;
+                        reRender();
+
+                        break;
+                    case "pan":
+                        System.out.println("buying pans");
+                        kitchenEdit.editCVSFile(9, 5, "9");
+                        //addictionPanCount++;
+                        reRender();
+                        break;
+                }
+
                 System.out.println("Clicked! Is checked: ");
-                game.goToGameOver();
+                //game.goToGameOver();
             }
         });
         return button;
 
 
+    }
+
+    private void reRender(){
+        TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
+        map = mapLoader.load("KitchenTemp.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
+        //gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
     }
 
     @Override
