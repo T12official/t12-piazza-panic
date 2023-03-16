@@ -12,8 +12,8 @@ public class Lettuce extends Ingredient{
      * The Lettuce class sets up an ArrayList of textures for its different skins.
      */
 
-    public Lettuce(float prepareTime, float cookTime) {
-        super(prepareTime, cookTime);
+    public Lettuce(float prepareTime, float cookTime, float burnTime) {
+        super(prepareTime, cookTime, burnTime);
         super.tex = new ArrayList<>();
         super.tex.add(new Texture("Food/Lettuce.png"));
         super.tex.add(new Texture("Food/Chopped_lettuce.png"));

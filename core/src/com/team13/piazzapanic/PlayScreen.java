@@ -33,7 +33,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Function;
+
 
 /**
  * The PlayScreen class is responsible for displaying the game to the user and handling the user's interactions.
@@ -73,6 +73,7 @@ public class PlayScreen implements Screen {
     private final World world;
     private final Chef chef1;
     private final Chef chef2;
+    private final Chef chef3;
     private long idleGametimer;
     private Chef controlledChef;
     private kitchenChangerAPI kitchenEdit;
@@ -132,7 +133,7 @@ public class PlayScreen implements Screen {
 
         chef1 = new Chef(this.world, 31.5F,65);
         chef2 = new Chef(this.world, 128,65);
-
+        chef3 = new Chef(this.world, 128, 88);
 
         controlledChef = chef1;
         world.setContactListener(new WorldContactListener());
@@ -177,10 +178,29 @@ public class PlayScreen implements Screen {
                 idleGametimer = TimeUtils.millis();
                 controlledChef.b2body.setLinearVelocity(0, 0);
                 controlledChef = chef2;
-            } else {
+                if (chef2.isCooking){
+                    chef2.isCooking = false;
+                    chef2.setChefSkin(chef2.getInHandsIng());
+                }
+            }
+            else if (controlledChef.equals(chef2)){
+                idleGametimer = TimeUtils.millis();
+                controlledChef.b2body.setLinearVelocity(0, 0);
+                controlledChef = chef3;
+                if (chef3.isCooking){
+                    chef3.isCooking = false;
+                    chef3.setChefSkin(chef3.getInHandsIng());
+                }
+
+            }
+            else {
                 idleGametimer = TimeUtils.millis();
                 controlledChef.b2body.setLinearVelocity(0, 0);
                 controlledChef = chef1;
+                if (chef1.isCooking){
+                    chef1.isCooking = false;
+                    chef1.setChefSkin(chef1.getInHandsIng());
+                }
             }
         }
         if (!controlledChef.getUserControlChef()){
@@ -295,6 +315,7 @@ public class PlayScreen implements Screen {
                                 if(controlledChef.getInHandsIng() != null) {
                                     if (controlledChef.getInHandsIng().isPrepared() && controlledChef.getInHandsIng().cookTime > 0){
                                         controlledChef.setUserControlChef(false);
+                                        controlledChef.isCooking = true;
                                     }
                                 }
 
@@ -339,6 +360,7 @@ public class PlayScreen implements Screen {
         renderer.setView(gamecam);
         chef1.update(dt);
         chef2.update(dt);
+        chef3.update(dt);
         world.step(1/60f, 6, 2);
 
     }
@@ -456,6 +478,7 @@ public class PlayScreen implements Screen {
         updateOrder();
         chef1.draw(game.batch);
         chef2.draw(game.batch);
+        chef3.draw(game.batch);
         controlledChef.drawNotification(game.batch);
         if (isActiveOrder){
             // TODO add this if statement to if report
@@ -475,14 +498,14 @@ public class PlayScreen implements Screen {
             Recipe recipeNew = plateStation.getCompletedRecipe();
             recipeNew.create(plateStation.getX(), plateStation.getY(), game.batch);
         }
-        if (!chef1.getUserControlChef()) {
+        if (!chef1.getUserControlChef() || chef1.isCooking) {
             if (chef1.getTouchingTile() != null && chef1.getInHandsIng() != null){
                 if (chef1.getTouchingTile().getUserData() instanceof InteractiveTileObject){
                     chef1.displayIngStatic(game.batch);
                 }
             }
         }
-        if (!chef2.getUserControlChef()) {
+        if (!chef2.getUserControlChef() || chef1.isCooking) {
             if (chef2.getTouchingTile() != null && chef2.getInHandsIng() != null) {
                 if (chef2.getTouchingTile().getUserData() instanceof InteractiveTileObject) {
                     chef2.displayIngStatic(game.batch);

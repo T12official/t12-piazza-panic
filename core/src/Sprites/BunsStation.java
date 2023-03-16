@@ -33,7 +33,7 @@ public class BunsStation extends InteractiveTileObject {
      * @return A new Bun object.
      */
     public Ingredient getIngredient() {
-        return new Bun(0, 3);
+        return new Bun(0, 3, 8);
     }
 }
 

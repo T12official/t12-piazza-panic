@@ -25,34 +25,34 @@ public class StationTests {
     public void checkBunsStationHasIngredient() {
         BunsStation bunsStation = new BunsStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if BunStation has Bun ingredient",
-                bunsStation.getIngredient(), new Bun(0, 3));
+                bunsStation.getIngredient(), new Bun(0, 3, 8));
     }
 
     @Test
     public void checkLettuceStationHasIngredient() {
         LettuceStation tile = new LettuceStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if LettuceStation has Lettuce ingredient",
-                tile.getIngredient(), new Lettuce(2, 0));
+                tile.getIngredient(), new Lettuce(2, 0, 0));
     }
 
     @Test
     public  void checkOnionStationHasIngredient(){
         OnionStation tile = new OnionStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if OnionStation has Onion ingredient",
-                tile.getIngredient(), new Onion(2,0));
+                tile.getIngredient(), new Onion(2,0, 0));
     }
 
     @Test
     public void checkSteakStationHasIngredient(){
         SteakStation tile = new SteakStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if SteakStation has Steak ingredient",
-                tile.getIngredient(), new Steak(2,3));
+                tile.getIngredient(), new Steak(2,3, 8));
     }
 
     @Test
     public void checkTomatoStationHasIngredient(){
         TomatoStation tile = new TomatoStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if TomatoStation has Tomato ingredient",
-                tile.getIngredient(), new Tomato(2,0));
+                tile.getIngredient(), new Tomato(2,0, 0));
     }
 }

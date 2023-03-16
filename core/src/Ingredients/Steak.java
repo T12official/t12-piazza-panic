@@ -12,11 +12,12 @@ public class Steak extends Ingredient{
      * The Steak class sets up an ArrayList of textures for its different skins.
      */
 
-    public Steak(float prepareTime, float cookTime) {
-        super(prepareTime, cookTime);
+    public Steak(float prepareTime, float cookTime,float burnTime) {
+        super(prepareTime, cookTime, burnTime);
         super.tex = new ArrayList<>();
         super.tex.add(new Texture("Food/Meat.png"));
         super.tex.add(new Texture("Food/Patty.png"));
         super.tex.add(new Texture("Food/Cooked_patty.png"));
+        super.tex.add(new Texture("Food/burned_patty.png"));
     }
 }

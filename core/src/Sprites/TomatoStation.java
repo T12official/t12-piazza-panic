@@ -21,7 +21,7 @@ public class TomatoStation extends InteractiveTileObject {
     }
 
     public Ingredient getIngredient(){
-        return new Tomato(2,0);
+        return new Tomato(2,0, 0);
     }
 }
 

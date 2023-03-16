@@ -31,9 +31,9 @@ public class RecipeTests {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
         CompletedDishStation completedDishStation = new CompletedDishStation(world, map, new BodyDef(), new Rectangle());
         Chef chef = new Chef(world, 0, 0);
-        Onion onion = new Onion(0, 0);
-        Tomato tomato = new Tomato(0, 0);
-        Lettuce lettuce = new Lettuce(0, 0);
+        Onion onion = new Onion(0, 0,0);
+        Tomato tomato = new Tomato(0, 0,0);
+        Lettuce lettuce = new Lettuce(0, 0,0);
 
         onion.setPrepared();
         tomato.setPrepared();
@@ -55,8 +55,8 @@ public class RecipeTests {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
         CompletedDishStation completedDishStation = new CompletedDishStation(world, map, new BodyDef(), new Rectangle());
         Chef chef = new Chef(world, 0, 0);
-        Steak steak = new Steak(0, 0);
-        Bun bun = new Bun(0, 0);
+        Steak steak = new Steak(0, 0, 0);
+        Bun bun = new Bun(0, 0, 0);
         steak.setPrepared();
         steak.setCooked();
         bun.setCooked();

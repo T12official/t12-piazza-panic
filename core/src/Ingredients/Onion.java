@@ -12,8 +12,8 @@ public class Onion extends Ingredient{
      * The Onion class sets up an ArrayList of textures for its different skins.
      */
 
-    public Onion(float prepareTime, float cookTime) {
-        super(prepareTime, cookTime);
+    public Onion(float prepareTime, float cookTime, float burnTime) {
+        super(prepareTime, cookTime, burnTime);
         super.tex = new ArrayList<>();
         super.tex.add(new Texture("Food/Onion.png"));
         super.tex.add(new Texture("Food/Chopped_onion.png"));

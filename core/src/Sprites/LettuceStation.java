@@ -31,7 +31,7 @@ public class LettuceStation extends InteractiveTileObject {
      * @return a Lettuce object
      */
     public Ingredient getIngredient(){
-        return (new Lettuce(2,0));
+        return (new Lettuce(2,0, 0));
     }
 }
 

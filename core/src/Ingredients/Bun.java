@@ -14,8 +14,8 @@ public class Bun extends Ingredient{
 
      */
 
-    public Bun(float prepareTime, float cookTime) {
-        super(prepareTime, cookTime);
+    public Bun(float prepareTime, float cookTime, float burnTime) {
+        super(prepareTime, cookTime, burnTime);
         super.setPrepared();
         super.tex = new ArrayList<>();
         super.tex.add(null);

@@ -74,6 +74,7 @@ public class Chef extends Sprite {
     private float notificationHeight;
 
     private CompletedDishStation completedStation;
+    public boolean isCooking = false;
 
     public int nextOrderAppearTime;
     public Recipe previousInHandRecipe;
@@ -201,14 +202,23 @@ public class Chef extends Sprite {
                 waitTimer = 0;
                 setChefSkin(inHandsIng);
             }
-        } else if (!userControlChef && !chefOnChefCollision && getInHandsIng().isPrepared() && inHandsIng.cookTime > 0) {
+        } else if (isCooking && !chefOnChefCollision && getInHandsIng().isPrepared() && (inHandsIng.cookTime > 0 || inHandsIng.getBurnTime() > 0)) {
             waitTimer += dt;
-            if (waitTimer > inHandsIng.cookTime) {
+            if (!userControlChef && waitTimer > inHandsIng.cookTime) {
                 inHandsIng.cookTime = 0;
                 inHandsIng.setCooked();
                 userControlChef = true;
+                //waitTimer = 0;
+
+            }
+            if (waitTimer > inHandsIng.getBurnTime()){
                 waitTimer = 0;
-                setChefSkin(inHandsIng);
+                userControlChef = true;
+                inHandsIng.setBurned();
+                isCooking = false;
+                this.setInHandsRecipe(null);
+                this.setInHandsIng(null);
+                this.setChefSkin(null);
             }
         }
     }

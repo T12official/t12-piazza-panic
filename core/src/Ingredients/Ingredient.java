@@ -8,6 +8,9 @@ import com.team13.piazzapanic.MainGame;
 import java.util.ArrayList;
 
 public abstract class Ingredient extends Sprite {
+
+    private float burnTime;
+
     /**
      * The time required to prepare the ingredient.
      */
@@ -28,19 +31,21 @@ public abstract class Ingredient extends Sprite {
      * An array of textures representing different states of the ingredient.
      */
     public ArrayList<Texture> tex;
-
+    public boolean isBurned;
     /**
      * Constructs a new Ingredient object with the specified preparation and cooking times.
      *
      * @param prepareTime The time required to prepare the ingredient.
      * @param cookTime The time required to cook the ingredient.
      */
-    public Ingredient(float prepareTime, float cookTime) {
+    public Ingredient(float prepareTime, float cookTime, float burnTime) {
+        this.burnTime = burnTime;
         this.prepareTime = prepareTime;
         this.cookTime = cookTime;
         this.amICooked = false;
         this.amIPrepared = false;
         this.tex = null;
+        this.isBurned = false;
     }
 
     /**
@@ -67,6 +72,13 @@ public abstract class Ingredient extends Sprite {
     public void setCooked() {
         amICooked= true;
     }
+
+
+    public void setBurned(){isBurned = true; }
+
+    public boolean isBurned(){return isBurned;}
+
+    public float getBurnTime(){return burnTime;}
 
     /**
      * Returns the value of the flag indicating whether the ingredient has been cooked.
@@ -101,6 +113,10 @@ public abstract class Ingredient extends Sprite {
      *
      * */
     private int findCorrectSkin(){
+        if(isBurned()){
+            return 3;
+        }
+
         if (isPrepared() && isCooked()){
             return 2;
         } else if (isPrepared()){
@@ -112,7 +128,7 @@ public abstract class Ingredient extends Sprite {
 
     public boolean equals(Object obj) {
         if (obj.getClass().equals(this.getClass())){
-            return ((Ingredient) obj).cookTime == this.cookTime && ((Ingredient) obj).prepareTime == this.prepareTime;
+            return ((Ingredient) obj).cookTime == this.cookTime && ((Ingredient) obj).prepareTime == this.prepareTime && this.isBurned == ((Ingredient) obj).isBurned ;
         }
         return false;
     }
