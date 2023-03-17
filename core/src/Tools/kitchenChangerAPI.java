@@ -8,14 +8,14 @@ import java.io.InputStreamReader;
 
 public class kitchenChangerAPI {
     private String filePath = "assets/kitchenTemp.tmx";
+    private String trueFilePath = "assets/Kitchen.tmx";
     private FileHandle handle;
     private String fileContent;
     private int cvsStart = 0;
     private boolean incCVS = true;
     public kitchenChangerAPI(){
         handle = Gdx.files.local(filePath);
-        FileHandle handle2 = Gdx.files.internal("assets/Kitchen.tmx");
-        handle.writeString(handle2.readString(), false);
+        handle.writeString(trueFilePath, false);
         fileContent = "";
     }
     public void readFile(){
