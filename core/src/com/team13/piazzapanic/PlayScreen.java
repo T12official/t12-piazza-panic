@@ -426,11 +426,6 @@ public class PlayScreen implements Screen {
 
      @param delta The time in seconds since the last frame.
      */
-    public void setTimer(){
-
-        resetIdleTimer();
-
-    }
 
     @Override
 

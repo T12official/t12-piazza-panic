@@ -116,6 +116,6 @@ public class MainGame extends Game {
 	}
 	public void disableIdle(){
 		goToIdle = false;
-		playScreen.setTimer();
+		playScreen.resetIdleTimer();
 	}
 }
