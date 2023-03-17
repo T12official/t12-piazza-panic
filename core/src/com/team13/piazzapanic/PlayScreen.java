@@ -547,7 +547,6 @@ public class PlayScreen implements Screen {
         skin.add("default", textButtonStyle);
 
         TextButton button = new TextButton(message, skin);
-        button.setScale((float) 0.6);
 
         button.addListener(new ClickListener() {
             @Override
