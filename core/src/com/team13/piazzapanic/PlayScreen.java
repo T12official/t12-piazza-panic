@@ -104,10 +104,11 @@ public class PlayScreen implements Screen {
      * @param game The MainGame instance that the PlayScreen will be a part of.
      */
 
+
     public PlayScreen(MainGame game){
         kitchenEdit = new kitchenChangerAPI();
         kitchenEdit.readFile();
-        idleGametimer = TimeUtils.millis();
+        resetIdleTimer();
         this.game = game;
         gameover = new GameOver(game);
 
@@ -143,6 +144,10 @@ public class PlayScreen implements Screen {
 
     }
 
+    public void resetIdleTimer(){
+        idleGametimer = TimeUtils.millis();
+    }
+
     @Override
     public void show(){
 
@@ -175,7 +180,7 @@ public class PlayScreen implements Screen {
                 chef1.getUserControlChef() &&
                 chef2.getUserControlChef())) {
             if (controlledChef.equals(chef1)) {
-                idleGametimer = TimeUtils.millis();
+                resetIdleTimer();
                 controlledChef.b2body.setLinearVelocity(0, 0);
                 controlledChef = chef2;
                 if (chef2.isCooking){
@@ -184,7 +189,7 @@ public class PlayScreen implements Screen {
                 }
             }
             else if (controlledChef.equals(chef2)){
-                idleGametimer = TimeUtils.millis();
+                resetIdleTimer();
                 controlledChef.b2body.setLinearVelocity(0, 0);
                 controlledChef = chef3;
                 if (chef3.isCooking){
@@ -194,7 +199,7 @@ public class PlayScreen implements Screen {
 
             }
             else {
-                idleGametimer = TimeUtils.millis();
+                resetIdleTimer();
                 controlledChef.b2body.setLinearVelocity(0, 0);
                 controlledChef = chef1;
                 if (chef1.isCooking){
@@ -217,19 +222,19 @@ public class PlayScreen implements Screen {
                 float yVelocity = 0;
 
                 if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                    idleGametimer = TimeUtils.millis();
+                    resetIdleTimer();
                     yVelocity += 0.5f;
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                    idleGametimer = TimeUtils.millis();
+                    resetIdleTimer();
                     xVelocity -= 0.5f;
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                    idleGametimer = TimeUtils.millis();
+                    resetIdleTimer();
                     yVelocity -= 0.5f;
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    idleGametimer = TimeUtils.millis();
+                    resetIdleTimer();
                     xVelocity += 0.5f;
                 }
                 controlledChef.b2body.setLinearVelocity(xVelocity, yVelocity);
@@ -252,7 +257,7 @@ public class PlayScreen implements Screen {
 
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
-            idleGametimer = TimeUtils.millis();
+            resetIdleTimer();
                 if(controlledChef.getTouchingTile() != null){
                     InteractiveTileObject tile = (InteractiveTileObject) controlledChef.getTouchingTile().getUserData();
                     String tileName = tile.getClass().getName();
@@ -344,6 +349,7 @@ public class PlayScreen implements Screen {
             }
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             System.out.println("do stuff!!!!!!!!!!!!!!!");
+            resetIdleTimer();
             //Some stuff
         }
         }
@@ -422,7 +428,7 @@ public class PlayScreen implements Screen {
      */
     public void setTimer(){
 
-        idleGametimer = TimeUtils.millis();
+        resetIdleTimer();
 
     }
 
