@@ -3,6 +3,7 @@ package Sprites;
 import Ingredients.*;
 import Recipe.BurgerRecipe;
 import Recipe.Recipe;
+import Recipe.*;
 import Recipe.SaladRecipe;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,7 +28,7 @@ import java.util.Objects;
 public class Chef extends Sprite {
     public World world;
     public Body b2body;
-
+    public double cookingSpeedModifier = 1;
     private final float initialX;
     private final float initialY;
 
@@ -44,13 +45,18 @@ public class Chef extends Sprite {
     private final Texture lettuceChef;
     private final Texture onionChef;
     private final Texture tomatoChef;
+    private final Texture cheeseChef;
+    private final Texture spudsChef;
     private final Texture choppedLettuceChef;
     private final Texture choppedOnionChef;
     private final Texture choppedTomatoChef;
     private final Texture pattyChef;
     private final Texture completedBurgerChef;
     private final Texture meatChef;
+    private final Texture rawDoughChef;
     private Texture saladChef;
+    private final Texture newDough;
+    private final Texture doneDough;
 
     public enum State {UP, DOWN, LEFT, RIGHT}
 
@@ -91,6 +97,8 @@ public class Chef extends Sprite {
         initialY = startY / MainGame.PPM;
 
         normalChef = new Texture("Chef/Chef_normal.png");
+        doneDough = new Texture("Chef/Chef_holding_doughCooked.png");
+        rawDoughChef = new Texture("Chef/Chef_holding_dough.png");
         bunsChef = new Texture("Chef/Chef_holding_buns.png");
         bunsToastedChef = new Texture("Chef/Chef_holding_buns_toasted.png");
         burgerChef = new Texture("Chef/Chef_holding_burger.png");
@@ -105,6 +113,9 @@ public class Chef extends Sprite {
         meatChef = new Texture("Chef/Chef_holding_meat.png");
         saladChef = new Texture("Chef/Chef_holding_salad.png");
         saladChef = new Texture("Chef/Chef_holding_salad.png");
+        spudsChef = new Texture("Chef/Chef_holding_potato.png");
+        cheeseChef = new Texture("Chef/Chef_holding_cheese.png");
+        newDough = new Texture("Chef/Chef_holding_rawdough.png");
 
 
         skinNeeded = normalChef;
@@ -204,6 +215,7 @@ public class Chef extends Sprite {
             }
         } else if (isCooking && !chefOnChefCollision && getInHandsIng().isPrepared() && (inHandsIng.cookTime > 0 || inHandsIng.getBurnTime() > 0)) {
             waitTimer += dt;
+            System.out.println("cooking supds");
             if (!userControlChef && waitTimer > inHandsIng.cookTime) {
                 inHandsIng.cookTime = 0;
                 inHandsIng.setCooked();
@@ -400,6 +412,29 @@ public class Chef extends Sprite {
             skinNeeded = completedBurgerChef;
         } else if (item instanceof SaladRecipe) {
             skinNeeded = saladChef;
+        }
+        else if (item instanceof pizzaRecipy){
+            skinNeeded = saladChef;
+        }
+        else if (item instanceof jacketPotato){
+            skinNeeded = saladChef;
+        }
+        else if (item instanceof Potatoes){
+            skinNeeded = spudsChef;
+        }
+        else if (item instanceof Cheese){
+            skinNeeded = cheeseChef;
+            System.out.println("apples");
+        }
+        else if (item instanceof pizzaDough){
+            if (inHandsIng.isPrepared() && inHandsIng.isCooked()) {
+                skinNeeded = doneDough;
+            } else if (inHandsIng.isPrepared()) {
+                skinNeeded = rawDoughChef;
+            } else {
+                skinNeeded = newDough;
+            }
+
         }
     }
 

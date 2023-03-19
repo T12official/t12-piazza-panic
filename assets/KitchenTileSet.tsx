@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.9" tiledversion="1.9.2" name="KitchenTileSet" tilewidth="16" tileheight="16" tilecount="21" columns="3">
- <image source="TileSet.png" width="48" height="112"/>
+<tileset version="1.9" tiledversion="1.9.2" name="KitchenTileSet" tilewidth="16" tileheight="16" tilecount="24" columns="3">
+ <image source="../finalTileSet/cheeseTileSet.png" width="48" height="128"/>
  <tile id="0">
   <objectgroup draworder="index" id="2">
    <object id="1" name="worktop" x="1.19555" y="1.11015" width="13.6634" height="14.005"/>
@@ -91,4 +91,19 @@
    <object id="1" name="order_bottom" x="1.19555" y="1.19555" width="13.578" height="13.7488"/>
   </objectgroup>
  </tile>
+ <tile id="21">
+   <objectgroup draworder="index" id="2">
+    <object id="1" name="cheese" x="1.19555" y="1.11015" width="13.6634" height="14.005"/>
+   </objectgroup>
+  </tile>
+  <tile id="22">
+     <objectgroup draworder="index" id="2">
+      <object id="1" name="potato" x="1.19555" y="1.11015" width="13.6634" height="14.005"/>
+     </objectgroup>
+    </tile>
+    <tile id="23">
+         <objectgroup draworder="index" id="2">
+          <object id="1" name="pizzaDough" x="1.19555" y="1.11015" width="13.6634" height="14.005"/>
+         </objectgroup>
+        </tile>
 </tileset>

@@ -91,6 +91,16 @@ public class B2WorldCreator {
                     PlayScreen.trayX = rectangle.x;
                     PlayScreen.trayY = rectangle.y;
                 }
+                else if (mapObject.getName().equals("cheese")){
+                    new potatoesStation(world, map, bdef, rectangle);
+                }
+                else if (mapObject.getName().equals("potato")){
+                    new cheeseStation(world, map, bdef, rectangle);
+                }
+                else if (mapObject.getName().equals("pizzaDough")){
+                    new pizzaDoughStation(world, map, bdef, rectangle);
+                }
+
 
             }
         }

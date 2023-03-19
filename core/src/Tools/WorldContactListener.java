@@ -3,6 +3,7 @@ package Tools;
 import Sprites.Chef;
 import Sprites.InteractiveTileObject;
 import com.badlogic.gdx.physics.box2d.*;
+import powerUps.cookingSpeedBoost;
 
 /**
  * WorldContactListener class is an implementation of the ContactListener interface.
@@ -39,6 +40,18 @@ public class WorldContactListener implements ContactListener {
             else if(objectFixt.getUserData() != null && objectFixt.getUserData() instanceof InteractiveTileObject){
                 // set the InteractiveTileObject for the Chef
                 ((Chef) chefFixt.getUserData()).setTouchingTile(objectFixt);
+            }
+        }
+
+        if (fixA.getUserData() instanceof Chef && fixB.getUserData() instanceof cookingSpeedBoost || (fixB.getUserData() instanceof Chef && fixA.getUserData() instanceof cookingSpeedBoost)){
+            System.out.println("contact between chef and cookingSpeedBoost");
+            if (fixA.getUserData() instanceof Chef){
+                cookingSpeedBoost a = (cookingSpeedBoost) fixB.getUserData();
+                a.onContractCreated();
+            }
+            else {
+                cookingSpeedBoost a = (cookingSpeedBoost) fixA.getUserData();
+                a.onContractCreated();
             }
         }
     }

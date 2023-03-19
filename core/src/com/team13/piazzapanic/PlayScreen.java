@@ -18,6 +18,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -31,6 +32,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import powerUps.cookingSpeedBoost;
+
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -95,6 +98,7 @@ public class PlayScreen implements Screen {
     private boolean activateShop = false;
     private int addictionPanCount = 0;
     private int additionChopCount = 0;
+    public cookingSpeedBoost powerUp;
 
     /**
      * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
@@ -107,6 +111,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(MainGame game){
         kitchenEdit = new kitchenChangerAPI();
+
         kitchenEdit.readFile();
         resetIdleTimer();
         this.game = game;
@@ -131,7 +136,7 @@ public class PlayScreen implements Screen {
         buttonPans = (TextButton) getButton("pan");
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
-
+        powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 128,65);
         chef1 = new Chef(this.world, 31.5F,65);
         chef2 = new Chef(this.world, 128,65);
         chef3 = new Chef(this.world, 128, 88);
@@ -261,6 +266,7 @@ public class PlayScreen implements Screen {
                 if(controlledChef.getTouchingTile() != null){
                     InteractiveTileObject tile = (InteractiveTileObject) controlledChef.getTouchingTile().getUserData();
                     String tileName = tile.getClass().getName();
+                    System.out.println(tileName + " apples aaa");
                     if (controlledChef.getInHandsIng() == null && controlledChef.getInHandsRecipe() == null) {
                         switch (tileName) {
                             case "Sprites.TomatoStation":
@@ -288,6 +294,23 @@ public class PlayScreen implements Screen {
                                 controlledChef.setInHandsIng(lettuceTile.getIngredient());
                                 controlledChef.setChefSkin(controlledChef.getInHandsIng());
                                 break;
+                            case "Sprites.potatoesStation":
+                                System.out.println("giving myself a spud");
+                                potatoesStation pots = (potatoesStation) tile;
+                                controlledChef.setInHandsIng(pots.getIngredient());
+                                controlledChef.setChefSkin(controlledChef.getInHandsIng());
+                                break;
+                            case "Sprites.cheeseStation":
+                                System.out.println("giving myself cheese");
+                                cheeseStation cheese = (cheeseStation) tile;
+                                controlledChef.setInHandsIng(cheese.getIngredient());
+                                controlledChef.setChefSkin(controlledChef.getInHandsIng());
+                                break;
+                            case "Sprites.pizzaDoughStation":
+                                System.out.println("giving myself pizza");
+                                pizzaDoughStation dough = (pizzaDoughStation) tile;
+                                controlledChef.setInHandsIng(dough.getIngredient());
+                                controlledChef.setChefSkin(controlledChef.getInHandsIng());
                             case "Sprites.PlateStation":
                                 if(plateStation.getPlate().size() > 0 || plateStation.getCompletedRecipe() != null){
                                     controlledChef.pickUpItemFrom(tile);
@@ -298,6 +321,7 @@ public class PlayScreen implements Screen {
                     } else {
                         switch (tileName) {
                             case "Sprites.Bin":
+                                System.out.println("giving myself a spud");
                                 controlledChef.setInHandsRecipe(null);
                                 controlledChef.setInHandsIng(null);
                                 controlledChef.setChefSkin(null);
@@ -326,6 +350,7 @@ public class PlayScreen implements Screen {
 
                                 break;
                             case "Sprites.CompletedDishStation":
+
                                 if (controlledChef.getInHandsRecipe() != null){
                                     if(controlledChef.getInHandsRecipe() == ordersArray.get(0).recipe){
                                         //TODO UPDATE CHANGE LOG FOR THIS
@@ -342,6 +367,7 @@ public class PlayScreen implements Screen {
                                     }
                                 }
                                 break;
+
                         }
                     }
 
@@ -367,6 +393,7 @@ public class PlayScreen implements Screen {
         chef1.update(dt);
         chef2.update(dt);
         chef3.update(dt);
+        powerUp.update(dt);
         world.step(1/60f, 6, 2);
 
     }
@@ -476,10 +503,16 @@ public class PlayScreen implements Screen {
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
 
+
         updateOrder();
+        powerUp.render(game.batch);
         chef1.draw(game.batch);
         chef2.draw(game.batch);
         chef3.draw(game.batch);
+        //System.out.println(chef1.getX());
+       // System.out.println(chef1.getY());
+
+
         controlledChef.drawNotification(game.batch);
         if (isActiveOrder){
             // TODO add this if statement to if report
@@ -561,14 +594,14 @@ public class PlayScreen implements Screen {
                         System.out.println("buying chopping baords");
                         kitchenEdit.editCVSFile(2, 4, "2");
                         //additionChopCount++;
-                        reRender();
+                        //reRender();
 
                         break;
                     case "pan":
                         System.out.println("buying pans");
                         kitchenEdit.editCVSFile(9, 5, "9");
                         //addictionPanCount++;
-                        reRender();
+                        //reRender();
                         break;
                 }
 
