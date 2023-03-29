@@ -1,6 +1,7 @@
 package com.team13.piazzapanic;
 
 import Tools.Overlay;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -11,9 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -45,6 +48,7 @@ public class HUD implements Disposable {
     Label orderNumLT;
 
     Label reputation;
+    public BitmapFont font;
     Label reputationT;
 
     public HUD(SpriteBatch sb){
@@ -60,7 +64,7 @@ public class HUD implements Disposable {
         textButtonStyle.fontColor = Color.WHITE;
 
 
-        BitmapFont font = new BitmapFont();
+        font = new BitmapFont();
         font.getData().setScale(fontX, fontY);
         Viewport viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
@@ -94,6 +98,8 @@ public class HUD implements Disposable {
 
         table.left().top();
         stage.addActor(table);
+
+        //labelStyle.font = new BitmapFont(); // replace with your desired font
 
         //stage.addActor(new TextButton("Custom Btn ", textButtonStyle));
     }
@@ -211,8 +217,104 @@ public class HUD implements Disposable {
         return repPoints;
     }
 
+
+
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public Integer getWorldTimerM() {
+        return worldTimerM;
+    }
+
+    public Integer getWorldTimerS() {
+        return worldTimerS;
+    }
+
+
+
+
+    public void setScore(Integer expectedTime){
+        int addScore;
+        int currentTime;
+
+        if(true){
+            currentTime = (worldTimerM * 60) + worldTimerS;
+            if (currentTime <= expectedTime) {
+                addScore = 100;
+            }
+            else{
+                addScore = 100 - (5 * (currentTime -expectedTime));
+                if(addScore < 0){
+                    addScore = 0;
+                }
+            }
+            score = expectedTime;
+        }
+
+
+        if(scenarioComplete==Boolean.TRUE){
+            scoreLabel.setColor(Color.GREEN);
+            scoreLabel.setText("");
+            scoreLabelT.setText("");
+            scoreLabelT.remove();
+            scoreLabel.remove();
+            table.center().top();
+            stage.addActor(table);
+            this.scenarioComplete = Boolean.TRUE;
+            return;
+        }
+
+        table.left().top();
+        scoreLabel.setText(String.format("%d", score));
+        stage.addActor(table);
+
+    }
+
+
+    public void purchase(Integer price){
+        score -= price;
+        if(scenarioComplete==Boolean.TRUE){
+            scoreLabel.setColor(Color.GREEN);
+            scoreLabel.setText("");
+            scoreLabelT.setText("");
+            scoreLabelT.remove();
+            scoreLabel.remove();
+            table.center().top();
+            stage.addActor(table);
+            this.scenarioComplete = Boolean.TRUE;
+            return;
+        }
+
+        table.left().top();
+        scoreLabel.setText(String.format("%d", score));
+        stage.addActor(table);
+
+    }
+
+
+
+
+    public void setWorldTimerM(Integer worldTimerM) {
+        this.worldTimerM = worldTimerM;
+    }
+
+
+    public int setRepPoints(Integer repPoint){
+        //System.out.println("I ran");
+        repPoints = repPoint;
+        reputation.setText(String.format("%d", repPoints));
+
+        stage.addActor(table);
+        return  repPoints;
+    }
+
+    public void setWorldTimerS(Integer worldTimerS) {
+        this.worldTimerS = worldTimerS;
     }
 }

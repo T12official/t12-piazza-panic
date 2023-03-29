@@ -214,7 +214,7 @@ public class Chef extends Sprite {
                 setChefSkin(inHandsIng);
             }
         } else if (isCooking && !chefOnChefCollision && getInHandsIng().isPrepared() && (inHandsIng.cookTime > 0 || inHandsIng.getBurnTime() > 0)) {
-            waitTimer += dt;
+            waitTimer += dt * cookingSpeedModifier;
             System.out.println("cooking supds");
             if (!userControlChef && waitTimer > inHandsIng.cookTime) {
                 inHandsIng.cookTime = 0;
@@ -630,6 +630,23 @@ public class Chef extends Sprite {
 
     public float getNotificationX() {
         return notificationX;
+    }
+
+    public void setNotificationX(float notificationX) {
+        this.notificationX = notificationX;
+    }
+
+    public void setNotificationY(float notificationY) {
+        this.notificationY = notificationY;
+
+    }
+
+    public Body getB2body() {
+        return b2body;
+    }
+
+    public void setCookingSpeedModifier(double cookingSpeedModifier) {
+        this.cookingSpeedModifier = cookingSpeedModifier;
     }
 }
 

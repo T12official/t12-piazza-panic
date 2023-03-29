@@ -1,0 +1,51 @@
+{
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "default-font": {
+      "file": "default.fnt"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+    "slider-knob": {
+      "name": "slider-knob",
+      "color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      }
+    },
+    "slider-background": {
+      "name": "slider-background",
+      "color": {
+        "r": 0.5,
+        "g": 0.5,
+        "b": 0.5,
+        "a": 1.0
+      }
+    },
+    "slider-knob-over": {
+      "name": "slider-knob-over",
+      "color": {
+        "r": 0.7,
+        "g": 0.7,
+        "b": 0.7,
+        "a": 1.0
+      }
+    },
+    "slider-knob-down": {
+      "name": "slider-knob-down",
+      "color": {
+        "r": 0.3,
+        "g": 0.3,
+        "b": 0.3,
+        "a": 1.0
+      }
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
+    "default-horizontal": {
+      "background": "slider-background",
+      "knob": "slider-knob"
+    }
+  }
+}

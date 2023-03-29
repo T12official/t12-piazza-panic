@@ -14,6 +14,7 @@ public class cookingSpeedBoost extends Sprite {
     private World world;
     private TextureRegion textureRegion;
     private Body body;
+    private powerUpGeneric powerUp;
 
     public cookingSpeedBoost(World world, TextureRegion textureRegion, float x, float y) {
         super(textureRegion);
@@ -59,6 +60,21 @@ public class cookingSpeedBoost extends Sprite {
 
     public void onContractCreated(){
         System.out.println("please resolve the contact");
+    }
+
+    public powerUpGeneric getPowerUp() {
+        return powerUp;
+    }
+
+    public void setPowerUp(powerUpGeneric powerUp) {
+        this.powerUp = powerUp;
+
+
+    }
+    public void DestroyBody(){
+        for (Fixture a :body.getFixtureList()){
+            body.destroyFixture(a);
+        }
     }
 
 

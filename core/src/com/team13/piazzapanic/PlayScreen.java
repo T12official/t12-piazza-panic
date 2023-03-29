@@ -4,11 +4,8 @@ import Ingredients.Ingredient;
 import Recipe.Recipe;
 import Sprites.*;
 import Recipe.Order;
-import Tools.B2WorldCreator;
-import Tools.Overlay;
-import Tools.WorldContactListener;
+import Tools.*;
 
-import Tools.kitchenChangerAPI;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -26,6 +23,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -33,6 +32,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import powerUps.cookingSpeedBoost;
+import powerUps.speedUpCooking;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -59,6 +59,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PlayScreen implements Screen {
 
     public final MainGame game;
+    private Label messageLabel;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
     public final HUD hud;
@@ -72,6 +73,7 @@ public class PlayScreen implements Screen {
     private GameOver gameover;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    public boolean dispose = false;
 
     private final World world;
     private final Chef chef1;
@@ -93,6 +95,8 @@ public class PlayScreen implements Screen {
     public static float trayY;
 
     private float timeSeconds = 0f;
+    private long shopMessageTimer = 0;
+    private boolean messageUp = false;
 
     private float timeSecondsCount = 0f;
     private boolean activateShop = false;
@@ -137,15 +141,19 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
         powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 128,65);
+        powerUp.setPowerUp(new speedUpCooking());
         chef1 = new Chef(this.world, 31.5F,65);
         chef2 = new Chef(this.world, 128,65);
         chef3 = new Chef(this.world, 128, 88);
 
         controlledChef = chef1;
-        world.setContactListener(new WorldContactListener());
+        world.setContactListener(new WorldContactListener(world, this));
         controlledChef.notificationSetBounds("Down");
 
         ordersArray = new ArrayList<>();
+        addToHud("welcome");
+        messageLabel.remove();
+
 
     }
 
@@ -181,9 +189,20 @@ public class PlayScreen implements Screen {
 
     public void handleInput(float dt){
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)){
+            //example load game
+            loadGameSave.loadMyGame(this);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)){
+            //example save game
+            gameSaveTool.saveMyGame(this);
+        }
+
         if ((Gdx.input.isKeyJustPressed(Input.Keys.R) &&
                 chef1.getUserControlChef() &&
                 chef2.getUserControlChef())) {
+
+
             if (controlledChef.equals(chef1)) {
                 resetIdleTimer();
                 controlledChef.b2body.setLinearVelocity(0, 0);
@@ -262,6 +281,7 @@ public class PlayScreen implements Screen {
 
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
+
             resetIdleTimer();
                 if(controlledChef.getTouchingTile() != null){
                     InteractiveTileObject tile = (InteractiveTileObject) controlledChef.getTouchingTile().getUserData();
@@ -386,6 +406,15 @@ public class PlayScreen implements Screen {
      * @param dt time interval for the update
     */
     public void update(float dt){
+
+        if (dispose){
+            world.destroyBody(powerUp.getBody());
+            powerUp.getTexture().dispose();
+            //powerUp.setTexture(null);
+            powerUp.dispose();
+            dispose = false;
+        }
+
         handleInput(dt);
 
         gamecam.update();
@@ -462,6 +491,10 @@ public class PlayScreen implements Screen {
 
         if (TimeUtils.timeSinceMillis(idleGametimer) > 20000){
             game.goToIdle();
+        }
+        if (messageUp && TimeUtils.timeSinceMillis(shopMessageTimer) > 5000){
+            messageLabel.remove();
+            messageUp = false;
         }
 
         //Execute handleEvent each 1 second
@@ -591,17 +624,47 @@ public class PlayScreen implements Screen {
                         activateShop = !activateShop;
                         break;
                     case "chop":
-                        System.out.println("buying chopping baords");
-                        kitchenEdit.editCVSFile(2, 4, "2");
-                        //additionChopCount++;
-                        //reRender();
+                        if (additionChopCount < 4 && hud.getScore() >= 5) {
+                            hud.purchase(5);
+
+                            System.out.println("buying chopping baords");
+                            kitchenEdit.editCVSFile(2, 4 + additionChopCount, "2");
+                            additionChopCount++;
+                            messageLabel.remove();
+                            addToHud("bought chopping board");
+                            messageUp = true;
+                            shopMessageTimer = TimeUtils.millis();
+                            reRender();
+                        }
+                        else {
+                            messageLabel.remove();
+                            addToHud("lack of money or at max chopping boards");
+                            messageUp = true;
+                            shopMessageTimer = TimeUtils.millis();
+                        }
+
+
 
                         break;
                     case "pan":
+
                         System.out.println("buying pans");
-                        kitchenEdit.editCVSFile(9, 5, "9");
-                        //addictionPanCount++;
-                        //reRender();
+                        if (addictionPanCount < 3 && hud.getScore() >= 5) {
+                            hud.purchase(5);
+                            kitchenEdit.editCVSFile(9, 5 - addictionPanCount, "9");
+                            addictionPanCount++;
+                            messageLabel.remove();
+                            addToHud("bought pans");
+                            messageUp = true;
+                            shopMessageTimer = TimeUtils.millis();
+                            reRender();
+                        }
+                        else {
+                            messageLabel.remove();
+                            addToHud("lack of money or at max pans");
+                            messageUp = true;
+                            shopMessageTimer = TimeUtils.millis();
+                        }
                         break;
                 }
 
@@ -647,5 +710,35 @@ public class PlayScreen implements Screen {
         renderer.dispose();
         world.dispose();
         hud.dispose();
+    }
+
+    public Chef getChef1() {
+        return chef1;
+    }
+
+    public Chef getChef2() {
+        return chef2;
+    }
+
+    public Chef getChef3() {
+        return chef3;
+    }
+
+    public HUD getHud() {
+        return hud;
+    }
+    public void addToHud(String Text){
+        Label.LabelStyle labelStyle = new Label.LabelStyle(hud.font, Color.WHITE);
+        messageLabel = new Label(Text, labelStyle);
+        //messageLabel.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+        messageLabel.setPosition(50,0);
+        //messageLabel.setAlignment(Align.center);
+
+        hud.stage.addActor(messageLabel);
+
+        // Fade out the label over 2 seconds
+    }
+    public void removeLabel(){
+        messageLabel.remove();
     }
 }

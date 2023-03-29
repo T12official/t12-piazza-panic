@@ -96,7 +96,9 @@ public class idleScreen implements Screen {
         chef2 = new Chef(this.world, 128,65);
         aiChef = new chefAI(this);
         controlledChef = chef1;
-        world.setContactListener(new WorldContactListener());
+
+        //TODO FIX THE NEED FOR PASSING A MAIN GAME IN THE IDLE SCREEN AKA MAKE THIS INHERIT FROM PLAYSCREEN OR HAVE A DIFFERENT CONTACT LISTENER
+        world.setContactListener(new WorldContactListener(world, new PlayScreen(this.game)));
         controlledChef.notificationSetBounds("Down");
 
         ordersArray = new ArrayList<>();

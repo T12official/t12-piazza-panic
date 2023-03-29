@@ -4,18 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 
 public class kitchenChangerAPI {
-    private String filePath = "assets/kitchenTemp.tmx";
+    private String filePath = "kitchenTemp.tmx";
     private String trueFilePath = "assets/Kitchen.tmx";
     private FileHandle handle;
     private String fileContent;
     private int cvsStart = 0;
     private boolean incCVS = true;
     public kitchenChangerAPI(){
+        FileHandle handle2 = Gdx.files.internal("Kitchen.tmx");
         handle = Gdx.files.local(filePath);
-        handle.writeString(trueFilePath, false);
+        handle.writeString(handle2.readString(), false);
         fileContent = "";
     }
     public void readFile(){
@@ -75,6 +77,7 @@ public class kitchenChangerAPI {
 
 
             }
+
 
         }
         catch (Exception err){

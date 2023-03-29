@@ -3,6 +3,7 @@ package Tools;
 import Sprites.Chef;
 import Sprites.InteractiveTileObject;
 import com.badlogic.gdx.physics.box2d.*;
+import com.team13.piazzapanic.PlayScreen;
 import powerUps.cookingSpeedBoost;
 
 /**
@@ -10,6 +11,13 @@ import powerUps.cookingSpeedBoost;
  * It helps to manage the interactions between objects in the world.
  */
 public class WorldContactListener implements ContactListener {
+
+    World myWorld;
+    PlayScreen aa;
+    public WorldContactListener(World world, PlayScreen a){
+        this.myWorld = world;
+        this.aa = a;
+    }
 
     /**
      * The beginContact method is called when two fixtures start to collide.
@@ -47,11 +55,21 @@ public class WorldContactListener implements ContactListener {
             System.out.println("contact between chef and cookingSpeedBoost");
             if (fixA.getUserData() instanceof Chef){
                 cookingSpeedBoost a = (cookingSpeedBoost) fixB.getUserData();
-                a.onContractCreated();
+                a.getPowerUp().improveChef((Chef) fixA.getUserData());
+                aa.dispose = true;
+                //myWorld.destroyBody(a.getBody());
+                //a.dispose();
             }
             else {
+
                 cookingSpeedBoost a = (cookingSpeedBoost) fixA.getUserData();
-                a.onContractCreated();
+                a.getPowerUp().improveChef((Chef) fixB.getUserData());
+                aa.dispose = true;
+
+                //myWorld.destroyBody(a.getBody());
+
+
+                //a.dispose();
             }
         }
     }
