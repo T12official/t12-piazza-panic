@@ -70,6 +70,7 @@ public class MainGame extends Game {
 			isPlayScreen = !isPlayScreen;
 		}
 		if (isPlayScreen && !isEndless) {
+			playScreen.difficultyScore = startScreen.diff;
 			setScreen(playScreen);
 
 		} else {
@@ -98,6 +99,7 @@ public class MainGame extends Game {
 		if (isGameOver){
 			setScreen(gameover);
 		}
+
 
 	}
 

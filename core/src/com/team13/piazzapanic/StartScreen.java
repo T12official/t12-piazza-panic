@@ -37,6 +37,7 @@ public class StartScreen implements Screen {
     private final TextButton button2;
     private final TextButton MEDIUM;
     private  final TextButton HARD;
+    public Double diff = 5.0;
 
     /**
      * Constructor for StartScreen.
@@ -44,17 +45,24 @@ public class StartScreen implements Screen {
      * @param game the game object.
      */
     public StartScreen(MainGame game) {
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, camera);
+        stage = new Stage(viewport, game.batch);
+        Gdx.input.setInputProcessor(stage);
         button2 = getButton("easy");
         MEDIUM = getButton("medium");
         HARD = getButton("hard");
-        MEDIUM.setPosition(50,0);
-        HARD.setPosition(130,0);
+        MEDIUM.setPosition(50, 0);
+        HARD.setPosition(130, 0);
+        stage.addActor(button2);
+        stage.addActor(MEDIUM);
+        stage.addActor(HARD);
         this.game = game;
         backgroundImage = new Texture("startImage.png");
         backgroundSprite = new Sprite(backgroundImage);
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, camera);
+
     }
+
     private TextButton getButton(final String message) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -78,6 +86,17 @@ public class StartScreen implements Screen {
             public void clicked (InputEvent event, float x, float y) {
 
                 System.out.println("Clicked! Is checked: ");
+                if (message == "easy"){
+                    diff = 0.025;
+
+                }
+                if (message == "medium"){
+                    diff = 0.05;
+
+                }
+                if (message == "hard"){
+                    diff = 0.07;
+                }
                 //game.goToGameOver();
             }
         });
@@ -114,12 +133,14 @@ public class StartScreen implements Screen {
         game.batch.begin();
 
         backgroundSprite.draw(game.batch);
-        button2.draw(game.batch,1f);
-        MEDIUM.draw(game.batch,1f);
-        HARD.draw(game.batch,1f);
+        //button2.draw(game.batch,1f);
+
+        //MEDIUM.draw(game.batch,1f);
+        //HARD.draw(game.batch,1f);
         //orderBar a  = new  orderBar(30,30,50,5, Color.RED);
         //a.draw(game.batch, 1);
         game.batch.end();
+        stage.draw();
     }
 
     /**

@@ -59,6 +59,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PlayScreen implements Screen {
 
     public final MainGame game;
+    public Double difficultyScore = 1.0;
     private Label messageLabel;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
@@ -551,7 +552,7 @@ public class PlayScreen implements Screen {
             // TODO add this if statement to if report
             orderTimer.draw(game.batch, 1);
             hud.stage.addActor(orderTimer);
-            if (orderTime > 0){ orderTime -= 0.01f;}
+            if (orderTime > 0){ orderTime -= 0.01f * difficultyScore;}
             else {orderTime = 0;}
 
             orderTimer.setPercentage(orderTime);
