@@ -34,7 +34,7 @@ public class MainGame extends Game {
 	public static final float PPM = 100;
 	public SpriteBatch batch;
 	public boolean isPlayScreen;
-	private PlayScreen playScreen;
+	public PlayScreen playScreen;
 	private StartScreen startScreen;
 	private idleScreen idleGame;
 	private GameOver gameover;
@@ -71,10 +71,12 @@ public class MainGame extends Game {
 		}
 		if (isPlayScreen && !isEndless) {
 			playScreen.difficultyScore = startScreen.diff;
+			//playScreen.idleGametimer = TimeUtils.millis();
 			setScreen(playScreen);
 
 		} else {
 			if (!isEndless) {
+				startScreen.reActivateInput();
 				setScreen(startScreen);
 			}
 		}
@@ -119,5 +121,10 @@ public class MainGame extends Game {
 	public void disableIdle(){
 		goToIdle = false;
 		playScreen.resetIdleTimer();
+	}
+
+	public void setGameScreen(){
+		setScreen(playScreen);
+		isPlayScreen = true;
 	}
 }

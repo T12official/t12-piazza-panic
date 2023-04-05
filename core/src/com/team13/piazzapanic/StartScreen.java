@@ -37,6 +37,7 @@ public class StartScreen implements Screen {
     private final TextButton button2;
     private final TextButton MEDIUM;
     private  final TextButton HARD;
+    private final TextButton loadSave;
     public Double diff = 5.0;
 
     /**
@@ -52,11 +53,14 @@ public class StartScreen implements Screen {
         button2 = getButton("easy");
         MEDIUM = getButton("medium");
         HARD = getButton("hard");
+        loadSave = getButton("Load");
         MEDIUM.setPosition(50, 0);
         HARD.setPosition(130, 0);
+        loadSave.setPosition(0,30);
         stage.addActor(button2);
         stage.addActor(MEDIUM);
         stage.addActor(HARD);
+        stage.addActor(loadSave);
         this.game = game;
         backgroundImage = new Texture("startImage.png");
         backgroundSprite = new Sprite(backgroundImage);
@@ -96,6 +100,11 @@ public class StartScreen implements Screen {
                 }
                 if (message == "hard"){
                     diff = 0.07;
+                }
+                if (message == "Load"){
+                    game.playScreen.onStartLoadGame();
+                    game.playScreen.idleGametimer = TimeUtils.millis();
+                    game.setGameScreen();
                 }
                 //game.goToGameOver();
             }
@@ -174,5 +183,9 @@ public class StartScreen implements Screen {
     @Override
     public void dispose() {
         backgroundImage.dispose();
+    }
+
+    public void reActivateInput(){
+        Gdx.input.setInputProcessor(stage);
     }
 }

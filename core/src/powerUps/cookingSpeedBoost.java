@@ -24,7 +24,7 @@ public class cookingSpeedBoost extends Sprite {
         float chefHeight = 20 / MainGame.PPM;
         setBounds(0, 0, chefWidth, chefHeight);
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(0.4f,0.6f);
+        bodyDef.position.set(x,y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
         FixtureDef fdef = new FixtureDef();
@@ -35,6 +35,8 @@ public class cookingSpeedBoost extends Sprite {
         body.createFixture(fdef).setUserData(this);
 
     }
+
+
 
     public void update(float delta) {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);

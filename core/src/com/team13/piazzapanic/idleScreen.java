@@ -7,19 +7,23 @@ import Sprites.*;
 import Tools.B2WorldCreator;
 import Tools.WorldContactListener;
 import Tools.chefAI;
+import Tools.gameSaveTool;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -29,6 +33,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class idleScreen implements Screen {
 
     private final MainGame game;
+    private final TextButton returnToGame;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
     private final HUD hud;
@@ -70,6 +75,7 @@ public class idleScreen implements Screen {
      */
 
     public idleScreen(MainGame game){
+        returnToGame = getButton("Press X to return to game");
 
         this.game = game;
         gameover = new GameOver(game);
@@ -290,6 +296,8 @@ public class idleScreen implements Screen {
      * @param dt time interval for the update
      */
     public void update(float dt){
+
+        hud.stage.addActor(returnToGame);
         //TODO implement AI chef
         aiChef.returnKeyboardInput();
         handleInput(dt, aiChef.returnKeyboardInput());
@@ -459,6 +467,39 @@ public class idleScreen implements Screen {
         renderer.dispose();
         world.dispose();
         hud.dispose();
+    }
+
+
+
+    private TextButton getButton(final String message) {
+        Skin skin = new Skin();
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        skin.add("white", new Texture(pixmap));
+
+        skin.add("default", new BitmapFont());
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
+
+        TextButton button = new TextButton(message, skin);
+
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked (InputEvent event, float x, float y) {
+            }
+        });
+
+
+
+        return button;
+
+
     }
 }
 

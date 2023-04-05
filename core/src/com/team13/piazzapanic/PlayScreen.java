@@ -59,6 +59,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PlayScreen implements Screen {
 
     public final MainGame game;
+    private boolean loadMyGame = false;
     public Double difficultyScore = 1.0;
     private Label messageLabel;
     private final OrthographicCamera gamecam;
@@ -67,6 +68,7 @@ public class PlayScreen implements Screen {
     private final TextButton button;
     private final TextButton button2;
     private final TextButton buttonPans;
+    private final TextButton saveGame;
 
     private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);;
     private float orderTime = 1;
@@ -80,13 +82,14 @@ public class PlayScreen implements Screen {
     private final Chef chef1;
     private final Chef chef2;
     private final Chef chef3;
-    private long idleGametimer;
+    public long idleGametimer;
     private Chef controlledChef;
     private kitchenChangerAPI kitchenEdit;
 
     public ArrayList<Order> ordersArray;
 
     public PlateStation plateStation;
+    private PlayScreen selfRef = this;
 
 
     public Boolean scenarioComplete;
@@ -98,12 +101,15 @@ public class PlayScreen implements Screen {
     private float timeSeconds = 0f;
     private long shopMessageTimer = 0;
     private boolean messageUp = false;
+    private long spawnNewPowerUpTimer;
+    public ArrayList<cookingSpeedBoost> powerUpArray;
 
     private float timeSecondsCount = 0f;
     private boolean activateShop = false;
     private int addictionPanCount = 0;
     private int additionChopCount = 0;
     public cookingSpeedBoost powerUp;
+    private int timeToNewPower = 22000;
 
     /**
      * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
@@ -115,7 +121,9 @@ public class PlayScreen implements Screen {
 
 
     public PlayScreen(MainGame game){
+        spawnNewPowerUpTimer = TimeUtils.millis();
         kitchenEdit = new kitchenChangerAPI();
+        powerUpArray = new ArrayList<>();
 
         kitchenEdit.readFile();
         resetIdleTimer();
@@ -139,9 +147,10 @@ public class PlayScreen implements Screen {
         button = (TextButton) getButton("shop");
         button2 = (TextButton) getButton("chop");
         buttonPans = (TextButton) getButton("pan");
+        saveGame = (TextButton) getButton("save game");
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
-        powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 128,65);
+        powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 126,85);
         powerUp.setPowerUp(new speedUpCooking());
         chef1 = new Chef(this.world, 31.5F,65);
         chef2 = new Chef(this.world, 128,65);
@@ -156,6 +165,10 @@ public class PlayScreen implements Screen {
         messageLabel.remove();
 
 
+    }
+
+    public void onStartLoadGame(){
+        loadMyGame = true;
     }
 
     public void resetIdleTimer(){
@@ -407,6 +420,10 @@ public class PlayScreen implements Screen {
      * @param dt time interval for the update
     */
     public void update(float dt){
+        if (loadMyGame) {
+            loadGameSave.loadMyGame(this);
+            loadMyGame = false;
+        }
 
         if (dispose){
             world.destroyBody(powerUp.getBody());
@@ -493,6 +510,15 @@ public class PlayScreen implements Screen {
         if (TimeUtils.timeSinceMillis(idleGametimer) > 20000){
             game.goToIdle();
         }
+
+        if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower){
+            cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.4f,0.4f);
+            newPower.setPowerUp(new speedUpCooking());
+            powerUpArray.add(newPower);
+            spawnNewPowerUpTimer = TimeUtils.millis();
+
+        }
+
         if (messageUp && TimeUtils.timeSinceMillis(shopMessageTimer) > 5000){
             messageLabel.remove();
             messageUp = false;
@@ -523,6 +549,10 @@ public class PlayScreen implements Screen {
 
         hud.stage.addActor(button);
         if (activateShop){
+            saveGame.setX(50);
+            saveGame.setY(40);
+            hud.stage.addActor(saveGame);
+
             button2.setX(50);
             hud.stage.addActor(button2);
             buttonPans.setX(50);
@@ -532,6 +562,7 @@ public class PlayScreen implements Screen {
         else {
             buttonPans.remove();
             button2.remove();
+            saveGame.remove();
         }
 
         game.batch.setProjectionMatrix(gamecam.combined);
@@ -539,7 +570,11 @@ public class PlayScreen implements Screen {
 
 
         updateOrder();
-        powerUp.render(game.batch);
+        //powerUp.getBody().setTransform(new Vector2(0,0),30);
+        //powerUp.render(game.batch);
+        for (int i = 0 ; i < powerUpArray.size(); i ++){
+            powerUpArray.get(i).render(game.batch);
+        }
         chef1.draw(game.batch);
         chef2.draw(game.batch);
         chef3.draw(game.batch);
@@ -667,6 +702,10 @@ public class PlayScreen implements Screen {
                             shopMessageTimer = TimeUtils.millis();
                         }
                         break;
+                    case "save game":
+                        gameSaveTool.saveMyGame(selfRef);
+                        break;
+
                 }
 
                 System.out.println("Clicked! Is checked: ");
