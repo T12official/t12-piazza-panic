@@ -12,9 +12,9 @@ import com.team13.piazzapanic.MainGame;
 public class cookingSpeedBoost extends Sprite {
 
     private World world;
-    private TextureRegion textureRegion;
-    private Body body;
-    private powerUpGeneric powerUp;
+    public TextureRegion textureRegion;
+    public Body body;
+    public powerUpGeneric powerUp;
 
     public cookingSpeedBoost(World world, TextureRegion textureRegion, float x, float y) {
         super(textureRegion);
@@ -22,7 +22,7 @@ public class cookingSpeedBoost extends Sprite {
         this.textureRegion = textureRegion;
         float chefWidth = 13 / MainGame.PPM;
         float chefHeight = 20 / MainGame.PPM;
-        setBounds(0, 0, chefWidth, chefHeight);
+        setBounds(x, y, chefWidth, chefHeight);
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x,y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -33,6 +33,7 @@ public class cookingSpeedBoost extends Sprite {
         shape.setPosition(new Vector2(shape.getPosition().x + (0.5f / MainGame.PPM), shape.getPosition().y - (5.5f / MainGame.PPM)));
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);
+
 
     }
 

@@ -57,6 +57,12 @@ public class WorldContactListener implements ContactListener {
                 cookingSpeedBoost a = (cookingSpeedBoost) fixB.getUserData();
                 a.getPowerUp().improveChef((Chef) fixA.getUserData());
                 aa.dispose = true;
+                aa.toKill = a;
+                aa.toKill.textureRegion.getTexture().dispose();
+                aa.toKill.textureRegion = null;
+                //a.body = null;
+                //a.powerUp = null;
+                aa.powerUpArray.remove(0);
                 //myWorld.destroyBody(a.getBody());
                 //a.dispose();
             }
@@ -65,6 +71,12 @@ public class WorldContactListener implements ContactListener {
                 cookingSpeedBoost a = (cookingSpeedBoost) fixA.getUserData();
                 a.getPowerUp().improveChef((Chef) fixB.getUserData());
                 aa.dispose = true;
+                aa.toKill = a;
+                aa.toKill.textureRegion.getTexture().dispose();
+                aa.toKill.textureRegion = null;
+                //a.body = null;
+                //a.powerUp = null;
+                aa.powerUpArray.remove(0);
 
                 //myWorld.destroyBody(a.getBody());
 

@@ -57,6 +57,8 @@ public class Chef extends Sprite {
     private Texture saladChef;
     private final Texture newDough;
     private final Texture doneDough;
+    private final Texture pizzaChef;
+    private final Texture jacketChef;
 
     public enum State {UP, DOWN, LEFT, RIGHT}
 
@@ -95,8 +97,9 @@ public class Chef extends Sprite {
     public Chef(World world, float startX, float startY) {
         initialX = startX / MainGame.PPM;
         initialY = startY / MainGame.PPM;
-
+        jacketChef = new Texture("Chef/Chef_holding_jacket.png");
         normalChef = new Texture("Chef/Chef_normal.png");
+        pizzaChef = new Texture("Chef/Chef_holding_pizza.png");
         doneDough = new Texture("Chef/Chef_holding_doughCooked.png");
         rawDoughChef = new Texture("Chef/Chef_holding_dough.png");
         bunsChef = new Texture("Chef/Chef_holding_buns.png");
@@ -111,7 +114,6 @@ public class Chef extends Sprite {
         pattyChef = new Texture("Chef/Chef_holding_patty.png");
         completedBurgerChef = new Texture("Chef/Chef_holding_front.png");
         meatChef = new Texture("Chef/Chef_holding_meat.png");
-        saladChef = new Texture("Chef/Chef_holding_salad.png");
         saladChef = new Texture("Chef/Chef_holding_salad.png");
         spudsChef = new Texture("Chef/Chef_holding_potato.png");
         cheeseChef = new Texture("Chef/Chef_holding_cheese.png");
@@ -414,10 +416,10 @@ public class Chef extends Sprite {
             skinNeeded = saladChef;
         }
         else if (item instanceof pizzaRecipy){
-            skinNeeded = saladChef;
+            skinNeeded = pizzaChef;
         }
         else if (item instanceof jacketPotato){
-            skinNeeded = saladChef;
+            skinNeeded = jacketChef;
         }
         else if (item instanceof Potatoes){
             skinNeeded = spudsChef;

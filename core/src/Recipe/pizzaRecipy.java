@@ -14,7 +14,7 @@ public class pizzaRecipy extends Recipe {
         ingredients.add(new pizzaDough(0,0,0));
         ingredients.add(new Cheese(0,0,0));
         ingredients.add (new Tomato(0,0,0));
-        completedImg = new Texture("Food/Salad.png");
+        completedImg = new Texture("Food/pizzaDone.png");
 
     }
 
