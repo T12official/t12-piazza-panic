@@ -206,7 +206,7 @@ public class PlayScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)){
             //example load game
-            loadGameSave.loadMyGame(this);
+            gameSaveTool.loadMyGame(this);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)){
             //example save game
@@ -473,7 +473,7 @@ public class PlayScreen implements Screen {
     }
     public void update(float dt){
         if (loadMyGame) {
-            loadGameSave.loadMyGame(this);
+            gameSaveTool.loadMyGame(this);
             loadMyGame = false;
         }
 
