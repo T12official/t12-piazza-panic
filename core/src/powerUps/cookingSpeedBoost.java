@@ -20,7 +20,7 @@ public class cookingSpeedBoost extends Sprite {
         super(textureRegion);
         this.world = world;
         this.textureRegion = textureRegion;
-        float chefWidth = 13 / MainGame.PPM;
+        float chefWidth = 20 / MainGame.PPM;
         float chefHeight = 20 / MainGame.PPM;
         setBounds(x, y, chefWidth, chefHeight);
         BodyDef bodyDef = new BodyDef();
