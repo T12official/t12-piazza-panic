@@ -31,7 +31,7 @@ public class Chef extends Sprite {
 
     // power up modifiers
     public double cookingSpeedModifier = 1;
-    public float runSpeedModifier = 1;
+    public float runSpeedModifier = 1F;
     public double moneyEarnedModifier = 1;
     // other powerups are add lives and give more customer time
     private final float initialX;
