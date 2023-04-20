@@ -32,6 +32,8 @@ public class Chef extends Sprite {
     private final float initialX;
     private final float initialY;
 
+    public boolean active = false;
+
 
     public Vector2 startVector;
     private float waitTimer;
