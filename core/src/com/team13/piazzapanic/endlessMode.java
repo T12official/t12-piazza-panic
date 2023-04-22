@@ -3,12 +3,11 @@ import java.util.Random;
 
 public class endlessMode extends PlayScreen{
     /**
-     * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
-     * creates and initializes game camera and viewport,
-     * creates and initializes HUD and orders hud, loads and initializes the map,
-     * creates and initializes world, creates and initializes chefs and sets them, sets contact listener for world, and initializes ordersArray.
+     * the endlessMode extends the player class as it implements the same game
      *
-     * @param game The MainGame instance that the PlayScreen will be a part of.
+     * The endlessKode class overrides the updateOrder function to make it that the game will never rtun of out orders and complete the game
+     * it does this by setting the orderComplete property on orders to false allowing them to be doie again
+
      */
     public endlessMode(MainGame game) {
         super(game);

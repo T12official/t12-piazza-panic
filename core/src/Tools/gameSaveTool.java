@@ -5,7 +5,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.team13.piazzapanic.PlayScreen;
 
-
+/**
+ * saveGameData is a class of static functions that are used to either write the state of the game into a text file,
+ * or load the state of a same gave from a text file
+ *
+ */
 public class gameSaveTool {
     public static void saveMyGame(PlayScreen game){
         FileHandle file = Gdx.files.local("gameSave.txt"); // create a file handle for a local file

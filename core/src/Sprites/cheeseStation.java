@@ -10,6 +10,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class cheeseStation extends  InteractiveTileObject {
 
+    /**
+     * cheeseStation is a class that extends from InteractieTileObject that is used to represent a location from which the player can pick up cheese.
+     * The station uses getIngredient() to show the deliver an Ingrideient.
+     */
+
     public cheeseStation(World world, TiledMap map, BodyDef bdef, Rectangle rectangle) {
         super(world, map, bdef, rectangle);
         fixture.setUserData(this);

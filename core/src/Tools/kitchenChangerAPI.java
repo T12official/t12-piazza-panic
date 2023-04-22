@@ -7,6 +7,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
+/**
+ * Kitchen API changer provides a series of functions that are used to make changes to the kitchen layouy
+ * This includes adding new pans and chopping baords
+ *
+ */
+
 public class kitchenChangerAPI {
     private String filePath = "kitchenTemp.tmx";
     private String trueFilePath = "assets/Kitchen.tmx";
