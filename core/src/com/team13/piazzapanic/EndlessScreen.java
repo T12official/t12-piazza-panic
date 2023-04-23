@@ -1,41 +1,28 @@
 package com.team13.piazzapanic;
+
 import java.util.Random;
 
-public class endlessMode extends PlayScreen{
+public class EndlessScreen extends PlayScreen{
     /**
-     * the endlessMode extends the player class as it implements the same game
+     * the endlessScreen extends the player class as it implements the same game
      *
-     * The endlessKode class overrides the updateOrder function to make it that the game will never rtun of out orders and complete the game
+     * The endlessKode class overrides the updateOrder function to make it that the game will never out of out orders and complete the game
      * it does this by setting the orderComplete property on orders to false allowing them to be doie again
 
      */
-    public endlessMode(MainGame game) {
+
+    public EndlessScreen(MainGame game) {
         super(game);
+        this.numberOfOrders = 10;
     }
 
     @Override
     public void updateOrder(){
-        if(scenarioComplete==Boolean.TRUE) {
-
-
-            hud.updateScore(Boolean.TRUE, (6 - ordersArray.size()) * 35);
-            hud.updateOrder(Boolean.TRUE, 0);
-            return;
+        if (ordersArray.size() == 1){
+            createOrder();
         }
-        if(ordersArray.size() != 0) {
-            int ord = randInt(0,ordersArray.size() - 1);
-            ordersArray.get(ord).orderComplete = false;
-            if (ordersArray.get(ord).orderComplete) {
-
-                hud.updateScore(Boolean.FALSE, ord * 35);
-                //ordersArray.remove(0);
-                hud.updateOrder(Boolean.FALSE, ord);
-                return;
-            }
-            ordersArray.get(0).create(trayX, trayY, game.batch);
-        }
+        super.updateOrder();
     }
-
     public static int randInt(int min, int max) {
 
         // NOTE: This will (intentionally) not run as written so that folks

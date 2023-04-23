@@ -1,7 +1,7 @@
 package Tools;
 
 import Sprites.Chef;
-import com.team13.piazzapanic.idleScreen;
+import com.team13.piazzapanic.IdleScreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class chefAI {
 
     //TODO make a ai to make burgers and salad
 
-    private idleScreen game;
+    private IdleScreen game;
     private Chef mychef;
     private int targetx = 4;
     private int targetY = 1;
@@ -37,7 +37,7 @@ public class chefAI {
                     {1, 1, 13, 1, 1, 1, 3, 9, 9, 1}};
     private int targetVal = 0;
 
-    public chefAI(idleScreen game) {
+    public chefAI(IdleScreen game) {
         this.game = game;
 
 

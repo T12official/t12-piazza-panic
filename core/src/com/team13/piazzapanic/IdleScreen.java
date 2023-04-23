@@ -34,7 +34,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 
 
-public class idleScreen implements Screen {
+public class IdleScreen implements Screen {
 
     private final MainGame game;
     private final TextButton returnToGame;
@@ -44,7 +44,7 @@ public class idleScreen implements Screen {
     private OrderTimer orderTimer;
     private float orderTime = 1;
     private boolean isActiveOrder = false;
-    private GameOver gameover;
+    private GameOverScreen gameover;
     public final TiledMap map;
     private final OrthogonalTiledMapRenderer renderer;
 
@@ -78,11 +78,11 @@ public class idleScreen implements Screen {
      * @param game The MainGame instance that the PlayScreen will be a part of.
      */
 
-    public idleScreen(MainGame game){
+    public IdleScreen(MainGame game){
         returnToGame = getButton("Press X to return to game");
 
         this.game = game;
-        gameover = new GameOver(game);
+        gameover = new GameOverScreen(game);
 
         scenarioComplete = Boolean.FALSE;
         createdOrder = Boolean.FALSE;

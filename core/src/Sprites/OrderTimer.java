@@ -106,10 +106,12 @@ public class OrderTimer extends Actor {
      * @param dt
      */
     public void update(float dt) {
-        System.out.println(difficulty);
-        if (orderTime > 0){ orderTime -= dt / difficulty;}
-        else {orderTime = 0;}
-
+        if (orderTime > 0){
+            orderTime -= dt / difficulty;
+        }
+        else {
+            orderTime = 0;
+        }
         setPercentage(orderTime);
     }
 }

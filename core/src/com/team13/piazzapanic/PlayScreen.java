@@ -66,10 +66,10 @@ public class PlayScreen implements Screen {
     private final TextButton buttonPans;
     private final TextButton saveGame;
 
-    private OrderTimer orderTimer;
+    public OrderTimer orderTimer;
 
-    private boolean isActiveOrder = false;
-    private GameOver gameover;
+    public boolean isActiveOrder = false;
+    private GameOverScreen gameover;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     public boolean dispose = false;
@@ -107,6 +107,8 @@ public class PlayScreen implements Screen {
     private int additionChopCount = 0;
     public cookingSpeedBoost powerUp;
     private int timeToNewPower = 22000;
+    public int numberOfOrders = 5;
+    private Integer orderNum = 1;
 
     /**
      * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
@@ -125,7 +127,7 @@ public class PlayScreen implements Screen {
         kitchenEdit.readFile();
         resetIdleTimer();
         this.game = game;
-        gameover = new GameOver(game);
+        gameover = new GameOverScreen(game);
 
         scenarioComplete = Boolean.FALSE;
         createdOrder = Boolean.FALSE;
@@ -440,6 +442,7 @@ public class PlayScreen implements Screen {
                                         controlledChef.setChefSkin(null);
                                         if(ordersArray.size()==1){
                                             scenarioComplete = Boolean.TRUE;
+                                            game.goToGameOver();
                                         }
                                     }
                                 }
@@ -509,7 +512,7 @@ public class PlayScreen implements Screen {
         Texture salad_recipe = new Texture("Food/salad_recipe.png");
         Order order;
 
-        for(int i = 0; i<5; i++){
+        for(int i = 0; i<numberOfOrders; i++){
             if(randomNum==1) {
                 order = new Order(PlateStation.burgerRecipe, burger_recipe);
             }
@@ -527,19 +530,18 @@ public class PlayScreen implements Screen {
      */
     public void updateOrder(){
         if(scenarioComplete==Boolean.TRUE) {
-            hud.updateScore(Boolean.TRUE, (6 - ordersArray.size()) * 35);
+            hud.updateScore(Boolean.TRUE, (numberOfOrders + 1 - ordersArray.size()) * 35);
             hud.updateOrder(Boolean.TRUE, 0);
             return;
         }
         if(ordersArray.size() != 0) {
-
             if (ordersArray.get(0).orderComplete) {
-                System.out.println("I am an oeder");
+                orderNum ++;
                 isActiveOrder = true;
                 orderTimer.setOrderTime(1);
-                hud.updateScore(Boolean.FALSE, (6 - ordersArray.size()) * 35);
+                hud.updateScore(Boolean.FALSE, (numberOfOrders + 1 - ordersArray.size()) * 35);
                 ordersArray.remove(0);
-                hud.updateOrder(Boolean.FALSE, 6 - ordersArray.size());
+                hud.updateOrder(Boolean.FALSE, orderNum);
                 return;
             }
             ordersArray.get(0).create(trayX, trayY, game.batch);

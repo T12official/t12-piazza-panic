@@ -12,14 +12,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 /**
  * the GameOverclass implements a basic game over screen that is simple just an image that reads game over
  */
-public class GameOver implements Screen {
+public class GameOverScreen implements Screen {
     private final MainGame game;
     private final Texture backgroundImage;
     private final Sprite backgroundSprite;
     final OrthographicCamera camera;
     private final Viewport viewport;
     //TODO DOCUMENT AND CHANGE LOG THIS
-    GameOver(MainGame game){
+    GameOverScreen(MainGame game){
         this.game = game;
         backgroundImage = new Texture("gameOver.jpg");
         backgroundSprite = new Sprite(backgroundImage);

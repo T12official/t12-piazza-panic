@@ -2,9 +2,9 @@ package com.team13.piazzapanic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class MainGame extends Game {
 
@@ -35,13 +35,14 @@ public class MainGame extends Game {
 	public SpriteBatch batch;
 	public boolean isPlayScreen;
 	public PlayScreen playScreen;
-	private StartScreen startScreen;
-	private idleScreen idleGame;
-	private GameOver gameover;
-	private endlessMode endless;
+	public StartScreen startScreen;
+	private IdleScreen idleScreen;
+	private GameOverScreen gameoverScreen;
+	private EndlessScreen endlessScreen;
+	public boolean isStartScreen = true;
 	private boolean isGameOver = false;
 	private boolean goToIdle = false;
-	private boolean isEndless = false;
+	public boolean isEndless = false;
 
 	public static final double EASY_DIFFICULTY = 100d;
 	public static final double MEDIUM_DIFFICULTY = 40d;
@@ -57,57 +58,19 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		startScreen = new StartScreen(this);
 		playScreen = new PlayScreen(this);
-		gameover = new GameOver(this);
-		idleGame = new idleScreen(this);
-		endless = new endlessMode(this);
-
-
+		gameoverScreen = new GameOverScreen(this);
+		idleScreen = new IdleScreen(this);
+		endlessScreen = new EndlessScreen(this);
 	}
 
 	@Override
 	public void render() {
-
-
-
-
 		super.render();
 		if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)){
-			isPlayScreen = !isPlayScreen;
+			isStartScreen = !isStartScreen;
 		}
-		if (isPlayScreen && !isEndless) {
-			playScreen.setDifficultyScore(startScreen.diff);
-			//playScreen.idleGametimer = TimeUtils.millis();
-			setScreen(playScreen);
-
-		} else {
-			if (!isEndless) {
-				startScreen.reActivateInput();
-				setScreen(startScreen);
-			}
-		}
-
-
-
-
-		if (Gdx.input.isKeyJustPressed(Input.Keys.Z)){
-			if (! isPlayScreen){
-				isEndless = true;
-				System.out.println("endlessMode");
-				endless.setDifficultyScore(startScreen.diff);
-				setScreen(endless);
-			}
-
-		}
-
-		if (goToIdle){
-			setScreen(idleGame);
-		}
-
-		if (isGameOver){
-			setScreen(gameover);
-		}
-
-
+		Screen currentScreen = getScreen();
+		setScreen(currentScreen);
 	}
 
 	@Override
@@ -116,8 +79,7 @@ public class MainGame extends Game {
 		batch.dispose();
 	}
 	public void goToGameOver(){
-		System.out.println("i also  ran");
-		isGameOver = true;
+		this.isGameOver = true;
 	}
 	public void goToIdle(){
 		goToIdle = true;
@@ -129,7 +91,19 @@ public class MainGame extends Game {
 	}
 
 	public void setGameScreen(){
-		setScreen(playScreen);
-		isPlayScreen = true;
+		setScreen(getScreen());
+	}
+
+	@Override
+	public Screen getScreen() {
+		if (isStartScreen){
+			return startScreen;
+		}
+		else if (isEndless) {
+			endlessScreen.setDifficultyScore(startScreen.diff);
+			return endlessScreen;
+		}
+		playScreen.setDifficultyScore(startScreen.diff);
+		return playScreen;
 	}
 }

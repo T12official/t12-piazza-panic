@@ -30,6 +30,8 @@ public class StartScreen implements Screen {
     private final TextButton MEDIUM;
     private  final TextButton HARD;
     private final TextButton loadSave;
+    private final TextButton gamemode1;
+    private final TextButton gamemode2;
     public double diff = MainGame.EASY_DIFFICULTY;
 
     /**
@@ -46,13 +48,19 @@ public class StartScreen implements Screen {
         MEDIUM = getButton("medium");
         HARD = getButton("hard");
         loadSave = getButton("Load");
+        gamemode1 = getButton("Scenario");
+        gamemode2 = getButton("Endless");
         MEDIUM.setPosition(50, 0);
         HARD.setPosition(130, 0);
         loadSave.setPosition(0,30);
+        gamemode1.setPosition(40, 30);
+        gamemode2.setPosition(110, 30);
         stage.addActor(button2);
         stage.addActor(MEDIUM);
         stage.addActor(HARD);
         stage.addActor(loadSave);
+        stage.addActor(gamemode1);
+        stage.addActor(gamemode2);
         this.game = game;
         backgroundImage = new Texture("startImage.png");
         backgroundSprite = new Sprite(backgroundImage);
@@ -80,8 +88,6 @@ public class StartScreen implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
-
-                System.out.println("Clicked! Is checked: ");
                 if (message == "easy"){
                     diff = MainGame.EASY_DIFFICULTY;
 
@@ -96,7 +102,14 @@ public class StartScreen implements Screen {
                 if (message == "Load"){
                     game.playScreen.onStartLoadGame();
                     game.playScreen.idleGametimer = TimeUtils.millis();
-                    game.setGameScreen();
+                    game.isPlayScreen = true;
+                }
+                if (message == "Scenario"){
+                    game.isPlayScreen = true;
+                }
+                if (message == "Endless"){
+                    game.isPlayScreen = false;
+                    game.isEndless = true;
                 }
                 //game.goToGameOver();
             }
@@ -142,6 +155,7 @@ public class StartScreen implements Screen {
         //a.draw(game.batch, 1);
         game.batch.end();
         stage.draw();
+        Gdx.input.setInputProcessor(stage);
     }
 
     /**
