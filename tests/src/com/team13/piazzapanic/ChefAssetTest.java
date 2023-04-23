@@ -31,6 +31,15 @@ public class ChefAssetTest {
         assertTrue("This will only pass when Chef_holding_chopped_tomato.png asset exists", Gdx.files.internal("Chef/Chef_holding_chopped_tomato.png").exists());
     }
     @Test
+    public void testChefHoldingDoughAssetExists(){
+        assertTrue("This will only pass when Chef_holding_dough.png asset exists", Gdx.files.internal("Chef/Chef_holding_dough.png").exists());
+    }
+
+    @Test
+    public void testChefHoldingDoughCookedAssetExists(){
+        assertTrue("This will only pass when Chef_holding_doughCooked.png asset exists", Gdx.files.internal("Chef/Chef_holding_doughCooked.png").exists());
+    }
+    @Test
     public void testChefHoldingFrontAssetExists(){
         assertTrue("This will only pass when Chef_holding_front.png asset exists", Gdx.files.internal("Chef/Chef_holding_front.png").exists());
     }
@@ -51,6 +60,10 @@ public class ChefAssetTest {
         assertTrue("This will only pass when Chef_holding_patty.png asset exists", Gdx.files.internal("Chef/Chef_holding_patty.png").exists());
     }
     @Test
+    public void testChefRawDoughAssetExists(){
+        assertTrue("This will only pass when Chef_holding_rawdough.png asset exists", Gdx.files.internal("Chef/Chef_holding_rawdough.png").exists());
+    }
+    @Test
     public void testChefHoldingSaladAssetExists(){
         assertTrue("This will only pass when Chef_holding_salad.png asset exists", Gdx.files.internal("Chef/Chef_holding_salad.png").exists());
     }
@@ -66,5 +79,6 @@ public class ChefAssetTest {
     public void testChefIdentifierAssetExists(){
         assertTrue("This will only pass when chefIdentifier.png asset exists", Gdx.files.internal("Chef/chefIdentifier.png").exists());
     }
+
 }
 

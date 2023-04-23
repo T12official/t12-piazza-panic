@@ -13,8 +13,6 @@ public class jacketPotato extends Recipe {
         ingredients.add(new Cheese(0,0,0));
         completedImg = new Texture("Food/Salad.png");
 
-
-
     }
 
     @Override
