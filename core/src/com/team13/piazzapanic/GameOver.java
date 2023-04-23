@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.w3c.dom.Text;
 
+/**
+ * the GameOverclass implements a basic game over screen that is simple just an image that reads game over
+ */
 public class GameOver implements Screen {
     private final MainGame game;
     private final Texture backgroundImage;

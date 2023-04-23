@@ -124,7 +124,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(MainGame game){
         spawnNewPowerUpTimer = TimeUtils.millis();
         kitchenEdit = new kitchenChangerAPI();
-        powerUpArray = new ArrayList<>();
+        powerUpArray = new ArrayList<>(); //The powerUpArray is an array containing all the powerups that need to be rendered. new powerups can be added to this array
 
         kitchenEdit.readFile();
         resetIdleTimer();
@@ -206,7 +206,7 @@ public class PlayScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)){
             //example load game
-            loadGameSave.loadMyGame(this);
+            gameSaveTool.loadMyGame(this);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.V)){
             //example save game
@@ -473,7 +473,7 @@ public class PlayScreen implements Screen {
     }
     public void update(float dt){
         if (loadMyGame) {
-            loadGameSave.loadMyGame(this);
+            gameSaveTool.loadMyGame(this);
             loadMyGame = false;
         }
 
@@ -570,6 +570,7 @@ public class PlayScreen implements Screen {
         }
 
         if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower){
+            // Ths if statement controls when a new powerup will spawn. they spawn a regular intervals defined by a timer
             cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.4f,0.4f);
             newPower.setPowerUp(new speedUpCooking());
             powerUpArray.add(newPower);
@@ -607,6 +608,7 @@ public class PlayScreen implements Screen {
 
         hud.stage.addActor(button);
         if (activateShop){
+            //This lays out the buttons of the shop
             saveGame.setX(50);
             saveGame.setY(40);
             hud.stage.addActor(saveGame);
@@ -631,6 +633,7 @@ public class PlayScreen implements Screen {
         //powerUp.getBody().setTransform(new Vector2(0,0),30);
         //powerUp.render(game.batch);
         for (int i = 0 ; i < powerUpArray.size(); i ++){
+            //The powerUpArray is an array containing all the powerups that need to be rendered. new powerups can be added to this array
             powerUpArray.get(i).render(game.batch);
         }
         chef1.draw(game.batch);
@@ -642,7 +645,11 @@ public class PlayScreen implements Screen {
 
         controlledChef.drawNotification(game.batch);
         if (isActiveOrder){
-            // TODO add this if statement to if report
+            /**
+             * This if statement is used to track how long a player still has left to complete an order
+             * orderTimer is used to keep track of this and is a variable that will hold a value between 1 and 0
+             * where 1 is full time and 0 is out of time
+             */
 
             hud.stage.addActor(orderTimer);
             if (orderTime > 0){ orderTime -= 0.01f * difficultyScore;}
@@ -786,6 +793,10 @@ public class PlayScreen implements Screen {
 
     }
 
+    /**
+     * reRender is used to reload the kitchen onto the screen so any changes to the kitchen can be displaced on the screen
+     */
+
     private void reRender(){
         TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
         map = mapLoader.load("KitchenTemp.tmx");
@@ -836,7 +847,16 @@ public class PlayScreen implements Screen {
     public HUD getHud() {
         return hud;
     }
+
+    /**
+     * The add to Hud function is used to displace text towards the bottom of the screen. This can be used to provide the plyer visual feedback
+     * as to things theye have done in the game world like buying a chopping board
+     * @param Text - the message to be displayed
+     */
+
     public void addToHud(String Text){
+
+
         Label.LabelStyle labelStyle = new Label.LabelStyle(hud.font, Color.WHITE);
         messageLabel = new Label(Text, labelStyle);
         //messageLabel.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
