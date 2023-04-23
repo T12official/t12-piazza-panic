@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.team13.piazzapanic.HUD;
+import com.team13.piazzapanic.MainGame;
 
 /**
  * The order bar class is a class that extends actor. This is a class that creates a bar that decreases over time to represent a time limit to the player
  */
 
-public class orderBar extends Actor {
+public class OrderTimer extends Actor {
 
     /**
      * @param texture - represents the red background of the timer bar
@@ -21,16 +23,27 @@ public class orderBar extends Actor {
     private Texture texture;
     private Texture texture2;
     private float percentage = 1f;
+    private float orderTime = 1;
+    private float x = 105;
+    private float y = 120;
+    private float width = 50;
+    private float height = 5;
+    private Color color = Color.RED;
+    private double difficulty = 10;
 
-    public orderBar(float x, float y, float width, float height, Color color){
+    public OrderTimer(){
         setColor(color);
         setX(x);
         setY(y);
         setWidth(width);
         setHeight(height);
         makeTexture((int)width, (int)height, color);
-
     }
+
+    public void setDifficulty(double difficulty) {
+        this.difficulty = difficulty;
+    }
+
     private void makeTexture(int width, int height, Color color){
         /**
          * This function uses a input width and height in order to create the required textures to render a order bar
@@ -52,8 +65,7 @@ public class orderBar extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha){
         /**
-        draws the sprire
-
+        draws the sprite
          */
         Color color = getColor();
         //batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
@@ -72,5 +84,32 @@ public class orderBar extends Actor {
 
     public float getPercentage() {
         return percentage;
+    }
+
+    public float getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(float orderTime) {
+        this.orderTime = orderTime;
+    }
+
+    public void render(HUD hud, MainGame game){
+        hud.stage.addActor(this);
+        draw(game.batch, 1);
+    }
+
+    /**
+     * This if statement is used to track how long a player still has left to complete an order
+     * orderTimer is used to keep track of this and is a variable that will hold a value between 1 and 0
+     * where 1 is full time and 0 is out of time
+     * @param dt
+     */
+    public void update(float dt) {
+        System.out.println(difficulty);
+        if (orderTime > 0){ orderTime -= dt / difficulty;}
+        else {orderTime = 0;}
+
+        setPercentage(orderTime);
     }
 }

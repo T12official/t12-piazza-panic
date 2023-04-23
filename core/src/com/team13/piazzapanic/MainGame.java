@@ -43,6 +43,11 @@ public class MainGame extends Game {
 	private boolean goToIdle = false;
 	private boolean isEndless = false;
 
+	public static final double EASY_DIFFICULTY = 100d;
+	public static final double MEDIUM_DIFFICULTY = 40d;
+	public static final double HARD_DIFFICULTY = 10d;
+
+
 
 	public MainGame(){
 		isPlayScreen = false;
@@ -70,7 +75,7 @@ public class MainGame extends Game {
 			isPlayScreen = !isPlayScreen;
 		}
 		if (isPlayScreen && !isEndless) {
-			playScreen.difficultyScore = startScreen.diff;
+			playScreen.setDifficultyScore(startScreen.diff);
 			//playScreen.idleGametimer = TimeUtils.millis();
 			setScreen(playScreen);
 
@@ -88,8 +93,8 @@ public class MainGame extends Game {
 			if (! isPlayScreen){
 				isEndless = true;
 				System.out.println("endlessMode");
+				endless.setDifficultyScore(startScreen.diff);
 				setScreen(endless);
-
 			}
 
 		}

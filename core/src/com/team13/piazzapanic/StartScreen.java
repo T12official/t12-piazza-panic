@@ -1,26 +1,18 @@
 package com.team13.piazzapanic;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.*;
-import Sprites.orderBar;
 
 
 /**
@@ -38,7 +30,7 @@ public class StartScreen implements Screen {
     private final TextButton MEDIUM;
     private  final TextButton HARD;
     private final TextButton loadSave;
-    public Double diff = 5.0;
+    public double diff = MainGame.EASY_DIFFICULTY;
 
     /**
      * Constructor for StartScreen.
@@ -91,15 +83,15 @@ public class StartScreen implements Screen {
 
                 System.out.println("Clicked! Is checked: ");
                 if (message == "easy"){
-                    diff = 0.025;
+                    diff = MainGame.EASY_DIFFICULTY;
 
                 }
                 if (message == "medium"){
-                    diff = 0.05;
+                    diff = MainGame.MEDIUM_DIFFICULTY;
 
                 }
                 if (message == "hard"){
-                    diff = 0.07;
+                    diff = MainGame.HARD_DIFFICULTY;
                 }
                 if (message == "Load"){
                     game.playScreen.onStartLoadGame();

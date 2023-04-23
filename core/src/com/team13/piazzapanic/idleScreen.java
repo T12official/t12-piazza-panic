@@ -7,7 +7,6 @@ import Sprites.*;
 import Tools.B2WorldCreator;
 import Tools.WorldContactListener;
 import Tools.chefAI;
-import Tools.gameSaveTool;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -23,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -43,7 +41,7 @@ public class idleScreen implements Screen {
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
     private final HUD hud;
-    private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);;
+    private OrderTimer orderTimer;
     private float orderTime = 1;
     private boolean isActiveOrder = false;
     private GameOver gameover;

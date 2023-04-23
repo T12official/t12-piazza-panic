@@ -6,11 +6,9 @@ import Sprites.*;
 import Recipe.Order;
 import Tools.*;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.graphics.*;
@@ -21,9 +19,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -60,7 +56,7 @@ public class PlayScreen implements Screen {
 
     public final MainGame game;
     private boolean loadMyGame = false;
-    public Double difficultyScore = 1.0;
+    public double difficultyScore;
     private Label messageLabel;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
@@ -70,8 +66,8 @@ public class PlayScreen implements Screen {
     private final TextButton buttonPans;
     private final TextButton saveGame;
 
-    private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);;
-    private float orderTime = 1;
+    private OrderTimer orderTimer;
+
     private boolean isActiveOrder = false;
     private GameOver gameover;
     private TiledMap map;
@@ -157,6 +153,7 @@ public class PlayScreen implements Screen {
         chef2 = new Chef(this.world, 128,65);
         chef3 = new Chef(this.world, 128, 88);
 
+
         controlledChef = chef1;
         world.setContactListener(new WorldContactListener(world, this));
         controlledChef.notificationSetBounds("Down");
@@ -166,6 +163,8 @@ public class PlayScreen implements Screen {
         messageLabel.remove();
 
 
+        orderTimer =  new OrderTimer();
+        orderTimer.setDifficulty(difficultyScore);
     }
 
     public void onStartLoadGame(){
@@ -432,7 +431,7 @@ public class PlayScreen implements Screen {
                                 if (controlledChef.getInHandsRecipe() != null){
                                     if(controlledChef.getInHandsRecipe() == ordersArray.get(0).recipe){
                                         //TODO UPDATE CHANGE LOG FOR THIS
-                                        if (orderTime == 0){
+                                        if (orderTimer.getOrderTime() == 0){
                                             hud.decrementReps();
                                             if (hud.getRepPoints() == 0){System.out.println("game over"); game.goToGameOver();}
                                         }
@@ -458,19 +457,17 @@ public class PlayScreen implements Screen {
         }
         }
 
-    /**
-     * The update method updates the game elements, such as camera and characters,
-     * based on a specified time interval "dt".
-     * @param dt time interval for the update
-    */
-
-
-
-
     public void destroyPowerup(World world, cookingSpeedBoost toKill){
         world.destroyBody(toKill.getBody());
         toKill.dispose();
     }
+
+    /**
+     * The update method updates the game elements, such as camera and characters,
+     * based on a specified time interval "dt".
+     * @param dt time interval for the update
+     */
+
     public void update(float dt){
         if (loadMyGame) {
             gameSaveTool.loadMyGame(this);
@@ -495,6 +492,7 @@ public class PlayScreen implements Screen {
         chef3.update(dt);
         powerUp.update(dt);
         world.step(1/60f, 6, 2);
+        orderTimer.update(dt);
 
     }
 
@@ -504,7 +502,7 @@ public class PlayScreen implements Screen {
     public void createOrder() {
         System.out.println("I am an oeder");
         isActiveOrder = true;
-        orderTime = 1;
+        orderTimer.setOrderTime(1);
 
         int randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
         Texture burger_recipe = new Texture("Food/burger_recipe.png");
@@ -538,7 +536,7 @@ public class PlayScreen implements Screen {
             if (ordersArray.get(0).orderComplete) {
                 System.out.println("I am an oeder");
                 isActiveOrder = true;
-                orderTime = 1;
+                orderTimer.setOrderTime(1);
                 hud.updateScore(Boolean.FALSE, (6 - ordersArray.size()) * 35);
                 ordersArray.remove(0);
                 hud.updateOrder(Boolean.FALSE, 6 - ordersArray.size());
@@ -645,18 +643,7 @@ public class PlayScreen implements Screen {
 
         controlledChef.drawNotification(game.batch);
         if (isActiveOrder){
-            /**
-             * This if statement is used to track how long a player still has left to complete an order
-             * orderTimer is used to keep track of this and is a variable that will hold a value between 1 and 0
-             * where 1 is full time and 0 is out of time
-             */
-
-            hud.stage.addActor(orderTimer);
-            if (orderTime > 0){ orderTime -= 0.01f * difficultyScore;}
-            else {orderTime = 0;}
-
-            orderTimer.setPercentage(orderTime);
-            orderTimer.draw(game.batch, 1);
+            orderTimer.render(hud, game);
         }
         if (plateStation.getPlate().size() > 0){
             for(Object ing : plateStation.getPlate()){
@@ -869,5 +856,10 @@ public class PlayScreen implements Screen {
     }
     public void removeLabel(){
         messageLabel.remove();
+    }
+
+    public void setDifficultyScore(double difficultyScore) {
+        orderTimer.setDifficulty(difficultyScore);
+        this.difficultyScore = difficultyScore;
     }
 }

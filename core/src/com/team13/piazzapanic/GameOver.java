@@ -1,16 +1,13 @@
 package com.team13.piazzapanic;
 
-import Sprites.orderBar;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import org.w3c.dom.Text;
 
 /**
  * the GameOverclass implements a basic game over screen that is simple just an image that reads game over
