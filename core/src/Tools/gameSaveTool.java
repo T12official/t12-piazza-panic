@@ -18,8 +18,18 @@ public class gameSaveTool {
         Json json = new Json();
         String jsonString = json.toJson(data);
         file.writeString(jsonString, false);
+        saveKitchenState();
 // print the JSON string
         System.out.println(jsonString);
+    }
+
+    private static void saveKitchenState(){
+
+        FileHandle tmxFile = Gdx.files.internal("kitchenTemp.tmx");
+        String tmxContents = tmxFile.readString();
+
+        FileHandle saveFile = Gdx.files.local("kitchenSave.txt");
+        saveFile.writeString(tmxContents, false);
     }
 
     public static boolean loadMyGame(PlayScreen game){

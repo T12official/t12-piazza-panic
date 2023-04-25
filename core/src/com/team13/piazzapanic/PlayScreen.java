@@ -11,6 +11,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -74,10 +75,10 @@ public class PlayScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     public boolean dispose = false;
 
-    private final World world;
-    private final Chef chef1;
-    private final Chef chef2;
-    private final Chef chef3;
+    private World world;
+    private Chef chef1;
+    private Chef chef2;
+    private Chef chef3;
     public long idleGametimer;
     private Chef controlledChef;
     private kitchenChangerAPI kitchenEdit;
@@ -474,6 +475,8 @@ public class PlayScreen implements Screen {
     public void update(float dt){
         if (loadMyGame) {
             gameSaveTool.loadMyGame(this);
+            reRender("apple");
+            //TODO add kitchenload
             loadMyGame = false;
         }
 
@@ -507,17 +510,25 @@ public class PlayScreen implements Screen {
         isActiveOrder = true;
         orderTimer.setOrderTime(1);
 
-        int randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
+        int randomNum = ThreadLocalRandom.current().nextInt(1, 5);
         Texture burger_recipe = new Texture("Food/burger_recipe.png");
         Texture salad_recipe = new Texture("Food/salad_recipe.png");
+        Texture jacket_recipy = new Texture("Food/jacketPotato.png");
+        Texture pizza_recipe = new Texture("Food/pizza_recipe.png");
         Order order;
 
         for(int i = 0; i<numberOfOrders; i++){
             if(randomNum==1) {
                 order = new Order(PlateStation.burgerRecipe, burger_recipe);
             }
-            else {
+            else if(randomNum==2) {
                 order = new Order(PlateStation.saladRecipe, salad_recipe);
+            }
+            else if (randomNum==3){
+                order = new Order(PlateStation.mypizzaRecipy, pizza_recipe);
+            }
+            else {
+                order = new Order(PlateStation.jacketPotatoRec, jacket_recipy );
             }
             ordersArray.add(order);
             randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
@@ -786,11 +797,30 @@ public class PlayScreen implements Screen {
      * reRender is used to reload the kitchen onto the screen so any changes to the kitchen can be displaced on the screen
      */
 
-    private void reRender(){
+    private void reRender(){ //loads a kitchen from the tempory file for the current instance of the game
         TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
         map = mapLoader.load("KitchenTemp.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
         //gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
+        new B2WorldCreator(world, map, this);
+
+    }
+    private void reRender(String inFile){ //loads a kitchen from perinant storage on game load
+
+        FileHandle tmxFile = Gdx.files.internal("kitchenSave.txt");
+        String tmxContents = tmxFile.readString();
+
+        FileHandle saveFile = Gdx.files.local("kitchenTemp.tmx");
+        saveFile.writeString(tmxContents, false);
+
+        TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
+        map = mapLoader.load("KitchenTemp.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
+        //gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
+        new B2WorldCreator(world, map, this);
+        saveFile = null;
+        tmxFile = null;
+
     }
 
     @Override

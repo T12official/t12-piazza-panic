@@ -1,1 +1,1 @@
-{chef1Posx:0.39289302,chef1PosY:0.25475234,chef2Posx:1.2449716,chef2PosY:0.4263416,chef3Posx:1.2936264,chef3PosY:0.8728831,money:570,repPoints:3,minutes:2,seconds:16}
+{chef1Posx:0.39289302,chef1PosY:0.72141856,chef2Posx:1.2449716,chef2PosY:0.4263416,chef3Posx:1.2936264,chef3PosY:0.8728831,money:530,repPoints:3,minutes:3,seconds:10}

@@ -56,32 +56,42 @@ public class WorldContactListener implements ContactListener {
             if (fixA.getUserData() instanceof Chef){
                 cookingSpeedBoost a = (cookingSpeedBoost) fixB.getUserData();
                 a.getPowerUp().improveChef((Chef) fixA.getUserData());
-                aa.dispose = true;
-                aa.toKill = a;
-                aa.toKill.textureRegion.getTexture().dispose();
-                aa.toKill.textureRegion = null;
-                //a.body = null;
-                //a.powerUp = null;
-                aa.powerUpArray.remove(0);
-                //myWorld.destroyBody(a.getBody());
-                //a.dispose();
+                try {
+                    aa.dispose = true;
+                    aa.toKill = a;
+                    aa.toKill.textureRegion.getTexture().dispose();
+                    aa.toKill.textureRegion = null;
+                    //a.body = null;
+                    //a.powerUp = null;
+                    aa.powerUpArray.remove(0);
+                    //myWorld.destroyBody(a.getBody());
+                    //a.dispose();
+                }
+                catch(Exception err){
+                    System.out.println(err.getMessage());
+                }
             }
             else {
 
                 cookingSpeedBoost a = (cookingSpeedBoost) fixA.getUserData();
                 a.getPowerUp().improveChef((Chef) fixB.getUserData());
-                aa.dispose = true;
-                aa.toKill = a;
-                aa.toKill.textureRegion.getTexture().dispose();
-                aa.toKill.textureRegion = null;
-                //a.body = null;
-                //a.powerUp = null;
-                aa.powerUpArray.remove(0);
+                try {
+                    aa.dispose = true;
+                    aa.toKill = a;
+                    aa.toKill.textureRegion.getTexture().dispose();
+                    aa.toKill.textureRegion = null;
+                    //a.body = null;
+                    //a.powerUp = null;
+                    aa.powerUpArray.remove(0);
 
-                //myWorld.destroyBody(a.getBody());
+                    //myWorld.destroyBody(a.getBody());
 
 
-                //a.dispose();
+                    //a.dispose();
+                }
+                catch (Exception err){
+                    System.out.println(err.getMessage());
+                }
             }
         }
     }
