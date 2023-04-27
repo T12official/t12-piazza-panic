@@ -5,7 +5,11 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.team13.piazzapanic.PlayScreen;
 
-
+/**
+ * saveGameData is a class of static functions that are used to either write the state of the game into a text file,
+ * or load the state of a same gave from a text file
+ *
+ */
 public class gameSaveTool {
     public static void saveMyGame(PlayScreen game){
         FileHandle file = Gdx.files.local("gameSave.txt"); // create a file handle for a local file
@@ -14,8 +18,18 @@ public class gameSaveTool {
         Json json = new Json();
         String jsonString = json.toJson(data);
         file.writeString(jsonString, false);
+        saveKitchenState();
 // print the JSON string
         System.out.println(jsonString);
+    }
+
+    private static void saveKitchenState(){
+
+        FileHandle tmxFile = Gdx.files.internal("kitchenTemp.tmx");
+        String tmxContents = tmxFile.readString();
+
+        FileHandle saveFile = Gdx.files.local("kitchenSave.txt");
+        saveFile.writeString(tmxContents, false);
     }
 
     public static boolean loadMyGame(PlayScreen game){

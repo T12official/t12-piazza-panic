@@ -90,6 +90,7 @@ public class Chef extends Sprite implements InputProcessor {
 
     private CompletedDishStation completedStation;
     public boolean isCooking = false;
+    public int lives = 3;
 
     public int nextOrderAppearTime;
     public Recipe previousInHandRecipe;
@@ -800,6 +801,11 @@ public class Chef extends Sprite implements InputProcessor {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         return false;
+
+    public void add1Life() {
+        lives += 1;
+        System.out.println("Added a life");
+
     }
 }
 
