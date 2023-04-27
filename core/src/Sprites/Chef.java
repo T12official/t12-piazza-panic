@@ -28,12 +28,7 @@ import java.util.Objects;
 public class Chef extends Sprite {
     public World world;
     public Body b2body;
-
-    // power up modifiers
     public double cookingSpeedModifier = 1;
-    public float runSpeedModifier = 1F;
-    public double moneyEarnedModifier = 1;
-    // other powerups are add lives and give more customer time
     private final float initialX;
     private final float initialY;
 
@@ -88,6 +83,7 @@ public class Chef extends Sprite {
 
     private CompletedDishStation completedStation;
     public boolean isCooking = false;
+    public int lives = 3;
 
     public int nextOrderAppearTime;
     public Recipe previousInHandRecipe;
@@ -345,7 +341,7 @@ public class Chef extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(4.5f / MainGame.PPM);
-        shape.setPosition(new Vector2(shape.getPosition().x + (0.5f / MainGame.PPM) * runSpeedModifier, shape.getPosition().y - (5.5f / MainGame.PPM)*runSpeedModifier ));
+        shape.setPosition(new Vector2(shape.getPosition().x + (0.5f / MainGame.PPM), shape.getPosition().y - (5.5f / MainGame.PPM)));
 
 
         fdef.shape = shape;
@@ -655,17 +651,10 @@ public class Chef extends Sprite {
     public void setCookingSpeedModifier(double cookingSpeedModifier) {
         this.cookingSpeedModifier = cookingSpeedModifier;
     }
-    public void resetCookingSpeedModifier() {
-        this.cookingSpeedModifier = 1;
+    public void add1Life() {
+        lives += 1;
+        System.out.println("Added a life");
     }
-
-    public void setRunSpeedModifier(float runSpeedModifier) {
-        this.runSpeedModifier = runSpeedModifier;
-    }
-    public void resetRunSpeedModifier() {
-        this.cookingSpeedModifier = 1F;
-    }
-
 }
 
 

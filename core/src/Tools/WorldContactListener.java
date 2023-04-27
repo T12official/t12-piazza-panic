@@ -1,6 +1,7 @@
 package Tools;
 
 import Sprites.Chef;
+import Sprites.OrderTimer;
 import Sprites.InteractiveTileObject;
 import com.badlogic.gdx.physics.box2d.*;
 import com.team13.piazzapanic.PlayScreen;
@@ -11,12 +12,13 @@ import powerUps.cookingSpeedBoost;
  * It helps to manage the interactions between objects in the world.
  */
 public class WorldContactListener implements ContactListener {
-
+    OrderTimer timer;
     World myWorld;
     PlayScreen aa;
-    public WorldContactListener(World world, PlayScreen a){
+    public WorldContactListener(World world, PlayScreen a, OrderTimer timer){
         this.myWorld = world;
         this.aa = a;
+        this.timer = timer;
     }
 
     /**
@@ -55,14 +57,14 @@ public class WorldContactListener implements ContactListener {
             System.out.println("contact between chef and cookingSpeedBoost");
             if (fixA.getUserData() instanceof Chef){
                 cookingSpeedBoost a = (cookingSpeedBoost) fixB.getUserData();
-                a.getPowerUp().improveChef((Chef) fixA.getUserData());
+                a.getPowerUp().improveChef((Chef) fixA.getUserData(), (timer));
                 try {
                     aa.dispose = true;
                     aa.toKill = a;
                     aa.toKill.textureRegion.getTexture().dispose();
                     aa.toKill.textureRegion = null;
                     //a.body = null;
-                    //a.powerUp = null;
+                    //a.powerUp = null;m
                     aa.powerUpArray.remove(0);
                     //myWorld.destroyBody(a.getBody());
                     //a.dispose();
@@ -74,7 +76,7 @@ public class WorldContactListener implements ContactListener {
             else {
 
                 cookingSpeedBoost a = (cookingSpeedBoost) fixA.getUserData();
-                a.getPowerUp().improveChef((Chef) fixB.getUserData());
+                a.getPowerUp().improveChef((Chef) fixB.getUserData(), (timer));
                 try {
                     aa.dispose = true;
                     aa.toKill = a;

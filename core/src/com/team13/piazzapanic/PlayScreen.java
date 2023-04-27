@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -30,6 +31,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import powerUps.cookingSpeedBoost;
 import powerUps.speedUpCooking;
+import powerUps.addLife;
+import powerUps.addOrderTimer;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -56,6 +59,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PlayScreen implements Screen {
 
     public final MainGame game;
+    private final Stage stage;
     private boolean loadMyGame = false;
     public double difficultyScore;
     private Label messageLabel;
@@ -103,6 +107,9 @@ public class PlayScreen implements Screen {
     public ArrayList<cookingSpeedBoost> powerUpArray;
 
     private float timeSecondsCount = 0f;
+
+
+
     private boolean activateShop = false;
     private int addictionPanCount = 0;
     private int additionChopCount = 0;
@@ -135,8 +142,7 @@ public class PlayScreen implements Screen {
         gamecam = new OrthographicCamera();
         // FitViewport to maintain aspect ratio whilst scaling to screen size
         gameport = new FitViewport(MainGame.V_WIDTH / MainGame.PPM, MainGame.V_HEIGHT / MainGame.PPM, gamecam);
-        // create HUD for score & time
-        hud = new HUD(game.batch);
+
         // create orders hud
         Orders orders = new Orders(game.batch);
         // create map
@@ -144,21 +150,29 @@ public class PlayScreen implements Screen {
         map = mapLoader.load("Kitchen.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
         gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
-        button = (TextButton) getButton("shop");
-        button2 = (TextButton) getButton("chop");
-        buttonPans = (TextButton) getButton("pan");
-        saveGame = (TextButton) getButton("save game");
+        hud = new HUD(game.batch);
+        stage = new Stage(gameport, game.batch);
+        Gdx.input.setInputProcessor(stage);
+        PlayScreenButton shopButton = new PlayScreenButton("shop", PlayScreenButton.Functionality.SHOP, this);
+        PlayScreenButton chopButton = new PlayScreenButton("chop", PlayScreenButton.Functionality.CHOP, this);
+        PlayScreenButton panButton = new PlayScreenButton("pan", PlayScreenButton.Functionality.PAN, this);
+        PlayScreenButton saveButton = new PlayScreenButton("save", PlayScreenButton.Functionality.PAN, this);
+        button = shopButton.getButton();
+        button2 = chopButton.getButton();
+        buttonPans = panButton.getButton();
+        saveGame = saveButton.getButton();
+
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
         powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 126,85);
-        powerUp.setPowerUp(new speedUpCooking());
+        powerUp.setPowerUp(new addOrderTimer());
         chef1 = new Chef(this.world, 31.5F,65);
         chef2 = new Chef(this.world, 128,65);
         chef3 = new Chef(this.world, 128, 88);
 
-
+        orderTimer =  new OrderTimer();
         controlledChef = chef1;
-        world.setContactListener(new WorldContactListener(world, this));
+        world.setContactListener(new WorldContactListener(world, this, orderTimer));
         controlledChef.notificationSetBounds("Down");
 
         ordersArray = new ArrayList<>();
@@ -166,7 +180,7 @@ public class PlayScreen implements Screen {
         messageLabel.remove();
 
 
-        orderTimer =  new OrderTimer();
+
         orderTimer.setDifficulty(difficultyScore);
     }
 
@@ -583,7 +597,7 @@ public class PlayScreen implements Screen {
         if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower){
             // Ths if statement controls when a new powerup will spawn. they spawn a regular intervals defined by a timer
             cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.4f,0.4f);
-            newPower.setPowerUp(new speedUpCooking());
+            newPower.setPowerUp(new addOrderTimer());
             powerUpArray.add(newPower);
             spawnNewPowerUpTimer = TimeUtils.millis();
 
@@ -612,7 +626,6 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
-
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         Gdx.input.setInputProcessor(hud.stage);
@@ -894,4 +907,43 @@ public class PlayScreen implements Screen {
         orderTimer.setDifficulty(difficultyScore);
         this.difficultyScore = difficultyScore;
     }
+
+    public void toggleShop() {
+        this.activateShop = !activateShop;
+    }
+
+    public void buyChoppingBoard(){
+        if (additionChopCount < 4 && hud.getScore() >= 5) {
+            hud.purchase(5);
+            System.out.println("buying chopping baords");
+            kitchenEdit.editCVSFile(2, 4 + additionChopCount, "2");
+            additionChopCount++;
+            messageLabel.remove();
+            addToHud("bought chopping board");
+            messageUp = true;
+            shopMessageTimer = TimeUtils.millis();
+            reRender();
+        }
+    }
+
+    public void buyPan(){
+        System.out.println("buying pans");
+        if (addictionPanCount < 3 && hud.getScore() >= 5) {
+            hud.purchase(5);
+            kitchenEdit.editCVSFile(9, 5 - addictionPanCount, "9");
+            addictionPanCount++;
+            messageLabel.remove();
+            addToHud("bought pans");
+            messageUp = true;
+            shopMessageTimer = TimeUtils.millis();
+            reRender();
+        }
+        else {
+            messageLabel.remove();
+            addToHud("lack of money or at max pans");
+            messageUp = true;
+            shopMessageTimer = TimeUtils.millis();
+        }
+    }
 }
+
