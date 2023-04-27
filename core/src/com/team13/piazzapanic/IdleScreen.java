@@ -9,7 +9,7 @@ import Tools.WorldContactListener;
 import Tools.chefAI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -28,19 +28,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * The idle screen is identical to an older version of the playscreen class in most ways. The main difference is that instead of the player having conrtol
- * the AI frm chefAI does
- */
 
-
-public class IdleScreen implements Screen {
+public class IdleScreen implements Playable {
 
     private final MainGame game;
     private final TextButton returnToGame;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
     private final HUD hud;
+
     private OrderTimer orderTimer;
     private float orderTime = 1;
     private boolean isActiveOrder = false;
@@ -82,6 +78,7 @@ public class IdleScreen implements Screen {
         returnToGame = getButton("Press X to return to game");
 
         this.game = game;
+
         gameover = new GameOverScreen(game);
 
         scenarioComplete = Boolean.FALSE;
@@ -102,16 +99,33 @@ public class IdleScreen implements Screen {
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
 
-        chef1 = new Chef(this.world, 31.5F,65);
-        chef2 = new Chef(this.world, 128,65);
+
+        chef1 = new Chef(this, 31.5F,65);
+        chef2 = new Chef(this, 128,65);
         aiChef = new chefAI(this);
         controlledChef = chef1;
         //TODO FIX THE NEED FOR PASSING A MAIN GAME IN THE IDLE SCREEN AKA MAKE THIS INHERIT FROM PLAYSCREEN OR HAVE A DIFFERENT CONTACT LISTENER
         world.setContactListener(new WorldContactListener(world, new PlayScreen(this.game), orderTimer));
+
         controlledChef.notificationSetBounds("Down");
 
         ordersArray = new ArrayList<>();
 
+    }
+
+
+    public World getWorld(){
+        return world;
+    }
+
+    @Override
+    public void resetIdleTimer() {
+
+    }
+
+    @Override
+    public PlateStation getPlateStation() {
+        return plateStation;
     }
 
     @Override
@@ -121,6 +135,7 @@ public class IdleScreen implements Screen {
 
 
     /**
+
             The handle input is simalr to the handle input in the playscreen implemention but with one very key difference.
             @param AIinput -  AIinput is the input key press that is requested by the AI playing the game. This is how the AI is able to make
                             "keyboard inputs" into the game
@@ -290,6 +305,7 @@ public class IdleScreen implements Screen {
     public void update(float dt){
 
         hud.stage.addActor(returnToGame);
+
         /**
          * The update function has been adapted to request a keybaord input from the AI, given the state of the current game world
          */
