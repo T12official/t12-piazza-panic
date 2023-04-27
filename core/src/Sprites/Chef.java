@@ -661,6 +661,7 @@ public class Chef extends Sprite implements InputProcessor {
 
     public void setCookingSpeedModifier(double cookingSpeedModifier) {
         this.cookingSpeedModifier = cookingSpeedModifier;
+        System.out.println("Cooking speed increase");
     }
 
     public void handleSprite(InteractiveTileObject tile, String tileName) {
@@ -811,6 +812,7 @@ public class Chef extends Sprite implements InputProcessor {
 
     public void setRunSpeedModifier(float v) {
         runSpeedModifier = v;
+        System.out.println("Speed Up");
     }
 
 }
