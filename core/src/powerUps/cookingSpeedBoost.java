@@ -52,10 +52,7 @@ public class cookingSpeedBoost extends Sprite {
         fdef.shape = shape;
         body.createFixture(fdef).setUserData(this);
 
-
     }
-
-
 
     public void update(float delta) {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
