@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.team13.piazzapanic.MainGame;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
+import com.team13.piazzapanic.Playable;
 
 import java.util.Objects;
 
@@ -25,13 +28,17 @@ import java.util.Objects;
  * and completed dish station.
  */
 
-public class Chef extends Sprite {
+public class Chef extends Sprite implements InputProcessor {
     public World world;
     public Body b2body;
     public double cookingSpeedModifier = 1;
     private final float initialX;
     private final float initialY;
 
+    private float yVelocity = 0;
+    private float xVelocity = 0;
+
+    public boolean active = false;
 
     public Vector2 startVector;
     private float waitTimer;
@@ -88,14 +95,18 @@ public class Chef extends Sprite {
     public int nextOrderAppearTime;
     public Recipe previousInHandRecipe;
 
+    private Playable level;
+
     /**
      * Chef class constructor that initializes all the fields
-     * @param world the world the chef exists in
+     * @param baseLevel the parent of the world the chef exists in
      * @param startX starting X position
      * @param startY starting Y position
      */
 
-    public Chef(World world, float startX, float startY) {
+    public Chef(Playable baseLevel, float startX, float startY) {
+        level = baseLevel;
+        world = level.getWorld();
         initialX = startX / MainGame.PPM;
         initialY = startY / MainGame.PPM;
         jacketChef = new Texture("Chef/Chef_holding_jacket.png");
@@ -123,7 +134,6 @@ public class Chef extends Sprite {
 
         skinNeeded = normalChef;
 
-        this.world = world;
         currentState = State.DOWN;
 
         defineChef();
@@ -651,9 +661,151 @@ public class Chef extends Sprite {
     public void setCookingSpeedModifier(double cookingSpeedModifier) {
         this.cookingSpeedModifier = cookingSpeedModifier;
     }
+
+    public void handleSprite(InteractiveTileObject tile, String tileName) {
+        switch (tileName) {
+            case "Sprites.TomatoStation":
+                TomatoStation tomatoTile = (TomatoStation) tile;
+                setInHandsIng(tomatoTile.getIngredient());
+                setChefSkin(getInHandsIng());
+                break;
+            case "Sprites.BunsStation":
+                BunsStation bunTile = (BunsStation) tile;
+                setInHandsIng(bunTile.getIngredient());
+                setChefSkin(getInHandsIng());
+                break;
+            case "Sprites.OnionStation":
+                OnionStation onionTile = (OnionStation) tile;
+                setInHandsIng(onionTile.getIngredient());
+                setChefSkin(getInHandsIng());
+                break;
+            case "Sprites.SteakStation":
+                SteakStation steakTile = (SteakStation) tile;
+                setInHandsIng(steakTile.getIngredient());
+                setChefSkin(getInHandsIng());
+                break;
+            case "Sprites.LettuceStation":
+                LettuceStation lettuceTile = (LettuceStation) tile;
+                setInHandsIng(lettuceTile.getIngredient());
+                setChefSkin(getInHandsIng());
+                break;
+            case "Sprites.potatoesStation":
+                System.out.println("giving myself a spud");
+                potatoesStation pots = (potatoesStation) tile;
+                setInHandsIng(pots.getIngredient());
+                setChefSkin(getInHandsIng());
+                break;
+            case "Sprites.cheeseStation":
+                System.out.println("giving myself cheese");
+                cheeseStation cheese = (cheeseStation) tile;
+                setInHandsIng(cheese.getIngredient());
+                setChefSkin(getInHandsIng());
+                break;
+            case "Sprites.pizzaDoughStation":
+                System.out.println("giving myself pizza");
+                pizzaDoughStation dough = (pizzaDoughStation) tile;
+                setInHandsIng(dough.getIngredient());
+                setChefSkin(getInHandsIng());
+            case "Sprites.PlateStation":
+                if (level.getPlateStation().getPlate().size() > 0 || level.getPlateStation().getCompletedRecipe() != null) {
+                    pickUpItemFrom(tile);
+
+                }
+
+        }
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        level.resetIdleTimer();
+        switch (keycode) {
+            case Input.Keys.R:
+                rest();
+                break;
+            case Input.Keys.W:
+                yVelocity += 0.5f;
+                break;
+            case Input.Keys.S:
+                yVelocity -= 0.5f;
+                break;
+            case Input.Keys.A:
+                xVelocity -= 0.5f;
+                break;
+            case Input.Keys.D:
+                xVelocity += 0.5f;
+                break;
+        }
+        b2body.setLinearVelocity(xVelocity, yVelocity);
+        if (b2body.getLinearVelocity().x > 0){
+            notificationSetBounds("Right");
+        }
+        if (b2body.getLinearVelocity().x < 0){
+            notificationSetBounds("Left");
+        }
+        if (b2body.getLinearVelocity().y > 0){
+            notificationSetBounds("Up");
+        }
+        if (b2body.getLinearVelocity().y < 0){
+            notificationSetBounds("Down");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        switch (keycode) {
+            case Input.Keys.W:
+            case Input.Keys.S:
+                yVelocity = 0;
+                break;
+            case Input.Keys.A:
+            case Input.Keys.D:
+                xVelocity = 0;
+                break;
+        }
+        b2body.setLinearVelocity(xVelocity, yVelocity);
+        return true;
+    }
+
+    public void rest(){
+        active = false;
+        xVelocity = 0;
+        yVelocity = 0;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
+
     public void add1Life() {
         lives += 1;
         System.out.println("Added a life");
+
     }
 }
 

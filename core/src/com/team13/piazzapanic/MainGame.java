@@ -35,11 +35,13 @@ public class MainGame extends Game {
 	public SpriteBatch batch;
 	public boolean isPlayScreen;
 	public PlayScreen playScreen;
+
 	public StartScreen startScreen;
 	private IdleScreen idleScreen;
 	private GameOverScreen gameoverScreen;
 	private EndlessScreen endlessScreen;
 	public boolean isStartScreen = true;
+
 	private boolean isGameOver = false;
 	private boolean goToIdle = false;
 	public boolean isEndless = false;
@@ -58,9 +60,11 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 		startScreen = new StartScreen(this);
 		playScreen = new PlayScreen(this);
+
 		gameoverScreen = new GameOverScreen(this);
 		idleScreen = new IdleScreen(this);
 		endlessScreen = new EndlessScreen(this);
+
 	}
 
 	@Override
