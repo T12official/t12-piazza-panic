@@ -443,7 +443,7 @@ public class PlayScreen implements Screen {
                                         controlledChef.setChefSkin(null);
                                         if(ordersArray.size()==1){
                                             scenarioComplete = Boolean.TRUE;
-                                            game.goToGameOver();
+                                            //game.goToGameOver();
                                         }
                                     }
                                 }
@@ -533,7 +533,7 @@ public class PlayScreen implements Screen {
             ordersArray.add(order);
             randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
         }
-        hud.updateOrder(Boolean.FALSE, 1);
+        hud.updateOrder(Boolean.FALSE, orderNum);
     }
 
     /**
@@ -542,7 +542,7 @@ public class PlayScreen implements Screen {
     public void updateOrder(){
         if(scenarioComplete==Boolean.TRUE) {
             hud.updateScore(Boolean.TRUE, (numberOfOrders + 1 - ordersArray.size()) * 35);
-            hud.updateOrder(Boolean.TRUE, 0);
+            hud.updateOrder(Boolean.TRUE, orderNum);
             return;
         }
         if(ordersArray.size() != 0) {

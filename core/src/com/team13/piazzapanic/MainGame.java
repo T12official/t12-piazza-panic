@@ -45,8 +45,8 @@ public class MainGame extends Game {
 	public boolean isEndless = false;
 
 	public static final double EASY_DIFFICULTY = 100d;
-	public static final double MEDIUM_DIFFICULTY = 40d;
-	public static final double HARD_DIFFICULTY = 10d;
+	public static final double MEDIUM_DIFFICULTY = 60d;
+	public static final double HARD_DIFFICULTY = 40d;
 
 
 
@@ -102,6 +102,9 @@ public class MainGame extends Game {
 		else if (isEndless) {
 			endlessScreen.setDifficultyScore(startScreen.diff);
 			return endlessScreen;
+		}
+		else if (isGameOver){
+			return gameoverScreen;
 		}
 		playScreen.setDifficultyScore(startScreen.diff);
 		return playScreen;

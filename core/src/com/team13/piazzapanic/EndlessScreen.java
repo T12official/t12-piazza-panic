@@ -18,7 +18,7 @@ public class EndlessScreen extends PlayScreen{
 
     @Override
     public void updateOrder(){
-        if (ordersArray.size() == 1){
+        if (ordersArray.size() <= 1){
             createOrder();
         }
         super.updateOrder();
