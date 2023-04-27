@@ -192,7 +192,7 @@ public class PlayScreen implements Playable {
         System.out.println(chefList.toString());
 
         controlledChef = getChef();
-        world.setContactListener(new WorldContactListener(world, this));
+        world.setContactListener(new WorldContactListener(world,this, orderTimer));
 
         controlledChef.notificationSetBounds("Down");
 
@@ -322,7 +322,6 @@ public class PlayScreen implements Playable {
 
                                 break;
                             case "Sprites.CompletedDishStation":
-
                                 if (controlledChef.getInHandsRecipe() != null){
                                     if(controlledChef.getInHandsRecipe() == ordersArray.get(0).recipe){
                                         //TODO UPDATE CHANGE LOG FOR THIS
@@ -339,19 +338,19 @@ public class PlayScreen implements Playable {
                                         }
                                     }
                                 }
+                                break;
                             }
-                            break;
                     }
                 }
 
             }
-        }
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             System.out.println("do stuff!!!!!!!!!!!!!!!");
             resetIdleTimer();
             //Some stuff
         }
-        }
+
+    }
 
     public void destroyPowerup(World world, cookingSpeedBoost toKill){
         world.destroyBody(toKill.getBody());

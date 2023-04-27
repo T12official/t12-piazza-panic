@@ -801,6 +801,7 @@ public class Chef extends Sprite implements InputProcessor {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         return false;
+    }
 
     public void add1Life() {
         lives += 1;
