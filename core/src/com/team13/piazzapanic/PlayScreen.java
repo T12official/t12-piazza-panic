@@ -30,6 +30,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import powerUps.cookingSpeedBoost;
 import powerUps.speedUpCooking;
+import powerUps.addLife;
+import powerUps.addOrderTimer;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -151,14 +153,14 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
         powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 126,85);
-        powerUp.setPowerUp(new speedUpCooking());
+        powerUp.setPowerUp(new addOrderTimer());
         chef1 = new Chef(this.world, 31.5F,65);
         chef2 = new Chef(this.world, 128,65);
         chef3 = new Chef(this.world, 128, 88);
 
-
+        orderTimer =  new OrderTimer();
         controlledChef = chef1;
-        world.setContactListener(new WorldContactListener(world, this));
+        world.setContactListener(new WorldContactListener(world, this, orderTimer));
         controlledChef.notificationSetBounds("Down");
 
         ordersArray = new ArrayList<>();
@@ -166,7 +168,7 @@ public class PlayScreen implements Screen {
         messageLabel.remove();
 
 
-        orderTimer =  new OrderTimer();
+
         orderTimer.setDifficulty(difficultyScore);
     }
 
@@ -583,7 +585,7 @@ public class PlayScreen implements Screen {
         if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower){
             // Ths if statement controls when a new powerup will spawn. they spawn a regular intervals defined by a timer
             cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.4f,0.4f);
-            newPower.setPowerUp(new speedUpCooking());
+            newPower.setPowerUp(new addOrderTimer());
             powerUpArray.add(newPower);
             spawnNewPowerUpTimer = TimeUtils.millis();
 

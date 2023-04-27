@@ -83,6 +83,7 @@ public class Chef extends Sprite {
 
     private CompletedDishStation completedStation;
     public boolean isCooking = false;
+    public int lives = 3;
 
     public int nextOrderAppearTime;
     public Recipe previousInHandRecipe;
@@ -649,6 +650,10 @@ public class Chef extends Sprite {
 
     public void setCookingSpeedModifier(double cookingSpeedModifier) {
         this.cookingSpeedModifier = cookingSpeedModifier;
+    }
+    public void add1Life() {
+        lives += 1;
+        System.out.println("Added a life");
     }
 }
 
