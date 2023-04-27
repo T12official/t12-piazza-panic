@@ -33,8 +33,8 @@ public class PlateStation extends InteractiveTileObject {
 
     /** Recipe that has been completed on the plate */
     private Recipe recipeDone;
-    private Recipe jacketPotatoRec;
-    private Recipe mypizzaRecipy;
+    public static Recipe jacketPotatoRec;
+    public static Recipe mypizzaRecipy;
 
 
     /**

@@ -7,7 +7,6 @@ import Sprites.*;
 import Tools.B2WorldCreator;
 import Tools.WorldContactListener;
 import Tools.chefAI;
-import Tools.gameSaveTool;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -23,24 +22,29 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class idleScreen implements Screen {
+/**
+ * The idle screen is identical to an older version of the playscreen class in most ways. The main difference is that instead of the player having conrtol
+ * the AI frm chefAI does
+ */
+
+
+public class IdleScreen implements Screen {
 
     private final MainGame game;
     private final TextButton returnToGame;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
     private final HUD hud;
-    private orderBar orderTimer =  new  orderBar(105,120,50,5, Color.RED);;
+    private OrderTimer orderTimer;
     private float orderTime = 1;
     private boolean isActiveOrder = false;
-    private GameOver gameover;
+    private GameOverScreen gameover;
     public final TiledMap map;
     private final OrthogonalTiledMapRenderer renderer;
 
@@ -74,11 +78,11 @@ public class idleScreen implements Screen {
      * @param game The MainGame instance that the PlayScreen will be a part of.
      */
 
-    public idleScreen(MainGame game){
+    public IdleScreen(MainGame game){
         returnToGame = getButton("Press X to return to game");
 
         this.game = game;
-        gameover = new GameOver(game);
+        gameover = new GameOverScreen(game);
 
         scenarioComplete = Boolean.FALSE;
         createdOrder = Boolean.FALSE;
@@ -118,26 +122,15 @@ public class idleScreen implements Screen {
 
 
     /**
-     * The handleInput method is responsible for handling the input events of the game such as movement and interaction with objects.
-     *
-     * It checks if the 'R' key is just pressed and both chefs have the user control, if so,
-     * it switches the control between the two chefs.
-     *
-     * If the controlled chef does not have the user control,
-     * the method checks if chef1 or chef2 have the user control and sets the control to that chef.
-     *
-     * If the controlled chef has the user control,
-     * it checks if the 'W', 'A', 'S', or 'D' keys are pressed and sets the velocity of the chef accordingly.
-     *
-     * If the 'E' key is just pressed and the chef is touching a tile,
-     * it checks the type of tile and sets the chef's in-hands ingredient accordingly.
-     *
-     * The method also sets the direction of the chef based on its linear velocity.
-     *
-     * @param dt is the time delta between the current and previous frame.
+            The handle input is simalr to the handle input in the playscreen implemention but with one very key difference.
+            @param AIinput -  AIinput is the input key press that is requested by the AI playing the game. This is how the AI is able to make
+                            "keyboard inputs" into the game
      */
 
     public void handleInput(float dt, String AIinput){
+        /**
+         * The X key has been mapped to the ability to go from the idle screen back to the main game
+         */
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)){
             game.disableIdle();
         }
@@ -298,7 +291,9 @@ public class idleScreen implements Screen {
     public void update(float dt){
 
         hud.stage.addActor(returnToGame);
-        //TODO implement AI chef
+        /**
+         * The update function has been adapted to request a keybaord input from the AI, given the state of the current game world
+         */
         aiChef.returnKeyboardInput();
         handleInput(dt, aiChef.returnKeyboardInput());
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.team13.piazzapanic;
+package de.tomgrill.gdxtesting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +39,11 @@ public class GdxTestRunner extends BlockJUnit4ClassRunner implements Application
 	public GdxTestRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 		HeadlessApplicationConfiguration conf = new HeadlessApplicationConfiguration();
+
 		new HeadlessApplication(this, conf);
 		Gdx.gl = mock(GL20.class);
+
+		Gdx.graphics = new MockGraphics();
 	}
 
 	@Override
@@ -83,6 +86,9 @@ public class GdxTestRunner extends BlockJUnit4ClassRunner implements Application
 		waitUntilInvokedInRenderMethod();
 	}
 
+	/**
+	    *
+	    */
 	private void waitUntilInvokedInRenderMethod() {
 		try {
 			while (true) {

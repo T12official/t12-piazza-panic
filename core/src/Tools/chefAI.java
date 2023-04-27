@@ -1,25 +1,30 @@
 package Tools;
 
 import Sprites.Chef;
-import com.team13.piazzapanic.idleScreen;
+import com.team13.piazzapanic.IdleScreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+/**
+ * Chef AI contains a path finding script that can tell a chef how to get between 2 points of a game world
+ * This is implemented uses an algorithm that takes inspration from Dijkstra's shortest path algorithm.
+ * This class could be further expanded into a chef that can actually play the game properly
+ */
 
 public class chefAI {
 
 
     //TODO make a ai to make burgers and salad
 
-    private idleScreen game;
+    private IdleScreen game;
     private Chef mychef;
     private int targetx = 4;
     private int targetY = 1;
 
-    private int[][] targetsPoints = {{4,1},{4,8},{9,8},{9,1}};
+    private int[][] targetsPoints = {{4,1},{4,8},{9,8},{9,1}}; //This provides a ser of positions for the chef to navigate to
     private int[][] myIntArray =
-                    {{19, 18, 18, 18, 18, 18, 18, 18, 18, 20,},
+                    {{19, 18, 18, 18, 18, 18, 18, 18, 18, 20,}, //This is a map of the kitchen and its tiles
                     {16, 21, 21, 21, 21, 21, 21, 21, 21, 17,},
                     {16, 21, 21, 21, 21, 21, 21, 21, 21, 17,},
                     {1, 2, 2, 2, 1, 1, 1, 1, 1, 1,},
@@ -32,7 +37,7 @@ public class chefAI {
                     {1, 1, 13, 1, 1, 1, 3, 9, 9, 1}};
     private int targetVal = 0;
 
-    public chefAI(idleScreen game) {
+    public chefAI(IdleScreen game) {
         this.game = game;
 
 
@@ -42,6 +47,11 @@ public class chefAI {
 
 
     public String pickMovementDirection(){
+        /**
+         * This function uses its current x,y index in the coord grid, and the next x,y index returned by the path finding algorithm
+         * to work out which input the chef needs to be provides out of wasd
+         */
+
         int[] myData = convertPosToXY(game.chef1.getNotificationX(), game.chef1.getNotificationY());
         if (myData[0] == targetx && myData[1] == targetY || myData[0] == 0){
             //System.out.println("i arrived at my target node");
@@ -65,6 +75,9 @@ public class chefAI {
     }
 
     public String returnKeyboardInput() {
+        /**
+         * This function provides a way for the idle screen to retreive the input that the chef AI wishes to make
+         */
         //System.out.println(String.format("chef x: %f chef y: %f ",game.chef1.getX(), game.chef1.getX() )); ;
        // System.out.println(String.format("chef x: %f chef y: %f ",game.chef1.getNotificationX(), game.chef1.getNotificationY() ));
         convertPosToXY(game.chef1.getNotificationX(), game.chef1.getNotificationY());
@@ -73,6 +86,13 @@ public class chefAI {
     }
 
     public List<String> defineShortestPath(int cols, int rows, int endNode, int endCol) {
+        /**
+         * This is the shortest path algorithm. It will return the optimal shortest path as their is no heuristic
+         * @param cols - the current Y location of the chef
+         * @param rows - the current X location of the chef
+         * @param endNode - the wanted end X position of the chef
+         * @param endCol = the wanted end Y position of the chef
+         */
         HashMap<String, String> nodes = new HashMap<String, String>();
         HashMap<String, String> visited = new HashMap<String, String>();
         List<String> fringe = new ArrayList<>();
@@ -99,6 +119,9 @@ public class chefAI {
 
 
     private List<String> printShortestPath(int startCol, int startRow, HashMap<String, String> nodes){
+        /**
+         * This function will go through the hashmap starting from the end node and return  a list of all of the step from the startt to the end node
+         */
 
         List<String> pathToFollow = new ArrayList<>();
         String currentNode = Integer.toString(startCol) + "," + Integer.toString(startRow);
@@ -119,11 +142,19 @@ public class chefAI {
 
 
     private void defineInit(HashMap<String, String> nodes, int cols, int rows) {
+
         nodes.put(Integer.toString(cols) + "," + Integer.toString(rows), "0,C,INIT");
     }
 
     private void visitNextNodes(int nodeCol, int nodeRow, List<String> fringe, HashMap<String, String> nodes, HashMap<String, String> visited) {
-
+        /**
+         * This function will take a node, and attempt to explore all of the adjacent nodes if they are not already explored.
+         * @param nodeCol - the Y index of the current node
+         * @param nodeRow - the X position of the current node
+         * @param fringe - A list of nodes that have been reached by the algorithm, but the algorithm has not yet explored to see where they lead to
+         * @param nodes - A collection of nodes that can be explored
+         * @param visited - a hashmap that allows the algorithm to store a node, the previous node that comes before it, and other details
+         */
 
         if (visited.containsKey(Integer.toString(nodeCol) + "," + Integer.toString(nodeRow))) {
             return;
@@ -175,6 +206,10 @@ public class chefAI {
 
 
     private int[] convertPosToXY(double x, double y){ //This function is assuming x and y and tiles the player can move to
+        /**
+         * This function takes the X, Y position of a chef, and works out how it translates into an X,y index of the tile map.
+         */
+
         //bottomY = 0.208184     topY = 1.056333
         //xStart = 0.198333      //xMidle = 0.441956
         double tileWidth = (0.441956 - 0.198333) / 2;

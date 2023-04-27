@@ -19,6 +19,10 @@ public class FoodAssetTests {
         assertTrue("This test will only pass when burger_recipe.png asset exists.", Gdx.files.internal("Food/burger_recipe.png").exists());//Maybe add to change log? (24/02/2023)
     }
     @Test
+    public void testBurnedPattyAssetExists(){
+        assertTrue("This test will only pass when burned_patty.png asset exists.", Gdx.files.internal("Food/burned_patty.png").exists());//Maybe add to change log? (24/02/2023)
+    }
+    @Test
     public void testChoppedLettuceAssetExists(){
         assertTrue("This test will only pass when Chopped_lettuce.png asset exists", Gdx.files.internal("Food/Chopped_lettuce.png").exists());//Maybe add to change log? (24/02/2023)
     }
@@ -49,6 +53,10 @@ public class FoodAssetTests {
     @Test
     public void testPattyAssetExists(){
         assertTrue("This test will only pass when Patty.png asset exists", Gdx.files.internal("Food/Patty.png").exists());//Maybe add to change log? (24/02/2023)
+    }
+    @Test
+    public void testPizzaDoneAssetExists(){
+        assertTrue("This test will only pass when pizzaDone.png asset exists", Gdx.files.internal("Food/pizzaDone.png").exists());//Maybe add to change log? (24/02/2023)
     }
     @Test
     public void testSaladAssetExists(){

@@ -1,26 +1,18 @@
 package com.team13.piazzapanic;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.*;
-import Sprites.orderBar;
 
 
 /**
@@ -38,7 +30,9 @@ public class StartScreen implements Screen {
     private final TextButton MEDIUM;
     private  final TextButton HARD;
     private final TextButton loadSave;
-    public Double diff = 5.0;
+    private final TextButton gamemode1;
+    private final TextButton gamemode2;
+    public double diff = MainGame.EASY_DIFFICULTY;
 
     /**
      * Constructor for StartScreen.
@@ -54,13 +48,19 @@ public class StartScreen implements Screen {
         MEDIUM = getButton("medium");
         HARD = getButton("hard");
         loadSave = getButton("Load");
+        gamemode1 = getButton("Scenario");
+        gamemode2 = getButton("Endless");
         MEDIUM.setPosition(50, 0);
         HARD.setPosition(130, 0);
         loadSave.setPosition(0,30);
+        gamemode1.setPosition(40, 30);
+        gamemode2.setPosition(110, 30);
         stage.addActor(button2);
         stage.addActor(MEDIUM);
         stage.addActor(HARD);
         stage.addActor(loadSave);
+        stage.addActor(gamemode1);
+        stage.addActor(gamemode2);
         this.game = game;
         backgroundImage = new Texture("startImage.png");
         backgroundSprite = new Sprite(backgroundImage);
@@ -88,23 +88,28 @@ public class StartScreen implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked (InputEvent event, float x, float y) {
-
-                System.out.println("Clicked! Is checked: ");
                 if (message == "easy"){
-                    diff = 0.025;
+                    diff = MainGame.EASY_DIFFICULTY;
 
                 }
                 if (message == "medium"){
-                    diff = 0.05;
+                    diff = MainGame.MEDIUM_DIFFICULTY;
 
                 }
                 if (message == "hard"){
-                    diff = 0.07;
+                    diff = MainGame.HARD_DIFFICULTY;
                 }
                 if (message == "Load"){
                     game.playScreen.onStartLoadGame();
                     game.playScreen.idleGametimer = TimeUtils.millis();
-                    game.setGameScreen();
+                    game.isPlayScreen = true;
+                }
+                if (message == "Scenario"){
+                    game.isPlayScreen = true;
+                }
+                if (message == "Endless"){
+                    game.isPlayScreen = false;
+                    game.isEndless = true;
                 }
                 //game.goToGameOver();
             }
@@ -150,6 +155,7 @@ public class StartScreen implements Screen {
         //a.draw(game.batch, 1);
         game.batch.end();
         stage.draw();
+        Gdx.input.setInputProcessor(stage);
     }
 
     /**

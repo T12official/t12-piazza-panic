@@ -9,6 +9,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.team13.piazzapanic.MainGame;
 
+/**
+ * cookingSpeedBoost is a badly named class. This class is used to render a token into the game screen that represents a power up collectable. It is
+ * also  responsible for adding the power up token to the world so that it can be seen in the collsion detection system in worldConstactListener.
+ */
+
 public class cookingSpeedBoost extends Sprite {
 
     private World world;
@@ -17,10 +22,23 @@ public class cookingSpeedBoost extends Sprite {
     public powerUpGeneric powerUp;
 
     public cookingSpeedBoost(World world, TextureRegion textureRegion, float x, float y) {
+        /**
+         * This construction creates a collidable body and stores it to the class gloabal varibale body. It then ceeates the textures of the coin
+         * Finally, it sets the X, Y location of the coin
+         *
+         * @param world - this is a reference to instance of world used in the game.Adding the body of this to the world allows for collision to
+         *              be detected in worldContactListener
+         * @param textureRegion - the textureRegion allows the input of what texture should be used to render the coin. This can allow for coins of different
+         *                      powers to have different appearences, that make them distinguishable. (currently only one texture has ben made so all coins look the same)
+         *
+         * @param x - the x pos to render the coin
+         * @param y - the y pos to render the coin
+         */
+
         super(textureRegion);
         this.world = world;
         this.textureRegion = textureRegion;
-        float chefWidth = 13 / MainGame.PPM;
+        float chefWidth = 20 / MainGame.PPM;
         float chefHeight = 20 / MainGame.PPM;
         setBounds(x, y, chefWidth, chefHeight);
         BodyDef bodyDef = new BodyDef();
@@ -44,6 +62,9 @@ public class cookingSpeedBoost extends Sprite {
     }
 
     public void render(SpriteBatch batch) {
+        /**
+         * Usedd to render the sprite itself
+         */
         setRotation(body.getAngle() * MathUtils.radiansToDegrees);
         draw(batch);
 
@@ -70,6 +91,10 @@ public class cookingSpeedBoost extends Sprite {
     }
 
     public void setPowerUp(powerUpGeneric powerUp) {
+        /**
+         * This is a VERY IMPORTANT SETTER. This setter allows the developer to attatch a specific power up to a coin after it has been created.
+         * if this setter is not used a powerUp token will not do anything
+         */
         this.powerUp = powerUp;
 
 

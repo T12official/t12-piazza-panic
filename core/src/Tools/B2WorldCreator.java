@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.team13.piazzapanic.MainGame;
 import com.team13.piazzapanic.PlayScreen;
-import com.team13.piazzapanic.idleScreen;
+import com.team13.piazzapanic.IdleScreen;
 
 /**
  * B2WorldCreator is a class used to create Box2D World objects from a TiledMap.
@@ -107,7 +107,7 @@ public class B2WorldCreator {
     }
 
 
-    public B2WorldCreator(World world, TiledMap map, idleScreen screen) {
+    public B2WorldCreator(World world, TiledMap map, IdleScreen screen) {
 
         //TODO CHANGE IDLE SCREEN SO THAT THIS SECOND CLASS IS NOT NEEDED :)
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);

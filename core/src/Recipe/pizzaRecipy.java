@@ -18,5 +18,9 @@ public class pizzaRecipy extends Recipe {
 
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return ((Recipe) obj).getClass().equals(this.getClass());
+    }
 
 }
