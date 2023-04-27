@@ -79,7 +79,7 @@ public class PlayScreen implements Playable {
     private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
     private float orderTime = 1;
 
-    public OrderTimer orderTimer;
+    public OrderTimer orderTimer = new OrderTimer();
 
     public boolean isActiveOrder = false;
     private GameOverScreen gameover;
