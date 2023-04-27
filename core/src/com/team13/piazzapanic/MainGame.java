@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class MainGame extends Game {
 
@@ -36,7 +35,7 @@ public class MainGame extends Game {
 	public boolean isPlayScreen;
 	public PlayScreen playScreen;
 	private StartScreen startScreen;
-	private idleScreen idleGame;
+	private IdleScreen idleGame;
 	private GameOver gameover;
 	private endlessMode endless;
 	private boolean isGameOver = false;
@@ -53,7 +52,7 @@ public class MainGame extends Game {
 		startScreen = new StartScreen(this);
 		playScreen = new PlayScreen(this);
 		gameover = new GameOver(this);
-		idleGame = new idleScreen(this);
+		idleGame = new IdleScreen(this);
 		endless = new endlessMode(this);
 
 

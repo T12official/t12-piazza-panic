@@ -6,7 +6,6 @@ import Recipe.Recipe;
 import Recipe.*;
 import Recipe.SaladRecipe;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,9 +15,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.team13.piazzapanic.MainGame;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.team13.piazzapanic.PlayScreen;
 import com.team13.piazzapanic.Playable;
-import com.team13.piazzapanic.idleScreen;
 
 import java.util.Objects;
 

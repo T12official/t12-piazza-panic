@@ -7,10 +7,8 @@ import Sprites.*;
 import Tools.B2WorldCreator;
 import Tools.WorldContactListener;
 import Tools.chefAI;
-import Tools.gameSaveTool;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,14 +21,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class idleScreen implements Playable {
+public class IdleScreen implements Playable {
 
     private final MainGame game;
     private final TextButton returnToGame;
@@ -74,7 +71,7 @@ public class idleScreen implements Playable {
      * @param game The MainGame instance that the PlayScreen will be a part of.
      */
 
-    public idleScreen(MainGame game){
+    public IdleScreen(MainGame game){
         returnToGame = getButton("Press X to return to game");
 
         this.game = game;
