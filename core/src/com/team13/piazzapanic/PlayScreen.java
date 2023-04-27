@@ -38,6 +38,7 @@ import powerUps.cookingSpeedBoost;
 import powerUps.speedUpCooking;
 import powerUps.addLife;
 import powerUps.addOrderTimer;
+import powerUps.runSpeedUp;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -181,7 +182,7 @@ public class PlayScreen implements Playable {
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
         powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 126,85);
-        powerUp.setPowerUp(new speedUpCooking());
+        powerUp.setPowerUp(new runSpeedUp());
         chefList.add(new Chef(this, 31.5F,65));
         chefList.add(new Chef(this, 128,65));
         chefList.add(new Chef(this, 128, 88));
@@ -478,7 +479,7 @@ public class PlayScreen implements Playable {
         if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower){
             // Ths if statement controls when a new powerup will spawn. they spawn a regular intervals defined by a timer
             cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.4f,0.4f);
-            newPower.setPowerUp(new addOrderTimer());
+            newPower.setPowerUp(new runSpeedUp());
             powerUpArray.add(newPower);
             spawnNewPowerUpTimer = TimeUtils.millis();
 

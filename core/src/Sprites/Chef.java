@@ -32,6 +32,7 @@ public class Chef extends Sprite implements InputProcessor {
     public World world;
     public Body b2body;
     public double cookingSpeedModifier = 1;
+    public float runSpeedModifier = 1F;
     private final float initialX;
     private final float initialY;
 
@@ -723,16 +724,16 @@ public class Chef extends Sprite implements InputProcessor {
                 rest();
                 break;
             case Input.Keys.W:
-                yVelocity += 0.5f;
+                yVelocity += 0.5f * runSpeedModifier;
                 break;
             case Input.Keys.S:
-                yVelocity -= 0.5f;
+                yVelocity -= 0.5f * runSpeedModifier ;
                 break;
             case Input.Keys.A:
-                xVelocity -= 0.5f;
+                xVelocity -= 0.5f * runSpeedModifier ;
                 break;
             case Input.Keys.D:
-                xVelocity += 0.5f;
+                xVelocity += 0.5f * runSpeedModifier ;
                 break;
         }
         b2body.setLinearVelocity(xVelocity, yVelocity);
@@ -806,8 +807,12 @@ public class Chef extends Sprite implements InputProcessor {
     public void add1Life() {
         lives += 1;
         System.out.println("Added a life");
-
     }
+
+    public void setRunSpeedModifier(float v) {
+        runSpeedModifier = v;
+    }
+
 }
 
 
