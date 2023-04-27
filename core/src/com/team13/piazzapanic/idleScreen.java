@@ -30,7 +30,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class idleScreen implements Screen {
+public class idleScreen implements Playable {
 
     private final MainGame game;
     private final TextButton returnToGame;
@@ -98,8 +98,8 @@ public class idleScreen implements Screen {
         world = new World(new Vector2(0,0), true);
         new B2WorldCreator(world, map, this);
 
-        chef1 = new Chef(this.world, 31.5F,65);
-        chef2 = new Chef(this.world, 128,65);
+        chef1 = new Chef(this, 31.5F,65);
+        chef2 = new Chef(this, 128,65);
         aiChef = new chefAI(this);
         controlledChef = chef1;
 
@@ -109,6 +109,20 @@ public class idleScreen implements Screen {
 
         ordersArray = new ArrayList<>();
 
+    }
+
+    public World getWorld(){
+        return world;
+    }
+
+    @Override
+    public void resetIdleTimer() {
+
+    }
+
+    @Override
+    public PlateStation getPlateStation() {
+        return plateStation;
     }
 
     @Override
