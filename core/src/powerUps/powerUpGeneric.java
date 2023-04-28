@@ -10,7 +10,6 @@ import com.team13.piazzapanic.HUD;
 
 public class powerUpGeneric {
     public void powerUpGeneric(){}
-    public void improveOrder(OrderTimer orderToModify){}
     public void improveChef(Chef chefToModify, OrderTimer orderTimer, HUD hud){}
 
 }

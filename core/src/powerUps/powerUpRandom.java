@@ -9,7 +9,7 @@ public class powerUpRandom extends powerUpGeneric{
     private Random randomGenerator = new Random();
     @Override
     public void improveChef(Chef chefToModify, OrderTimer orderTimer, HUD hud){
-        int randNumber = randomGenerator.nextInt(4);
+        int randNumber = randomGenerator.nextInt(5);
         switch(randNumber){
             case 1:
                 chefToModify.setRunSpeedModifier(1.5F);
@@ -20,8 +20,11 @@ public class powerUpRandom extends powerUpGeneric{
             case 3:
                 orderTimer.stopTimer((1));
                 break;
-            case 0:
+            case 4:
                 hud.addRep();
+                break;
+            case 0:
+                hud.doublePoints();
                 break;
 
         }

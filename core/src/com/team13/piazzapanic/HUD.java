@@ -35,9 +35,13 @@ public class HUD implements Disposable {
     private Integer score;
     Integer repPoints = 3;
 
+    Boolean boost = false;
+
     public String timeStr;
 
     public Table table;
+
+
 
     Label timeLabelT;
     Label timeLabel;
@@ -149,13 +153,26 @@ public class HUD implements Disposable {
         int addScore;
         int currentTime;
 
+
         if(this.scenarioComplete == Boolean.FALSE){
             currentTime = (worldTimerM * 60) + worldTimerS;
+
             if (currentTime <= expectedTime) {
-                addScore = 100;
+                if (boost == Boolean.TRUE){
+                    addScore = 200;
+                    boost = Boolean.FALSE;}
+                else {
+                    addScore = 100;
+                }
             }
             else{
-                addScore = 100 - (5 * (currentTime -expectedTime));
+                if (boost == Boolean.TRUE){
+                    addScore = 2 * (100 - (5 * (currentTime -expectedTime)));
+                    boost = Boolean.FALSE;
+                }
+                else{
+                    addScore = 100 - (5 * (currentTime -expectedTime));
+                }
                 if(addScore < 0){
                     addScore = 0;
                 }
@@ -321,6 +338,10 @@ public class HUD implements Disposable {
         repPoints += 1;
         System.out.println("Added reputation you now you have a reputation of " + repPoints);
         setRepPoints(repPoints);
+    }
+    public void doublePoints() {
+        boost = Boolean.TRUE;
+        System.out.println("Double Points for next order");
     }
 }
 
