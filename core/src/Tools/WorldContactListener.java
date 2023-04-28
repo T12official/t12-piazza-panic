@@ -5,6 +5,7 @@ import Sprites.OrderTimer;
 import Sprites.InteractiveTileObject;
 import com.badlogic.gdx.physics.box2d.*;
 import com.team13.piazzapanic.PlayScreen;
+import com.team13.piazzapanic.HUD;
 import powerUps.cookingSpeedBoost;
 
 /**
@@ -15,10 +16,12 @@ public class WorldContactListener implements ContactListener {
     OrderTimer timer;
     World myWorld;
     PlayScreen aa;
-    public WorldContactListener(World world, PlayScreen a, OrderTimer timer){
+    HUD hud;
+    public WorldContactListener(World world, PlayScreen a, OrderTimer timer, HUD hud){
         this.myWorld = world;
         this.aa = a;
         this.timer = timer;
+        this.hud = hud;
     }
 
     /**
@@ -57,7 +60,7 @@ public class WorldContactListener implements ContactListener {
             System.out.println("contact between chef and cookingSpeedBoost");
             if (fixA.getUserData() instanceof Chef){
                 cookingSpeedBoost a = (cookingSpeedBoost) fixB.getUserData();
-                a.getPowerUp().improveChef((Chef) fixA.getUserData(), (timer));
+                a.getPowerUp().improveChef((Chef) fixA.getUserData(), (timer), (hud));
                 try {
                     aa.dispose = true;
                     aa.toKill = a;
@@ -76,7 +79,7 @@ public class WorldContactListener implements ContactListener {
             else {
 
                 cookingSpeedBoost a = (cookingSpeedBoost) fixA.getUserData();
-                a.getPowerUp().improveChef((Chef) fixB.getUserData(), (timer));
+                a.getPowerUp().improveChef((Chef) fixB.getUserData(), (timer), (hud));
                 try {
                     aa.dispose = true;
                     aa.toKill = a;

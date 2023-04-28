@@ -317,4 +317,10 @@ public class HUD implements Disposable {
     public void setWorldTimerS(Integer worldTimerS) {
         this.worldTimerS = worldTimerS;
     }
+    public void addRep() {
+        repPoints += 1;
+        System.out.println("Added reputation you now you have a reputation of " + repPoints);
+        setRepPoints(repPoints);
+    }
 }
+

@@ -190,7 +190,7 @@ public class PlayScreen implements Playable {
         System.out.println(chefList.toString());
 
         controlledChef = getChef();
-        world.setContactListener(new WorldContactListener(world,this, orderTimer));
+        world.setContactListener(new WorldContactListener(world,this, orderTimer, hud));
 
         controlledChef.notificationSetBounds("Down");
 
