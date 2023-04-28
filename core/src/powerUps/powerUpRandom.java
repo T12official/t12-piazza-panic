@@ -19,7 +19,7 @@ public class powerUpRandom extends powerUpGeneric{
             case 3:
                 orderTimer.stopTimer((1));
                 break;
-            case 4:
+            case 0:
                 chefToModify.add1Life();
                 break;
 

@@ -807,7 +807,7 @@ public class Chef extends Sprite implements InputProcessor {
 
     public void add1Life() {
         lives += 1;
-        System.out.println("Added a life");
+        System.out.println("Added a life, now you have " + lives + " lives left");
     }
 
     public void setRunSpeedModifier(float v) {
