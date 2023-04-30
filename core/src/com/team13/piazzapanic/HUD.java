@@ -54,6 +54,9 @@ public class HUD implements Disposable {
     Label reputation;
     public BitmapFont font;
     Label reputationT;
+    Label powerUpTextLabel;
+    private float powerUpDuration = 3.0f;
+    private float powerUpTimer = 0.0f;
 
     public HUD(SpriteBatch sb){
         this.scenarioComplete = Boolean.FALSE;
@@ -90,6 +93,10 @@ public class HUD implements Disposable {
         reputationT = new Label("REP", new Label.LabelStyle(font, Color.BLACK));
         reputation = new Label(String.format("%d", repPoints), new Label.LabelStyle(font, Color.WHITE));
 
+        Label powerUpLabel = new Label("PowerUp:", new Label.LabelStyle(font, Color.BLACK));
+        powerUpTextLabel = new Label("None", new Label.LabelStyle(font, Color.GREEN));
+
+
         table.add(timeLabelT).padTop(2).padLeft(2);
         table.add(scoreLabelT).padTop(2).padLeft(2);
         table.add(orderNumLT).padTop(2).padLeft(2);
@@ -99,6 +106,9 @@ public class HUD implements Disposable {
         table.add(scoreLabel).padTop(2).padLeft(2);
         table.add(orderNumL).padTop(2).padLeft(2);
         table.add(reputation).padTop(2).padLeft(2);
+        table.row();
+        table.add(powerUpLabel).colspan(2).padTop(2).padLeft(2); // add the new label here
+        table.add(powerUpTextLabel).padTop(2).padLeft(2);
 
         table.left().top();
         stage.addActor(table);
@@ -342,6 +352,35 @@ public class HUD implements Disposable {
     public void doublePoints() {
         boost = Boolean.TRUE;
         System.out.println("Double Points for next order");
+    }
+    public void updatePowerUp(int powerUpType) {
+        String powerUpText;
+
+        // Determine the power up text based on the powerUpType integer input
+        switch (powerUpType) {
+            case 0:
+                powerUpText = "x2 Points!";
+                break;
+            case 1:
+                powerUpText = "Run Speed Boost!";
+                break;
+            case 2:
+                powerUpText = "Cooking Speed Boost!";
+                break;
+            case 3:
+                powerUpText = "Extra Time!";
+                break;
+            case 4:
+                powerUpText = "+1 Rep!";
+                break;
+            default:
+                powerUpText = "None";
+                break;
+        }
+
+        // Set the text of the powerUpTextLabel to the power up text
+        powerUpTextLabel.setText(powerUpText);
+        System.out.println(powerUpTextLabel);
     }
 }
 
