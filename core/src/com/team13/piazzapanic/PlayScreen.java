@@ -475,7 +475,7 @@ public class PlayScreen implements Playable {
 
         if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower){
             // Ths if statement controls when a new powerup will spawn. they spawn a regular intervals defined by a timer
-            cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.4f,0.4f);
+            cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.3f,0.3f);
             newPower.setPowerUp(new powerUpRandom());
             powerUpArray.add(newPower);
             spawnNewPowerUpTimer = TimeUtils.millis();

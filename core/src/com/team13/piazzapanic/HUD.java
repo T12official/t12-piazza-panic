@@ -55,8 +55,6 @@ public class HUD implements Disposable {
     public BitmapFont font;
     Label reputationT;
     Label powerUpTextLabel;
-    private float powerUpDuration = 3.0f;
-    private float powerUpTimer = 0.0f;
 
     public HUD(SpriteBatch sb){
         this.scenarioComplete = Boolean.FALSE;
@@ -362,10 +360,10 @@ public class HUD implements Disposable {
                 powerUpText = "x2 Points!";
                 break;
             case 1:
-                powerUpText = "Run Speed Boost!";
+                powerUpText = "Speed!";
                 break;
             case 2:
-                powerUpText = "Cooking Speed Boost!";
+                powerUpText = "x2 Cooking!";
                 break;
             case 3:
                 powerUpText = "Extra Time!";
