@@ -214,7 +214,7 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
 
         MainGame maingame = new MainGame();
         PlayScreen playscreen = new PlayScreen(maingame);
-        Chef chef = new Chef(playscreen, 0, 0);
+        //Chef chef = new Chef(playscreen, 0, 0);
 
         chefList = new ArrayList<>();
         chefList.add(new Chef(playscreen, 0, 0));

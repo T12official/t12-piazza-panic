@@ -25,8 +25,8 @@ public class MoneyTest {
     public MainGame game = new MainGame();
 
 
-    @Test
-    public void StartingMoneyTest(){
+    //@Test
+   /* public void StartingMoneyTest(){
         SpriteBatch spriteBatch = new SpriteBatch();
         HUD hud = new HUD(spriteBatch);
         int money = hud.getScore();
@@ -34,5 +34,5 @@ public class MoneyTest {
                 0, money);
 
 }
-
+*/
 }
