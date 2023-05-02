@@ -68,6 +68,14 @@ public class PlayScreen implements Playable {
     private Label messageLabel;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
+
+    public HUD getHUD() {
+        if (hud == null){
+            return new HUD(game.getBatch());
+        }
+        return hud;
+    }
+
     public HUD hud;
     private final TextButton button;
     private final TextButton button2;
@@ -238,7 +246,7 @@ public class PlayScreen implements Playable {
 
     @Override
     public void show(){
-        hud = new HUD(game.getBatch());
+        hud = getHUD();
         stage = new Stage(gameport, game.getBatch());
         InputProcessor[] cars = {getChef(), hud.stage};
         inputMultiplexer.setProcessors(cars);
