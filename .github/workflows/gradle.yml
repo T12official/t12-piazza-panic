@@ -35,33 +35,9 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-  release:
-    runs-on: ubuntu-22.04
-    needs: [ "build" ]
-    permissions:
-      contents: write
-    steps:
-    - name: Download Ubuntu Build Artifact
-      uses: actions/download-artifact@v3.0.1
+    - name: Upload library JAR
+      uses: actions/upload-artifact@v3.1.1
       with:
-        name: lib-ubuntu-22.04.jar
-    - name: Rename Ubuntu Build Artifact
-      run: mv lib.jar lib-ubuntu.jar
-    - name: Download MacOS Build Artifact
-      uses: actions/download-artifact@v3.0.1
-      with:
-        name: lib-macos-12.jar
-    - name: Rename MacOS Build Artifact
-      run: mv lib.jar lib-macos.jar
-    - name: Download Windows Build Artifact
-      uses: actions/download-artifact@v3.0.1
-      with:
-        name: lib-windows-2022.jar
-    - name: Rename Windows Build Artifact
-      run: mv lib.jar lib-windows.jar
-    - name: Release
-      uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
-      with:
-        files: lib*.jar
-    
+        name: lib-${{ matrix.os }}.jar
+        path: triangle/lib/build/libs/lib.jar
       
