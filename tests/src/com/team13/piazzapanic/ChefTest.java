@@ -32,6 +32,7 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     public TiledMap map = mapLoader.load("Kitchen.tmx");
     public MainGame game = new MainGame();
 
+    //Playable playable = new Playable()
 
     private Playable level;
 
@@ -101,10 +102,9 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     }
 
 
+
     @Test
     public void MoveChefRightTest(){
-
-        World world = level.getWorld();
 
         Chef chef = new Chef(level, 0, 0);
         Gdx.input.setInputProcessor(chef);

@@ -60,7 +60,7 @@ public class HUD implements Disposable {
         this.scenarioComplete = Boolean.FALSE;
         worldTimerM = 0;
         worldTimerS = 0;
-        score = 0;
+        score = 0;//score = money in game
         timeStr = String.format("%d", worldTimerM) + " : " + String.format("%d", worldTimerS);
         float fontX = 0.5F;
         float fontY = 0.3F;
