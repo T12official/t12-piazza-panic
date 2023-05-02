@@ -57,9 +57,9 @@ public class MainGame extends Game {
 	private boolean isIdleScreen = false;
 	public boolean isEndless = false;
 
-	public static final double EASY_DIFFICULTY = 100d;
-	public static final double MEDIUM_DIFFICULTY = 60d;
-	public static final double HARD_DIFFICULTY = 40d;
+	public static final double EASY_DIFFICULTY = 150d;
+	public static final double MEDIUM_DIFFICULTY = 100d;
+	public static final double HARD_DIFFICULTY = 75d;
 
 
 
