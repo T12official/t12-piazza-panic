@@ -62,13 +62,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class PlayScreen implements Playable {
 
     public final MainGame game;
-    private final Stage stage;
+    private Stage stage;
     private boolean loadMyGame = false;
     public double difficultyScore;
     private Label messageLabel;
     private final OrthographicCamera gamecam;
     private final Viewport gameport;
-    public final HUD hud;
+    public HUD hud;
     private final TextButton button;
     private final TextButton button2;
     private final TextButton buttonPans;
@@ -158,14 +158,13 @@ public class PlayScreen implements Playable {
         gameport = new FitViewport(MainGame.V_WIDTH / MainGame.PPM, MainGame.V_HEIGHT / MainGame.PPM, gamecam);
 
         // create orders hud
-        Orders orders = new Orders(game.batch);
+
         // create map
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
         map = mapLoader.load("Kitchen.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
+
         gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
-        hud = new HUD(game.batch);
-        stage = new Stage(gameport, game.batch);
+
         Gdx.input.setInputProcessor(stage);
         PlayScreenButton shopButton = new PlayScreenButton("shop", PlayScreenButton.Functionality.SHOP, this);
         PlayScreenButton chopButton = new PlayScreenButton("chop", PlayScreenButton.Functionality.CHOP, this);
@@ -195,8 +194,7 @@ public class PlayScreen implements Playable {
         controlledChef.notificationSetBounds("Down");
 
         ordersArray = new ArrayList<>();
-        addToHud("welcome");
-        messageLabel.remove();
+
 
         orderTimer.setDifficulty(difficultyScore);
     }
@@ -237,6 +235,14 @@ public class PlayScreen implements Playable {
         inputMultiplexer.setProcessors(cars);
         inputMultiplexer.getProcessors();
         Gdx.input.setInputProcessor(inputMultiplexer);
+        hud = new HUD(game.getBatch());
+        stage = new Stage(gameport, game.getBatch());
+        Orders orders = new Orders(game.getBatch());
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
+        addToHud("welcome");
+        messageLabel.remove();
+
+
 
     }
 
@@ -444,7 +450,7 @@ public class PlayScreen implements Playable {
                 hud.updateOrder(Boolean.FALSE, orderNum);
                 return;
             }
-            ordersArray.get(0).create(trayX, trayY, game.batch);
+            ordersArray.get(0).create(trayX, trayY, game.getBatch());
         }
     }
 
@@ -514,7 +520,7 @@ public class PlayScreen implements Playable {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        game.getBatch().setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         Gdx.input.setInputProcessor(hud.stage);
 
@@ -537,50 +543,50 @@ public class PlayScreen implements Playable {
             saveGame.remove();
         }
 
-        game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
+        game.getBatch().setProjectionMatrix(gamecam.combined);
+        game.getBatch().begin();
 
 
         updateOrder();
         //powerUp.getBody().setTransform(new Vector2(0,0),30);
-        //powerUp.render(game.batch);
+        //powerUp.render(game.getBatch());
         for (int i = 0 ; i < powerUpArray.size(); i ++){
             //The powerUpArray is an array containing all the powerups that need to be rendered. new powerups can be added to this array
-            powerUpArray.get(i).render(game.batch);
+            powerUpArray.get(i).render(game.getBatch());
         }
         for (Chef chef : chefList) {
-            chef.draw(game.batch);
+            chef.draw(game.getBatch());
         }
         //System.out.println(chef1.getX());
        // System.out.println(chef1.getY());
 
 
-        getChef().drawNotification(game.batch);
+        getChef().drawNotification(game.getBatch());
         if (isActiveOrder){
             orderTimer.render(hud, game);
         }
         if (plateStation.getPlate().size() > 0){
             for(Object ing : plateStation.getPlate()){
                 Ingredient ingNew = (Ingredient) ing;
-                ingNew.create(plateStation.getX(), plateStation.getY(),game.batch);
+                ingNew.create(plateStation.getX(), plateStation.getY(),game.getBatch());
             }
         } else if (plateStation.getCompletedRecipe() != null){
             Recipe recipeNew = plateStation.getCompletedRecipe();
-            recipeNew.create(plateStation.getX(), plateStation.getY(), game.batch);
+            recipeNew.create(plateStation.getX(), plateStation.getY(), game.getBatch());
         }
         for (Chef chef : chefList) {
             if (!chef.getUserControlChef() || chef.isCooking) {
                 if (chef.getTouchingTile() != null && chef.getInHandsIng() != null){
                     if (chef.getTouchingTile().getUserData() instanceof InteractiveTileObject){
-                        chef.displayIngStatic(game.batch);
+                        chef.displayIngStatic(game.getBatch());
                     }
                 }
             }
             if (chef.previousInHandRecipe != null){
-                chef.displayIngDynamic(game.batch);
+                chef.displayIngDynamic(game.getBatch());
             }
         }
-        game.batch.end();
+        game.getBatch().end();
     }
 
     /**

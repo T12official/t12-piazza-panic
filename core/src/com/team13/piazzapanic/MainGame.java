@@ -32,6 +32,17 @@ public class MainGame extends Game {
 	public static final int TILE_SIZE = 16;
 
 	public static final float PPM = 100;
+
+	public SpriteBatch getBatch() {
+		if (batch == null) {
+			return new SpriteBatch();
+		}
+		else {
+			return batch;
+		}
+	}
+
+
 	public SpriteBatch batch;
 	public boolean isPlayScreen;
 	public PlayScreen playScreen;

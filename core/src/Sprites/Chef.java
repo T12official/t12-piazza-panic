@@ -36,7 +36,16 @@ public class Chef extends Sprite implements InputProcessor {
     private final float initialX;
     private final float initialY;
 
+    public float getyVelocity() {
+        return yVelocity;
+    }
+
     private float yVelocity = 0;
+
+    public float getxVelocity() {
+        return xVelocity;
+    }
+
     private float xVelocity = 0;
 
     public boolean active = false;

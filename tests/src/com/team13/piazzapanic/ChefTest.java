@@ -115,14 +115,11 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
-        event.setKeyCode(Input.Keys.A);
-        InputListener listener = (InputListener) Gdx.input.getInputProcessor();
-        listener.keyDown(event, event.getKeyCode());
-        float testicle = chef.getX();
-        System.out.println(testicle);
+        event.setKeyCode(Input.Keys.D);
+        chef.keyDown(Input.Keys.D);
 
         assertEquals("This test will only pass if, after pressing 'D', the chef moves to the right",
-                0.042, chef.getX(), 0.001f);
+                0.5f, chef.getxVelocity(), 0.001f);
 
 
     }
@@ -132,17 +129,15 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
         MainGame maingame  = new MainGame();
         PlayScreen playscreen = new PlayScreen(maingame);
         Chef chef = new Chef(playscreen, 0, 0);
+
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
         event.setKeyCode(Input.Keys.A);
-        InputListener listener = (InputListener) Gdx.input.getInputProcessor();
-        listener.keyDown(event, event.getKeyCode());
-        float testicle = chef.getX();
-        System.out.println(testicle);
+        chef.keyDown(Input.Keys.A);
 
-        assertEquals("This test will only pass if, after pressing 'A', the chef moves to the left",
-                -0.042, chef.getX(), 0.001f);
+        assertEquals("This test will only pass if, after pressing 'A', the chef moves to the right",
+                -0.5f, chef.getxVelocity(), 0.001f);
     }
     @Test
     public void MoveChefUpTest() {
@@ -150,17 +145,15 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
         MainGame maingame  = new MainGame();
         PlayScreen playscreen = new PlayScreen(maingame);
         Chef chef = new Chef(playscreen, 0, 0);
+
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
-        event.setKeyCode(Input.Keys.A);
-        InputListener listener = (InputListener) Gdx.input.getInputProcessor();
-        listener.keyDown(event, event.getKeyCode());
-        float testicle = chef.getX();
-        System.out.println(testicle);
+        event.setKeyCode(Input.Keys.W);
+        chef.keyDown(Input.Keys.W);
 
         assertEquals("This test will only pass if, after pressing 'W', the chef moves up",
-                0.042, chef.getY(), 0.001f);
+                0.5f, chef.getyVelocity(), 0.001f);
     }
     @Test
     public void MoveChefDownTest() {
@@ -168,16 +161,14 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
         MainGame maingame  = new MainGame();
         PlayScreen playscreen = new PlayScreen(maingame);
         Chef chef = new Chef(playscreen, 0, 0);
+
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
-        event.setKeyCode(Input.Keys.A);
-        InputListener listener = (InputListener) Gdx.input.getInputProcessor();
-        listener.keyDown(event, event.getKeyCode());
-        float testicle = chef.getX();
-        System.out.println(testicle);
+        event.setKeyCode(Input.Keys.S);
+        chef.keyDown(Input.Keys.S);
+
 
         assertEquals("This test will only pass if, after pressing 'S', the chef moves down",
-                0.042, chef.getY(), 0.001f);
-    }
-}
+                -0.5f, chef.getyVelocity(), 0.001f);
+}}
