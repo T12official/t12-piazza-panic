@@ -409,15 +409,7 @@ public class IdleScreen implements Playable {
         chef2.draw(game.batch);
         controlledChef.drawNotification(game.batch);
         if (isActiveOrder){
-            // TODO add this if statement to if report
-            orderTimer.draw(game.batch, 1);
-            hud.stage.addActor(orderTimer);
-            if (orderTime > 0){ orderTime -= 0.01f;}
-            else {orderTime = 0;}
 
-
-
-            orderTimer.setPercentage(orderTime);
         }
         if (plateStation.getPlate().size() > 0){
             for(Object ing : plateStation.getPlate()){

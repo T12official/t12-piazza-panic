@@ -43,7 +43,7 @@ public class MainGame extends Game {
 	public boolean isStartScreen = true;
 
 	private boolean isGameOver = false;
-	private boolean goToIdle = false;
+	private boolean isIdleScreen = false;
 	public boolean isEndless = false;
 
 	public static final double EASY_DIFFICULTY = 100d;
@@ -86,11 +86,13 @@ public class MainGame extends Game {
 		this.isGameOver = true;
 	}
 	public void goToIdle(){
-		goToIdle = true;
+		isPlayScreen = false;
+		isEndless = false;
+		isIdleScreen = true;
 
 	}
 	public void disableIdle(){
-		goToIdle = false;
+		isIdleScreen = false;
 		playScreen.resetIdleTimer();
 	}
 
@@ -109,6 +111,9 @@ public class MainGame extends Game {
 		}
 		else if (isGameOver){
 			return gameoverScreen;
+		}
+		else if (isIdleScreen){
+			return idleScreen;
 		}
 		playScreen.setDifficultyScore(startScreen.diff);
 		return playScreen;
