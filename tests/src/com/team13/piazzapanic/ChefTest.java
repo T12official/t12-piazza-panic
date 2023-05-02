@@ -2,6 +2,8 @@ package com.team13.piazzapanic;
 
 
 import Sprites.Chef;
+import com.team13.piazzapanic.PlayScreen;
+import com.team13.piazzapanic.MainGame;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import jdk.internal.foreign.PlatformLayouts;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -105,8 +108,10 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
 
     @Test
     public void MoveChefRightTest(){
+        MainGame maingame  = new MainGame();
+        PlayScreen playscreen = new PlayScreen(maingame);
+        Chef chef = new Chef(playscreen, 0, 0);
 
-        Chef chef = new Chef(level, 0, 0);
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
@@ -124,9 +129,9 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     @Test
     public void MoveChefLeftTest() {
 
-        World world = level.getWorld();
-
-        Chef chef = new Chef(level, 0, 0);
+        MainGame maingame  = new MainGame();
+        PlayScreen playscreen = new PlayScreen(maingame);
+        Chef chef = new Chef(playscreen, 0, 0);
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
@@ -142,9 +147,9 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     @Test
     public void MoveChefUpTest() {
 
-        World world = level.getWorld();
-
-        Chef chef = new Chef(level, 0, 0);
+        MainGame maingame  = new MainGame();
+        PlayScreen playscreen = new PlayScreen(maingame);
+        Chef chef = new Chef(playscreen, 0, 0);
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
@@ -160,9 +165,9 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     @Test
     public void MoveChefDownTest() {
 
-        World world = level.getWorld();
-
-        Chef chef = new Chef(level, 0, 0);
+        MainGame maingame  = new MainGame();
+        PlayScreen playscreen = new PlayScreen(maingame);
+        Chef chef = new Chef(playscreen, 0, 0);
         Gdx.input.setInputProcessor(chef);
         InputEvent event = new InputEvent();
         event.setType(InputEvent.Type.keyDown);
