@@ -359,11 +359,15 @@ public class Chef extends Sprite implements InputProcessor {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
+
+
+
         shape.setRadius(4.5f / MainGame.PPM);
         shape.setPosition(new Vector2(shape.getPosition().x + (0.5f / MainGame.PPM), shape.getPosition().y - (5.5f / MainGame.PPM)));
 
 
         fdef.shape = shape;
+        //fdef.restitution = 0f;
         b2body.createFixture(fdef).setUserData(this);
     }
 
@@ -505,9 +509,10 @@ public class Chef extends Sprite implements InputProcessor {
       * Finally, it calls the setStartVector method to update the position of the chef.
      */
         public void chefsColliding () {
-            userControlChef = false;
-            chefOnChefCollision = true;
-            setStartVector();
+            b2body.setLinearVelocity(0f,0f);
+            //userControlChef = false;
+            //chefOnChefCollision = true;
+            //setStartVector();
         }
 
     /**

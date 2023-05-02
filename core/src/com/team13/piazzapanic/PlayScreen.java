@@ -140,6 +140,7 @@ public class PlayScreen implements Playable {
 
 
     public PlayScreen(MainGame game){
+
         spawnNewPowerUpTimer = TimeUtils.millis();
         kitchenEdit = new kitchenChangerAPI();
 
@@ -202,6 +203,7 @@ public class PlayScreen implements Playable {
     public void onStartLoadGame(){
         loadMyGame = true;
     }
+    public void dontLoadGame(){loadMyGame = false;}
 
     public void resetIdleTimer(){
         idleGametimer = TimeUtils.millis();
@@ -224,6 +226,11 @@ public class PlayScreen implements Playable {
         getChef().rest();
         currentChef += 1;
         getChef().active = true;
+        if (getChef().isCooking) {
+            getChef().isCooking = false;
+            getChef().setChefSkin(getChef().getInHandsIng());
+        }
+
         InputProcessor[] cars = {getChef()};
         inputMultiplexer.setProcessors(cars);
         return getChef();
@@ -231,7 +238,7 @@ public class PlayScreen implements Playable {
 
     @Override
     public void show(){
-        InputProcessor[] cars = {getChef()};
+        InputProcessor[] cars = {getChef(), hud.stage};
         inputMultiplexer.setProcessors(cars);
         inputMultiplexer.getProcessors();
         Gdx.input.setInputProcessor(inputMultiplexer);
@@ -368,6 +375,7 @@ public class PlayScreen implements Playable {
      */
 
     public void update(float dt){
+
         if (loadMyGame) {
             gameSaveTool.loadMyGame(this);
             reRender("apple");
