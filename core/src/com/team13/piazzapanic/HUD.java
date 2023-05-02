@@ -181,11 +181,11 @@ public class HUD implements Disposable {
                 else{
                     addScore = 100 - (5 * (currentTime -expectedTime));
                 }
-                if(addScore < 0){
+                if(currentTime < 0){
                     addScore = 0;
                 }
             }
-            score += 20;
+            score += addScore;
         }
 
 
