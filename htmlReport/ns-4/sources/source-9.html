@@ -1,0 +1,203 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > kitchenChangerAPI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Tools</a>
+</div>
+
+<h1>Coverage Summary for Class: kitchenChangerAPI (Tools)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">kitchenChangerAPI</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    42.9%
+  </span>
+  <span class="absValue">
+    (18/42)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package Tools;
+&nbsp;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.files.FileHandle;
+&nbsp;
+&nbsp;import java.io.BufferedReader;
+&nbsp;import java.io.File;
+&nbsp;import java.io.InputStreamReader;
+&nbsp;
+&nbsp;/**
+&nbsp; * Kitchen API changer provides a series of functions that are used to make changes to the kitchen layouy
+&nbsp; * This includes adding new pans and chopping baords
+&nbsp; *
+&nbsp; */
+&nbsp;
+&nbsp;public class kitchenChangerAPI {
+<b class="fc">&nbsp;    private String filePath = &quot;kitchenTemp.tmx&quot;;</b>
+<b class="fc">&nbsp;    private String trueFilePath = &quot;assets/Kitchen.tmx&quot;;</b>
+&nbsp;    private FileHandle handle;
+&nbsp;    private String fileContent;
+<b class="fc">&nbsp;    private int cvsStart = 0;</b>
+<b class="fc">&nbsp;    private boolean incCVS = true;</b>
+<b class="fc">&nbsp;    public kitchenChangerAPI(){</b>
+<b class="fc">&nbsp;        FileHandle handle2 = Gdx.files.internal(&quot;Kitchen.tmx&quot;);</b>
+<b class="fc">&nbsp;        handle = Gdx.files.local(filePath);</b>
+<b class="fc">&nbsp;        handle.writeString(handle2.readString(), false);</b>
+<b class="fc">&nbsp;        fileContent = &quot;&quot;;</b>
+&nbsp;    }
+&nbsp;    public void readFile(){
+<b class="fc">&nbsp;        BufferedReader reader = new BufferedReader(new InputStreamReader(handle.read()));</b>
+<b class="fc">&nbsp;        String str = &quot;&quot;;</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            while ((str = reader.readLine()) != null) {</b>
+<b class="fc">&nbsp;                if (incCVS &amp;&amp;str.contains(&quot;&lt;data encoding=\&quot;csv\&quot;&gt;&quot;)){</b>
+<b class="fc">&nbsp;                    cvsStart++; incCVS = false;</b>
+&nbsp;                }
+<b class="fc">&nbsp;                else {if (incCVS){cvsStart ++;}}</b>
+&nbsp;
+<b class="fc">&nbsp;                fileContent += str;</b>
+<b class="fc">&nbsp;                fileContent += &quot;\n&quot;;</b>
+&nbsp;
+&nbsp;            }
+&nbsp;            //System.out.println(fileContent);
+&nbsp;        }
+<b class="nc">&nbsp;        catch (Exception err){</b>
+&nbsp;            //System.out.println(err.getMessage());
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void editCVSFile(int col ,int row, String newVal){
+<b class="nc">&nbsp;        String newData = &quot;&quot;;</b>
+<b class="nc">&nbsp;        int line = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;        BufferedReader reader = new BufferedReader(new InputStreamReader(handle.read()));</b>
+<b class="nc">&nbsp;        String str = &quot;&quot;;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            while ((str = reader.readLine()) != null) {</b>
+<b class="nc">&nbsp;                if (line == col + cvsStart){</b>
+<b class="nc">&nbsp;                    String[] lined = str.split(&quot;,&quot;);</b>
+<b class="nc">&nbsp;                    lined[row] = newVal;</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;                    StringBuffer sb = new StringBuffer();</b>
+<b class="nc">&nbsp;                    for(int i = 0; i &lt; lined.length; i++) {</b>
+<b class="nc">&nbsp;                        sb.append(lined[i] + &quot;,&quot;);</b>
+&nbsp;                    }
+&nbsp;
+<b class="nc">&nbsp;                    System.out.println(sb.toString() + &quot;apples&quot;);</b>
+<b class="nc">&nbsp;                    newData += sb.toString();</b>
+<b class="nc">&nbsp;                    newData += &quot;\n&quot;;</b>
+<b class="nc">&nbsp;                    System.out.println(newData + &quot;apples&quot;);</b>
+<b class="nc">&nbsp;                    line++;</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;                }</b>
+&nbsp;                else {
+<b class="nc">&nbsp;                    line ++;</b>
+<b class="nc">&nbsp;                    newData += str;</b>
+<b class="nc">&nbsp;                    newData += &quot;\n&quot;;</b>
+&nbsp;                }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;            }
+&nbsp;
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;        catch (Exception err){</b>
+&nbsp;            //System.out.println(err.getMessage());
+<b class="nc">&nbsp;        }</b>
+&nbsp;
+<b class="nc">&nbsp;        handle.writeString(newData, false);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

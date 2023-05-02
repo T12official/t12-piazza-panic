@@ -1,0 +1,143 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > BunsStation</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Sprites</a>
+</div>
+
+<h1>Coverage Summary for Class: BunsStation (Sprites)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">BunsStation</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package Sprites;
+&nbsp;
+&nbsp;import Ingredients.Bun;
+&nbsp;import Ingredients.Ingredient;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import com.badlogic.gdx.math.Rectangle;
+&nbsp;import com.badlogic.gdx.physics.box2d.BodyDef;
+&nbsp;import com.badlogic.gdx.physics.box2d.World;
+&nbsp;
+&nbsp;/**
+&nbsp; * Class representing the Buns Station in the game.
+&nbsp; * Extends the InteractiveTileObject class, which handles the Box2D physics.
+&nbsp; */
+&nbsp;public class BunsStation extends InteractiveTileObject {
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for BunsStation.
+&nbsp;     * Creates a new BunsStation with a Box2D body and fixture.
+&nbsp;     *
+&nbsp;     * @param world The playable world.
+&nbsp;     * @param map The tiled map.
+&nbsp;     * @param bdef The body definition of a tile.
+&nbsp;     * @param rectangle Rectangle shape.
+&nbsp;     */
+&nbsp;    public BunsStation(World world, TiledMap map, BodyDef bdef, Rectangle rectangle) {
+<b class="fc">&nbsp;        super(world, map, bdef, rectangle);</b>
+<b class="fc">&nbsp;        fixture.setUserData(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Gets an Ingredient (in this case a bun) from the station.
+&nbsp;     *
+&nbsp;     * @return A new Bun object.
+&nbsp;     */
+&nbsp;    public Ingredient getIngredient() {
+<b class="fc">&nbsp;        return new Bun(0, 3, 8);</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

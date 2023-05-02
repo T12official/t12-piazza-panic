@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > WorldContactListener</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Tools</a>
+</div>
+
+<h1>Coverage Summary for Class: WorldContactListener (Tools)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">WorldContactListener</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/51)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package Tools;
+&nbsp;
+&nbsp;import Sprites.Chef;
+&nbsp;import Sprites.OrderTimer;
+&nbsp;import Sprites.InteractiveTileObject;
+&nbsp;import com.badlogic.gdx.physics.box2d.*;
+&nbsp;import com.team13.piazzapanic.PlayScreen;
+&nbsp;import com.team13.piazzapanic.HUD;
+&nbsp;import powerUps.cookingSpeedBoost;
+&nbsp;
+&nbsp;/**
+&nbsp; * WorldContactListener class is an implementation of the ContactListener interface.
+&nbsp; * It helps to manage the interactions between objects in the world.
+&nbsp; */
+&nbsp;public class WorldContactListener implements ContactListener {
+&nbsp;    OrderTimer timer;
+&nbsp;    World myWorld;
+&nbsp;    PlayScreen aa;
+&nbsp;    HUD hud;
+<b class="nc">&nbsp;    public WorldContactListener(World world, PlayScreen a, OrderTimer timer, HUD hud){</b>
+<b class="nc">&nbsp;        this.myWorld = world;</b>
+<b class="nc">&nbsp;        this.aa = a;</b>
+<b class="nc">&nbsp;        this.timer = timer;</b>
+<b class="nc">&nbsp;        this.hud = hud;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The beginContact method is called when two fixtures start to collide.
+&nbsp;     *
+&nbsp;     * @param contact - The contact that has been made between two fixtures.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void beginContact(Contact contact) {
+&nbsp;        // get the two fixtures that have collided
+<b class="nc">&nbsp;        Fixture fixA = contact.getFixtureA();</b>
+<b class="nc">&nbsp;        Fixture fixB = contact.getFixtureB();</b>
+&nbsp;
+&nbsp;        // if either of the fixtures is the Chef object
+<b class="nc">&nbsp;        if (fixA.getUserData() instanceof Chef || fixB.getUserData() instanceof Chef) {</b>
+&nbsp;            // determine which fixture is the Chef
+<b class="nc">&nbsp;            Fixture chefFixt = fixA.getUserData() instanceof Chef ? fixA : fixB;</b>
+<b class="nc">&nbsp;            Fixture objectFixt = fixA.getUserData() instanceof Chef ? fixB: fixA;</b>
+&nbsp;
+&nbsp;            // if both fixtures are Chef objects
+<b class="nc">&nbsp;            if(fixA.getUserData() instanceof Chef &amp;&amp; fixB.getUserData() instanceof Chef){</b>
+&nbsp;                // call the chefsColliding method on both Chef objects
+<b class="nc">&nbsp;                Chef chef = ((Chef) fixA.getUserData());</b>
+<b class="nc">&nbsp;                Chef chefb = ((Chef) fixB.getUserData());</b>
+<b class="nc">&nbsp;                chef.chefsColliding();</b>
+<b class="nc">&nbsp;                chefb.chefsColliding();</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            // if the object fixture is an InteractiveTileObject
+<b class="nc">&nbsp;            else if(objectFixt.getUserData() != null &amp;&amp; objectFixt.getUserData() instanceof InteractiveTileObject){</b>
+&nbsp;                // set the InteractiveTileObject for the Chef
+<b class="nc">&nbsp;                ((Chef) chefFixt.getUserData()).setTouchingTile(objectFixt);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (fixA.getUserData() instanceof Chef &amp;&amp; fixB.getUserData() instanceof cookingSpeedBoost || (fixB.getUserData() instanceof Chef &amp;&amp; fixA.getUserData() instanceof cookingSpeedBoost)){</b>
+<b class="nc">&nbsp;            System.out.println(&quot;contact between chef and cookingSpeedBoost&quot;);</b>
+<b class="nc">&nbsp;            if (fixA.getUserData() instanceof Chef){</b>
+<b class="nc">&nbsp;                cookingSpeedBoost a = (cookingSpeedBoost) fixB.getUserData();</b>
+<b class="nc">&nbsp;                a.getPowerUp().improveChef((Chef) fixA.getUserData(), (timer), (hud));</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    aa.dispose = true;</b>
+<b class="nc">&nbsp;                    aa.toKill = a;</b>
+<b class="nc">&nbsp;                    aa.toKill.textureRegion.getTexture().dispose();</b>
+<b class="nc">&nbsp;                    aa.toKill.textureRegion = null;</b>
+&nbsp;                    //a.body = null;
+&nbsp;                    //a.powerUp = null;m
+<b class="nc">&nbsp;                    aa.powerUpArray.remove(0);</b>
+&nbsp;                    //myWorld.destroyBody(a.getBody());
+&nbsp;                    //a.dispose();
+&nbsp;                }
+<b class="nc">&nbsp;                catch(Exception err){</b>
+<b class="nc">&nbsp;                    System.out.println(err.getMessage());</b>
+<b class="nc">&nbsp;                }</b>
+<b class="nc">&nbsp;            }</b>
+&nbsp;            else {
+&nbsp;
+<b class="nc">&nbsp;                cookingSpeedBoost a = (cookingSpeedBoost) fixA.getUserData();</b>
+<b class="nc">&nbsp;                a.getPowerUp().improveChef((Chef) fixB.getUserData(), (timer), (hud));</b>
+&nbsp;                try {
+<b class="nc">&nbsp;                    aa.dispose = true;</b>
+<b class="nc">&nbsp;                    aa.toKill = a;</b>
+<b class="nc">&nbsp;                    aa.toKill.textureRegion.getTexture().dispose();</b>
+<b class="nc">&nbsp;                    aa.toKill.textureRegion = null;</b>
+&nbsp;                    //a.body = null;
+&nbsp;                    //a.powerUp = null;
+<b class="nc">&nbsp;                    aa.powerUpArray.remove(0);</b>
+&nbsp;
+&nbsp;                    //myWorld.destroyBody(a.getBody());
+&nbsp;
+&nbsp;
+&nbsp;                    //a.dispose();
+&nbsp;                }
+<b class="nc">&nbsp;                catch (Exception err){</b>
+<b class="nc">&nbsp;                    System.out.println(err.getMessage());</b>
+<b class="nc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The endContact method is called when two fixtures stop colliding.
+&nbsp;     *
+&nbsp;     * @param contact - The contact that has been made between two fixtures.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void endContact(Contact contact) {
+&nbsp;        // get the two fixtures that have collided
+<b class="nc">&nbsp;        Fixture fixA = contact.getFixtureA();</b>
+<b class="nc">&nbsp;        Fixture fixB = contact.getFixtureB();</b>
+&nbsp;
+&nbsp;        // if either of the fixtures is the Chef object
+<b class="nc">&nbsp;        if (fixA.getUserData() instanceof Chef || fixB.getUserData() instanceof Chef) {</b>
+&nbsp;            // determine which fixture is the Chef
+<b class="nc">&nbsp;            Fixture chefFixt = fixA.getUserData() instanceof Chef ? fixA : fixB;</b>
+<b class="nc">&nbsp;            Fixture objectFixt = fixA.getUserData() instanceof Chef ? fixB: fixA;</b>
+&nbsp;
+&nbsp;            // if the object fixture is an InteractiveTileObject
+<b class="nc">&nbsp;            if(objectFixt.getUserData() != null &amp;&amp; objectFixt.getUserData() instanceof InteractiveTileObject){</b>
+&nbsp;                // remove the InteractiveTileObject for the Chef
+<b class="nc">&nbsp;                ((Chef) chefFixt.getUserData()).setTouchingTile(null);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void preSolve(Contact contact, Manifold oldManifold) {
+&nbsp;        // TODO Auto-generated method stub
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void postSolve(Contact contact, ContactImpulse impulse) {
+&nbsp;        // TODO Auto-generated method stub
+&nbsp;        
+<b class="nc">&nbsp;    }</b>
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

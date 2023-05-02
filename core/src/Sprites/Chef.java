@@ -237,7 +237,7 @@ public class Chef extends Sprite implements InputProcessor {
             }
         } else if (isCooking && !chefOnChefCollision && getInHandsIng().isPrepared() && (inHandsIng.cookTime > 0 || inHandsIng.getBurnTime() > 0)) {
             waitTimer += dt * cookingSpeedModifier;
-            System.out.println("cooking supds");
+            //System.out.println(inHandsIng.cookTime);
             if (!userControlChef && waitTimer > inHandsIng.cookTime) {
                 inHandsIng.cookTime = 0;
                 inHandsIng.setCooked();

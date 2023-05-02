@@ -1,0 +1,980 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Chef</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Sprites</a>
+</div>
+
+<h1>Coverage Summary for Class: Chef (Sprites)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Chef</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (7/42)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    29.2%
+  </span>
+  <span class="absValue">
+    (95/325)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Chef$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">Chef$State</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    18.2%
+  </span>
+  <span class="absValue">
+    (8/44)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    29.4%
+  </span>
+  <span class="absValue">
+    (96/327)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package Sprites;
+&nbsp;
+&nbsp;import Ingredients.*;
+&nbsp;import Recipe.BurgerRecipe;
+&nbsp;import Recipe.Recipe;
+&nbsp;import Recipe.*;
+&nbsp;import Recipe.SaladRecipe;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.graphics.Texture;
+&nbsp;import com.badlogic.gdx.graphics.g2d.Sprite;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.badlogic.gdx.graphics.g2d.TextureRegion;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.*;
+&nbsp;import com.team13.piazzapanic.MainGame;
+&nbsp;import com.badlogic.gdx.Input;
+&nbsp;import com.badlogic.gdx.InputProcessor;
+&nbsp;import com.team13.piazzapanic.Playable;
+&nbsp;
+&nbsp;import java.util.Objects;
+&nbsp;
+&nbsp;/**
+&nbsp; * Chef class extends {@link Sprite} and represents a chef in the game.
+&nbsp; * It has fields for the world it exists in, a Box2D body, the initial X and Y
+&nbsp; * positions, a wait timer, collision flag, various textures for different skins,
+&nbsp; * state (UP, DOWN, LEFT, RIGHT), skin needed, fixture of what it is touching, ingredient
+&nbsp; * and recipe in hand, control flag, circle sprite, chef notification X, Y, width and height,
+&nbsp; * and completed dish station.
+&nbsp; */
+&nbsp;
+&nbsp;public class Chef extends Sprite implements InputProcessor {
+&nbsp;    public World world;
+&nbsp;    public Body b2body;
+<b class="fc">&nbsp;    public double cookingSpeedModifier = 1;</b>
+<b class="fc">&nbsp;    public float runSpeedModifier = 1F;</b>
+&nbsp;    private final float initialX;
+&nbsp;    private final float initialY;
+&nbsp;
+&nbsp;    public float getyVelocity() {
+<b class="fc">&nbsp;        return yVelocity;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private float yVelocity = 0;</b>
+&nbsp;
+&nbsp;    public float getxVelocity() {
+<b class="fc">&nbsp;        return xVelocity;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    private float xVelocity = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;    public boolean active = false;</b>
+&nbsp;
+&nbsp;    public Vector2 startVector;
+&nbsp;    private float waitTimer;
+&nbsp;
+&nbsp;    private float putDownWaitTimer;
+&nbsp;    public boolean chefOnChefCollision;
+&nbsp;    private final Texture normalChef;
+&nbsp;    private final Texture bunsChef;
+&nbsp;    private final Texture bunsToastedChef;
+&nbsp;    private final Texture burgerChef;
+&nbsp;    private final Texture lettuceChef;
+&nbsp;    private final Texture onionChef;
+&nbsp;    private final Texture tomatoChef;
+&nbsp;    private final Texture cheeseChef;
+&nbsp;    private final Texture spudsChef;
+&nbsp;    private final Texture choppedLettuceChef;
+&nbsp;    private final Texture choppedOnionChef;
+&nbsp;    private final Texture choppedTomatoChef;
+&nbsp;    private final Texture pattyChef;
+&nbsp;    private final Texture completedBurgerChef;
+&nbsp;    private final Texture meatChef;
+&nbsp;    private final Texture rawDoughChef;
+&nbsp;    private Texture saladChef;
+&nbsp;    private final Texture newDough;
+&nbsp;    private final Texture doneDough;
+&nbsp;    private final Texture pizzaChef;
+&nbsp;    private final Texture jacketChef;
+&nbsp;
+<b class="fc">&nbsp;    public enum State {UP, DOWN, LEFT, RIGHT}</b>
+&nbsp;
+&nbsp;    public State currentState;
+&nbsp;    private TextureRegion currentSkin;
+&nbsp;
+&nbsp;    private Texture skinNeeded;
+&nbsp;
+&nbsp;    private Fixture whatTouching;
+&nbsp;
+&nbsp;    private Ingredient inHandsIng;
+&nbsp;    private Recipe inHandsRecipe;
+&nbsp;
+&nbsp;    private Boolean userControlChef;
+&nbsp;
+&nbsp;    private final Sprite circleSprite;
+&nbsp;
+&nbsp;    private float notificationX;
+&nbsp;    private float notificationY;
+&nbsp;    private float notificationWidth;
+&nbsp;    private float notificationHeight;
+&nbsp;
+&nbsp;    private CompletedDishStation completedStation;
+<b class="fc">&nbsp;    public boolean isCooking = false;</b>
+&nbsp;
+&nbsp;    public int nextOrderAppearTime;
+&nbsp;    public Recipe previousInHandRecipe;
+&nbsp;
+&nbsp;    private Playable level;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Chef class constructor that initializes all the fields
+&nbsp;     * @param baseLevel the parent of the world the chef exists in
+&nbsp;     * @param startX starting X position
+&nbsp;     * @param startY starting Y position
+&nbsp;     */
+&nbsp;
+<b class="fc">&nbsp;    public Chef(Playable baseLevel, float startX, float startY) {</b>
+<b class="fc">&nbsp;        level = baseLevel;</b>
+<b class="fc">&nbsp;        world = level.getWorld();</b>
+<b class="fc">&nbsp;        initialX = startX / MainGame.PPM;</b>
+<b class="fc">&nbsp;        initialY = startY / MainGame.PPM;</b>
+<b class="fc">&nbsp;        jacketChef = new Texture(&quot;Chef/Chef_holding_jacket.png&quot;);</b>
+<b class="fc">&nbsp;        normalChef = new Texture(&quot;Chef/Chef_normal.png&quot;);</b>
+<b class="fc">&nbsp;        pizzaChef = new Texture(&quot;Chef/Chef_holding_pizza.png&quot;);</b>
+<b class="fc">&nbsp;        doneDough = new Texture(&quot;Chef/Chef_holding_doughCooked.png&quot;);</b>
+<b class="fc">&nbsp;        rawDoughChef = new Texture(&quot;Chef/Chef_holding_dough.png&quot;);</b>
+<b class="fc">&nbsp;        bunsChef = new Texture(&quot;Chef/Chef_holding_buns.png&quot;);</b>
+<b class="fc">&nbsp;        bunsToastedChef = new Texture(&quot;Chef/Chef_holding_buns_toasted.png&quot;);</b>
+<b class="fc">&nbsp;        burgerChef = new Texture(&quot;Chef/Chef_holding_burger.png&quot;);</b>
+<b class="fc">&nbsp;        lettuceChef = new Texture(&quot;Chef/Chef_holding_lettuce.png&quot;);</b>
+<b class="fc">&nbsp;        onionChef = new Texture(&quot;Chef/Chef_holding_onion.png&quot;);</b>
+<b class="fc">&nbsp;        tomatoChef = new Texture(&quot;Chef/Chef_holding_tomato.png&quot;);</b>
+<b class="fc">&nbsp;        choppedLettuceChef = new Texture(&quot;Chef/Chef_holding_chopped_lettuce.png&quot;);</b>
+<b class="fc">&nbsp;        choppedOnionChef = new Texture(&quot;Chef/Chef_holding_chopped_onion.png&quot;);</b>
+<b class="fc">&nbsp;        choppedTomatoChef = new Texture(&quot;Chef/Chef_holding_chopped_tomato.png&quot;);</b>
+<b class="fc">&nbsp;        pattyChef = new Texture(&quot;Chef/Chef_holding_patty.png&quot;);</b>
+<b class="fc">&nbsp;        completedBurgerChef = new Texture(&quot;Chef/Chef_holding_front.png&quot;);</b>
+<b class="fc">&nbsp;        meatChef = new Texture(&quot;Chef/Chef_holding_meat.png&quot;);</b>
+<b class="fc">&nbsp;        saladChef = new Texture(&quot;Chef/Chef_holding_salad.png&quot;);</b>
+<b class="fc">&nbsp;        spudsChef = new Texture(&quot;Chef/Chef_holding_potato.png&quot;);</b>
+<b class="fc">&nbsp;        cheeseChef = new Texture(&quot;Chef/Chef_holding_cheese.png&quot;);</b>
+<b class="fc">&nbsp;        newDough = new Texture(&quot;Chef/Chef_holding_rawdough.png&quot;);</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        skinNeeded = normalChef;</b>
+&nbsp;
+<b class="fc">&nbsp;        currentState = State.DOWN;</b>
+&nbsp;
+<b class="fc">&nbsp;        defineChef();</b>
+&nbsp;
+<b class="fc">&nbsp;        float chefWidth = 13 / MainGame.PPM;</b>
+<b class="fc">&nbsp;        float chefHeight = 20 / MainGame.PPM;</b>
+<b class="fc">&nbsp;        setBounds(0, 0, chefWidth, chefHeight);</b>
+<b class="fc">&nbsp;        chefOnChefCollision = false;</b>
+<b class="fc">&nbsp;        waitTimer = 0;</b>
+<b class="fc">&nbsp;        putDownWaitTimer = 0;</b>
+<b class="fc">&nbsp;        startVector = new Vector2(0, 0);</b>
+<b class="fc">&nbsp;        whatTouching = null;</b>
+<b class="fc">&nbsp;        inHandsIng = null;</b>
+<b class="fc">&nbsp;        inHandsRecipe = null;</b>
+<b class="fc">&nbsp;        userControlChef = true;</b>
+<b class="fc">&nbsp;        Texture circleTexture = new Texture(&quot;Chef/chefIdentifier.png&quot;);</b>
+<b class="fc">&nbsp;        circleSprite = new Sprite(circleTexture);</b>
+<b class="fc">&nbsp;        nextOrderAppearTime = 3;</b>
+<b class="fc">&nbsp;        completedStation = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Update the position and region of the chef and set the notification position based on the chef&#39;s current state.
+&nbsp;     *
+&nbsp;     * @param dt The delta time.
+&nbsp;     */
+&nbsp;    public void update(float dt) {
+<b class="nc">&nbsp;        setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);</b>
+<b class="nc">&nbsp;        currentSkin = getSkin(dt);</b>
+<b class="nc">&nbsp;        setRegion(currentSkin);</b>
+<b class="nc">&nbsp;        switch (currentState) {</b>
+&nbsp;            case UP:
+<b class="nc">&nbsp;                if (this.inHandsIng == null &amp;&amp; this.inHandsRecipe == null) {</b>
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x - (1.75f / MainGame.PPM);</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (7.7f / MainGame.PPM);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x - (0.67f / MainGame.PPM);</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (7.2f / MainGame.PPM);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case DOWN:
+<b class="nc">&nbsp;                if (this.inHandsIng == null &amp;&amp; this.inHandsRecipe == null) {</b>
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x + (0.95f / MainGame.PPM);</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (5.015f / MainGame.PPM);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x + (0.55f / MainGame.PPM);</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (5.3f / MainGame.PPM);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case LEFT:
+<b class="nc">&nbsp;                if (this.inHandsIng == null &amp;&amp; this.inHandsRecipe == null) {</b>
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x;</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (5.015f / MainGame.PPM);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x - (1.92f / MainGame.PPM);</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (4.6f / MainGame.PPM);</b>
+&nbsp;                }
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case RIGHT:
+<b class="nc">&nbsp;                if (this.inHandsIng == null &amp;&amp; this.inHandsRecipe == null) {</b>
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x + (0.5f / MainGame.PPM);</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (5.015f / MainGame.PPM);</b>
+&nbsp;                } else {
+<b class="nc">&nbsp;                    notificationX = b2body.getPosition().x + (0.17f / MainGame.PPM);</b>
+<b class="nc">&nbsp;                    notificationY = b2body.getPosition().y - (4.63f / MainGame.PPM);</b>
+&nbsp;                }
+&nbsp;                break;
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if (!userControlChef &amp;&amp; chefOnChefCollision) {</b>
+<b class="nc">&nbsp;            waitTimer += dt;</b>
+<b class="nc">&nbsp;            b2body.setLinearVelocity(new Vector2(startVector.x * -1, startVector.y * -1));</b>
+<b class="nc">&nbsp;            if (waitTimer &gt; 0.3f) {</b>
+<b class="nc">&nbsp;                b2body.setLinearVelocity(new Vector2(0, 0));</b>
+<b class="nc">&nbsp;                chefOnChefCollision = false;</b>
+<b class="nc">&nbsp;                userControlChef = true;</b>
+<b class="nc">&nbsp;                waitTimer = 0;</b>
+<b class="nc">&nbsp;                if (inHandsIng != null) {</b>
+<b class="nc">&nbsp;                    setChefSkin(inHandsIng);</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (!userControlChef &amp;&amp; getInHandsIng().prepareTime &gt; 0) {</b>
+<b class="nc">&nbsp;            waitTimer += dt;</b>
+<b class="nc">&nbsp;            if (waitTimer &gt; inHandsIng.prepareTime) {</b>
+<b class="nc">&nbsp;                inHandsIng.prepareTime = 0;</b>
+<b class="nc">&nbsp;                inHandsIng.setPrepared();</b>
+<b class="nc">&nbsp;                userControlChef = true;</b>
+<b class="nc">&nbsp;                waitTimer = 0;</b>
+<b class="nc">&nbsp;                setChefSkin(inHandsIng);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (isCooking &amp;&amp; !chefOnChefCollision &amp;&amp; getInHandsIng().isPrepared() &amp;&amp; (inHandsIng.cookTime &gt; 0 || inHandsIng.getBurnTime() &gt; 0)) {</b>
+<b class="nc">&nbsp;            waitTimer += dt * cookingSpeedModifier;</b>
+&nbsp;            //System.out.println(inHandsIng.cookTime);
+<b class="nc">&nbsp;            if (!userControlChef &amp;&amp; waitTimer &gt; inHandsIng.cookTime) {</b>
+<b class="nc">&nbsp;                inHandsIng.cookTime = 0;</b>
+<b class="nc">&nbsp;                inHandsIng.setCooked();</b>
+<b class="nc">&nbsp;                userControlChef = true;</b>
+&nbsp;                //waitTimer = 0;
+&nbsp;
+&nbsp;            }
+<b class="nc">&nbsp;            if (waitTimer &gt; inHandsIng.getBurnTime()){</b>
+<b class="nc">&nbsp;                waitTimer = 0;</b>
+<b class="nc">&nbsp;                userControlChef = true;</b>
+<b class="nc">&nbsp;                inHandsIng.setBurned();</b>
+<b class="nc">&nbsp;                isCooking = false;</b>
+<b class="nc">&nbsp;                this.setInHandsRecipe(null);</b>
+<b class="nc">&nbsp;                this.setInHandsIng(null);</b>
+<b class="nc">&nbsp;                this.setChefSkin(null);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * This method sets the bounds for the notification based on the given direction.
+&nbsp;     * @param direction - A string representing the direction of the notification.
+&nbsp;     *                   Can be &quot;Left&quot;, &quot;Right&quot;, &quot;Up&quot;, or &quot;Down&quot;.
+&nbsp;     */
+&nbsp;
+&nbsp;    public void notificationSetBounds(String direction) {
+<b class="fc">&nbsp;        switch (direction) {</b>
+&nbsp;            case &quot;Left&quot;:
+&nbsp;            case &quot;Right&quot;:
+<b class="fc">&nbsp;                notificationWidth = 1.5f / MainGame.PPM;</b>
+<b class="fc">&nbsp;                notificationHeight = 1.5f / MainGame.PPM;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case &quot;Up&quot;:
+<b class="fc">&nbsp;                notificationWidth = 4 / MainGame.PPM;</b>
+<b class="fc">&nbsp;                notificationHeight = 4 / MainGame.PPM;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case &quot;Down&quot;:
+<b class="fc">&nbsp;                notificationWidth = 2 / MainGame.PPM;</b>
+<b class="fc">&nbsp;                notificationHeight = 2 / MainGame.PPM;</b>
+&nbsp;                break;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     Draws a notification to help the user understand what chef they are controlling.
+&nbsp;     The notification is a sprite that looks like at &quot;C&quot; on the controlled chef.
+&nbsp;     @param batch The sprite batch that the notification should be drawn with.
+&nbsp;     */
+&nbsp;    public void drawNotification(SpriteBatch batch) {
+<b class="nc">&nbsp;        if (this.getUserControlChef()) {</b>
+<b class="nc">&nbsp;            circleSprite.setBounds(notificationX, notificationY, notificationWidth, notificationHeight);</b>
+<b class="nc">&nbsp;            circleSprite.draw(batch);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the texture region for the current state of the player.
+&nbsp;     *
+&nbsp;     * @param dt the time difference between this and the last frame
+&nbsp;     * @return the texture region for the player&#39;s current state
+&nbsp;     */
+&nbsp;
+&nbsp;    private TextureRegion getSkin(float dt) {
+<b class="nc">&nbsp;        currentState = getState();</b>
+&nbsp;
+&nbsp;        TextureRegion region;
+<b class="nc">&nbsp;        switch (currentState) {</b>
+&nbsp;            case UP:
+<b class="nc">&nbsp;                region = new TextureRegion(skinNeeded, 0, 0, 33, 46);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case DOWN:
+<b class="nc">&nbsp;                region = new TextureRegion(skinNeeded, 33, 0, 33, 46);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case LEFT:
+<b class="nc">&nbsp;                region = new TextureRegion(skinNeeded, 64, 0, 33, 46);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case RIGHT:
+<b class="nc">&nbsp;                region = new TextureRegion(skinNeeded, 96, 0, 33, 46);</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            default:
+<b class="nc">&nbsp;                region = currentSkin;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return region;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     Returns the current state of the player based on the controlled chefs velocity.
+&nbsp;     @return current state of the player - UP, DOWN, LEFT, or RIGHT
+&nbsp;     */
+&nbsp;    public State getState() {
+<b class="nc">&nbsp;        if (b2body.getLinearVelocity().y &gt; 0)</b>
+<b class="nc">&nbsp;            return State.UP;</b>
+<b class="nc">&nbsp;        if (b2body.getLinearVelocity().y &lt; 0)</b>
+<b class="nc">&nbsp;            return State.DOWN;</b>
+<b class="nc">&nbsp;        if (b2body.getLinearVelocity().x &gt; 0)</b>
+<b class="nc">&nbsp;            return State.RIGHT;</b>
+<b class="nc">&nbsp;        if (b2body.getLinearVelocity().x &lt; 0)</b>
+<b class="nc">&nbsp;            return State.LEFT;</b>
+&nbsp;        else
+<b class="nc">&nbsp;            return currentState;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Define the body and fixture of the chef object.
+&nbsp;     *
+&nbsp;     * This method creates a dynamic body definition and sets its position with the `initialX` and `initialY`
+&nbsp;     * variables, then creates the body in the physics world. A fixture definition is also created and a
+&nbsp;     * circle shape is set with a radius of `4.5f / MainGame.PPM` and a position shifted by `(0.5f / MainGame.PPM)`
+&nbsp;     * in the x-axis and `-(5.5f / MainGame.PPM)` in the y-axis. The created fixture is then set as the user data
+&nbsp;     * of the chef object.
+&nbsp;     */
+&nbsp;
+&nbsp;    public void defineChef() {
+<b class="fc">&nbsp;        BodyDef bdef = new BodyDef();</b>
+<b class="fc">&nbsp;        bdef.position.set(initialX, initialY);</b>
+<b class="fc">&nbsp;        bdef.type = BodyDef.BodyType.DynamicBody;</b>
+<b class="fc">&nbsp;        b2body = world.createBody(bdef);</b>
+&nbsp;
+<b class="fc">&nbsp;        FixtureDef fdef = new FixtureDef();</b>
+<b class="fc">&nbsp;        CircleShape shape = new CircleShape();</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        shape.setRadius(4.5f / MainGame.PPM);</b>
+<b class="fc">&nbsp;        shape.setPosition(new Vector2(shape.getPosition().x + (0.5f / MainGame.PPM), shape.getPosition().y - (5.5f / MainGame.PPM)));</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        fdef.shape = shape;</b>
+&nbsp;        //fdef.restitution = 0f;
+<b class="fc">&nbsp;        b2body.createFixture(fdef).setUserData(this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Method to set the skin of the chef character based on the item the chef is holding.
+&nbsp;     *
+&nbsp;     * @param item the item that chef is holding
+&nbsp;     *
+&nbsp;     * The skin is set based on the following cases:
+&nbsp;     * - if item is null, then the skin is set to normalChef
+&nbsp;     * - if item is a Lettuce, then the skin is set to
+&nbsp;     *    - choppedLettuceChef if the lettuce is prepared
+&nbsp;     *    - lettuceChef if the lettuce is not prepared
+&nbsp;     * - if item is a Steak, then the skin is set to
+&nbsp;     *    - burgerChef if the steak is prepared and cooked
+&nbsp;     *    - pattyChef if the steak is prepared but not cooked
+&nbsp;     *    - meatChef if the steak is not prepared
+&nbsp;     * - if item is an Onion, then the skin is set to
+&nbsp;     *    - choppedOnionChef if the onion is prepared
+&nbsp;     *    - onionChef if the onion is not prepared
+&nbsp;     * - if item is a Tomato, then the skin is set to
+&nbsp;     *    - choppedTomatoChef if the tomato is prepared
+&nbsp;     *    - tomatoChef if the tomato is not prepared
+&nbsp;     * - if item is a Bun, then the skin is set to
+&nbsp;     *    - bunsToastedChef if the bun is cooked
+&nbsp;     *    - bunsChef if the bun is not cooked
+&nbsp;     * - if item is a BurgerRecipe, then the skin is set to completedBurgerChef
+&nbsp;     * - if item is a SaladRecipe, then the skin is set to saladChef
+&nbsp;     */
+&nbsp;
+&nbsp;    public void setChefSkin(Object item) {
+<b class="nc">&nbsp;        if (item == null) {</b>
+<b class="nc">&nbsp;            skinNeeded = normalChef;</b>
+<b class="nc">&nbsp;        } else if (item instanceof Lettuce) {</b>
+<b class="nc">&nbsp;            if (inHandsIng.isPrepared()) {</b>
+<b class="nc">&nbsp;                skinNeeded = choppedLettuceChef;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                skinNeeded = lettuceChef;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (item instanceof Steak) {</b>
+<b class="nc">&nbsp;            if (inHandsIng.isPrepared() &amp;&amp; inHandsIng.isCooked()) {</b>
+<b class="nc">&nbsp;                skinNeeded = burgerChef;</b>
+<b class="nc">&nbsp;            } else if (inHandsIng.isPrepared()) {</b>
+<b class="nc">&nbsp;                skinNeeded = pattyChef;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                skinNeeded = meatChef;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (item instanceof Onion) {</b>
+<b class="nc">&nbsp;            if (inHandsIng.isPrepared()) {</b>
+<b class="nc">&nbsp;                skinNeeded = choppedOnionChef;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                skinNeeded = onionChef;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (item instanceof Tomato) {</b>
+<b class="nc">&nbsp;            if (inHandsIng.isPrepared()) {</b>
+<b class="nc">&nbsp;                skinNeeded = choppedTomatoChef;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                skinNeeded = tomatoChef;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (item instanceof Bun) {</b>
+<b class="nc">&nbsp;            if (inHandsIng.isCooked()) {</b>
+<b class="nc">&nbsp;                skinNeeded = bunsToastedChef;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                skinNeeded = bunsChef;</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } else if (item instanceof BurgerRecipe) {</b>
+<b class="nc">&nbsp;            skinNeeded = completedBurgerChef;</b>
+<b class="nc">&nbsp;        } else if (item instanceof SaladRecipe) {</b>
+<b class="nc">&nbsp;            skinNeeded = saladChef;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (item instanceof pizzaRecipy){</b>
+<b class="nc">&nbsp;            skinNeeded = pizzaChef;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (item instanceof jacketPotato){</b>
+<b class="nc">&nbsp;            skinNeeded = jacketChef;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (item instanceof Potatoes){</b>
+<b class="nc">&nbsp;            skinNeeded = spudsChef;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (item instanceof Cheese){</b>
+<b class="nc">&nbsp;            skinNeeded = cheeseChef;</b>
+<b class="nc">&nbsp;            System.out.println(&quot;apples&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        else if (item instanceof pizzaDough){</b>
+<b class="nc">&nbsp;            if (inHandsIng.isPrepared() &amp;&amp; inHandsIng.isCooked()) {</b>
+<b class="nc">&nbsp;                skinNeeded = doneDough;</b>
+<b class="nc">&nbsp;            } else if (inHandsIng.isPrepared()) {</b>
+<b class="nc">&nbsp;                skinNeeded = rawDoughChef;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                skinNeeded = newDough;</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Method to display the ingredient on the specific interactive tile objects (ChoppingBoard/Pan)
+&nbsp;     * @param batch the SpriteBatch used to render the texture.
+&nbsp;     */
+&nbsp;
+&nbsp;    public void displayIngStatic(SpriteBatch batch) {
+<b class="nc">&nbsp;        Gdx.app.log(&quot;&quot;, inHandsIng.toString());</b>
+<b class="nc">&nbsp;        if (whatTouching != null &amp;&amp; !chefOnChefCollision) {</b>
+<b class="nc">&nbsp;            InteractiveTileObject tile = (InteractiveTileObject) whatTouching.getUserData();</b>
+<b class="nc">&nbsp;            if (tile instanceof ChoppingBoard) {</b>
+<b class="nc">&nbsp;                ChoppingBoard tileNew = (ChoppingBoard) tile;</b>
+<b class="nc">&nbsp;                inHandsIng.create(tileNew.getX() - (0.5f / MainGame.PPM), tileNew.getY() - (0.2f / MainGame.PPM), batch);</b>
+<b class="nc">&nbsp;                setChefSkin(null);</b>
+<b class="nc">&nbsp;            } else if (tile instanceof Pan) {</b>
+<b class="nc">&nbsp;                Pan tileNew = (Pan) tile;</b>
+<b class="nc">&nbsp;                inHandsIng.create(tileNew.getX(), tileNew.getY() - (0.01f / MainGame.PPM), batch);</b>
+<b class="nc">&nbsp;                setChefSkin(null);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The method creates an instance of the recipe and sets its position on the completed station coordinates.
+&nbsp;     * The method also implements a timer for each ingredient which gets removed from the screen after a certain amount of time.
+&nbsp;     *
+&nbsp;     * @param batch The batch used for drawing the sprite on the screen
+&nbsp;     */
+&nbsp;
+&nbsp;    public void displayIngDynamic(SpriteBatch batch){
+<b class="nc">&nbsp;        putDownWaitTimer += 1/60f;</b>
+<b class="nc">&nbsp;        previousInHandRecipe.create(completedStation.getX(), completedStation.getY() - (0.01f / MainGame.PPM), batch);</b>
+<b class="nc">&nbsp;        if (putDownWaitTimer &gt; nextOrderAppearTime) {</b>
+<b class="nc">&nbsp;            previousInHandRecipe = null;</b>
+<b class="nc">&nbsp;            putDownWaitTimer = 0;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;
+&nbsp;      * This method updates the state of the chef when it is in a collision with another chef.
+&nbsp;      * The method sets the userControlChef to false, meaning the user cannot control the chef while it&#39;s in collision.
+&nbsp;      * It also sets the chefOnChefCollision to true, indicating that the chef is in collision with another chef.
+&nbsp;      * Finally, it calls the setStartVector method to update the position of the chef.
+&nbsp;     */
+&nbsp;        public void chefsColliding () {
+<b class="nc">&nbsp;            b2body.setLinearVelocity(0f,0f);</b>
+&nbsp;            //userControlChef = false;
+&nbsp;            //chefOnChefCollision = true;
+&nbsp;            //setStartVector();
+&nbsp;        }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the starting velocity vector of the chef
+&nbsp;     * when the chef collides with another chef
+&nbsp;     *
+&nbsp;     */
+&nbsp;    public void setStartVector () {
+<b class="nc">&nbsp;        startVector = new Vector2(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the touching tile fixture
+&nbsp;     *
+&nbsp;     * @param obj fixture that the chef is touching
+&nbsp;     */
+&nbsp;    public void setTouchingTile (Fixture obj){
+<b class="nc">&nbsp;        this.whatTouching = obj;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the fixture that the chef is touching
+&nbsp;     *
+&nbsp;     * @return the fixture that the chef is touching
+&nbsp;     */
+&nbsp;    public Fixture getTouchingTile () {
+<b class="nc">&nbsp;        if (whatTouching == null) {</b>
+<b class="nc">&nbsp;            return null;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return whatTouching;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the ingredient that the chef is holding
+&nbsp;     *
+&nbsp;     * @return the ingredient that the chef is holding
+&nbsp;     */
+&nbsp;    public Ingredient getInHandsIng () {
+<b class="nc">&nbsp;        return inHandsIng;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Get the recipe that the chef is holding
+&nbsp;     *
+&nbsp;     * @return the recipe that the chef is holding
+&nbsp;     */
+&nbsp;    public Recipe getInHandsRecipe () {
+<b class="nc">&nbsp;        return inHandsRecipe;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the ingredient that the chef is holding
+&nbsp;     *
+&nbsp;     * @param ing the ingredient that the chef is holding
+&nbsp;     */
+&nbsp;    public void setInHandsIng (Ingredient ing){
+<b class="nc">&nbsp;        inHandsIng = ing;</b>
+<b class="nc">&nbsp;        inHandsRecipe = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the recipe that the chef is holding
+&nbsp;     *
+&nbsp;     * @param recipe the recipe that the chef is holding
+&nbsp;     */
+&nbsp;    public void setInHandsRecipe (Recipe recipe){
+<b class="nc">&nbsp;        inHandsRecipe = recipe;</b>
+<b class="nc">&nbsp;        inHandsIng = null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Set the chef&#39;s control by the user
+&nbsp;     *
+&nbsp;     * @param value whether the chef is controlled by the user
+&nbsp;     */
+&nbsp;    public void setUserControlChef ( boolean value){
+<b class="nc">&nbsp;        userControlChef = value;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;
+&nbsp;     * Returns a boolean value indicating whether the chef is under user control.
+&nbsp;     * If not specified, returns false.
+&nbsp;     *
+&nbsp;     * @return userControlChef The boolean value indicating chef&#39;s control.
+&nbsp;     */
+&nbsp;    public boolean getUserControlChef () {
+<b class="nc">&nbsp;            return Objects.requireNonNullElse(userControlChef, false);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;      * Drops the given ingredient on a plate station.
+&nbsp;      * @param station The plate station to drop the ingredient on.
+&nbsp;      * @param ing The ingredient to be dropped.
+&nbsp;     */
+&nbsp;
+&nbsp;    public void dropItemOn (InteractiveTileObject station, Ingredient ing){
+<b class="nc">&nbsp;        if (station instanceof PlateStation) {</b>
+<b class="nc">&nbsp;                ((PlateStation) station).dropItem(ing);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        setInHandsRecipe(null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Drops the in-hand recipe on a completed dish station and saves the previous in-hand recipe.
+&nbsp;     *
+&nbsp;     * @param station The completed dish station to drop the recipe on.
+&nbsp;     */
+&nbsp;        public void dropItemOn (InteractiveTileObject station){
+<b class="nc">&nbsp;            if (station instanceof CompletedDishStation) {</b>
+<b class="nc">&nbsp;                previousInHandRecipe = getInHandsRecipe();</b>
+<b class="nc">&nbsp;                completedStation = (CompletedDishStation) station;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            setInHandsRecipe(null);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Picks up an item from a plate station and sets it as in-hand ingredient or recipe.
+&nbsp;     *
+&nbsp;     * @param station The plate station to pick up the item from.
+&nbsp;     */
+&nbsp;    public void pickUpItemFrom(InteractiveTileObject station){
+<b class="nc">&nbsp;        if (station instanceof PlateStation){</b>
+<b class="nc">&nbsp;            PlateStation pStation = (PlateStation) station;</b>
+<b class="nc">&nbsp;            Object item = pStation.pickUpItem();</b>
+<b class="nc">&nbsp;            if (item instanceof Ingredient){</b>
+<b class="nc">&nbsp;                setInHandsIng((Ingredient) item);</b>
+<b class="nc">&nbsp;                setChefSkin(item);</b>
+<b class="nc">&nbsp;            } else if (item instanceof Recipe){</b>
+<b class="nc">&nbsp;                setInHandsRecipe(((Recipe) item));</b>
+<b class="nc">&nbsp;                setChefSkin(item);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public float getNotificationY() {
+<b class="nc">&nbsp;        return notificationY;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public float getNotificationX() {
+<b class="nc">&nbsp;        return notificationX;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNotificationX(float notificationX) {
+<b class="nc">&nbsp;        this.notificationX = notificationX;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setNotificationY(float notificationY) {
+<b class="nc">&nbsp;        this.notificationY = notificationY;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public Body getB2body() {
+<b class="nc">&nbsp;        return b2body;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setCookingSpeedModifier(double cookingSpeedModifier) {
+<b class="nc">&nbsp;        this.cookingSpeedModifier = cookingSpeedModifier;</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Cooking speed increase&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void handleSprite(InteractiveTileObject tile, String tileName) {
+<b class="nc">&nbsp;        switch (tileName) {</b>
+&nbsp;            case &quot;Sprites.TomatoStation&quot;:
+<b class="nc">&nbsp;                TomatoStation tomatoTile = (TomatoStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(tomatoTile.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case &quot;Sprites.BunsStation&quot;:
+<b class="nc">&nbsp;                BunsStation bunTile = (BunsStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(bunTile.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case &quot;Sprites.OnionStation&quot;:
+<b class="nc">&nbsp;                OnionStation onionTile = (OnionStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(onionTile.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case &quot;Sprites.SteakStation&quot;:
+<b class="nc">&nbsp;                SteakStation steakTile = (SteakStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(steakTile.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case &quot;Sprites.LettuceStation&quot;:
+<b class="nc">&nbsp;                LettuceStation lettuceTile = (LettuceStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(lettuceTile.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case &quot;Sprites.potatoesStation&quot;:
+<b class="nc">&nbsp;                System.out.println(&quot;giving myself a spud&quot;);</b>
+<b class="nc">&nbsp;                potatoesStation pots = (potatoesStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(pots.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case &quot;Sprites.cheeseStation&quot;:
+<b class="nc">&nbsp;                System.out.println(&quot;giving myself cheese&quot;);</b>
+<b class="nc">&nbsp;                cheeseStation cheese = (cheeseStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(cheese.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case &quot;Sprites.pizzaDoughStation&quot;:
+<b class="nc">&nbsp;                System.out.println(&quot;giving myself pizza&quot;);</b>
+<b class="nc">&nbsp;                pizzaDoughStation dough = (pizzaDoughStation) tile;</b>
+<b class="nc">&nbsp;                setInHandsIng(dough.getIngredient());</b>
+<b class="nc">&nbsp;                setChefSkin(getInHandsIng());</b>
+&nbsp;            case &quot;Sprites.PlateStation&quot;:
+<b class="nc">&nbsp;                if (level.getPlateStation().getPlate().size() &gt; 0 || level.getPlateStation().getCompletedRecipe() != null) {</b>
+<b class="nc">&nbsp;                    pickUpItemFrom(tile);</b>
+&nbsp;
+&nbsp;                }
+&nbsp;
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean keyDown(int keycode) {
+<b class="fc">&nbsp;        level.resetIdleTimer();</b>
+<b class="fc">&nbsp;        switch (keycode) {</b>
+&nbsp;            case Input.Keys.R:
+<b class="fc">&nbsp;                rest();</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.W:
+<b class="fc">&nbsp;                yVelocity += 0.5f * runSpeedModifier;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.S:
+<b class="fc">&nbsp;                yVelocity -= 0.5f * runSpeedModifier ;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.A:
+<b class="fc">&nbsp;                xVelocity -= 0.5f * runSpeedModifier ;</b>
+<b class="fc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.D:
+<b class="fc">&nbsp;                xVelocity += 0.5f * runSpeedModifier ;</b>
+&nbsp;                break;
+&nbsp;        }
+<b class="fc">&nbsp;        b2body.setLinearVelocity(xVelocity, yVelocity);</b>
+<b class="fc">&nbsp;        if (b2body.getLinearVelocity().x &gt; 0){</b>
+<b class="fc">&nbsp;            notificationSetBounds(&quot;Right&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (b2body.getLinearVelocity().x &lt; 0){</b>
+<b class="fc">&nbsp;            notificationSetBounds(&quot;Left&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (b2body.getLinearVelocity().y &gt; 0){</b>
+<b class="fc">&nbsp;            notificationSetBounds(&quot;Up&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        if (b2body.getLinearVelocity().y &lt; 0){</b>
+<b class="fc">&nbsp;            notificationSetBounds(&quot;Down&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean keyUp(int keycode) {
+<b class="nc">&nbsp;        switch (keycode) {</b>
+&nbsp;            case Input.Keys.W:
+&nbsp;            case Input.Keys.S:
+<b class="nc">&nbsp;                yVelocity = 0;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.A:
+&nbsp;            case Input.Keys.D:
+<b class="nc">&nbsp;                xVelocity = 0;</b>
+&nbsp;                break;
+&nbsp;        }
+<b class="nc">&nbsp;        b2body.setLinearVelocity(xVelocity, yVelocity);</b>
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void rest(){
+<b class="fc">&nbsp;        active = false;</b>
+<b class="fc">&nbsp;        xVelocity = 0;</b>
+<b class="fc">&nbsp;        yVelocity = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean keyTyped(char character) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean touchDragged(int screenX, int screenY, int pointer) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean mouseMoved(int screenX, int screenY) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean scrolled(float amountX, float amountY) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public void setRunSpeedModifier(float v) {
+<b class="nc">&nbsp;        runSpeedModifier = v;</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Speed Up&quot;);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

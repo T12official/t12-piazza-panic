@@ -1,0 +1,487 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > HUD</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: HUD (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HUD</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/162)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import Tools.Overlay;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.graphics.Color;
+&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+&nbsp;import com.badlogic.gdx.graphics.Pixmap;
+&nbsp;import com.badlogic.gdx.graphics.Texture;
+&nbsp;import com.badlogic.gdx.graphics.g2d.BitmapFont;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.Actor;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.InputEvent;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.InputListener;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.Stage;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Table;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+&nbsp;import com.badlogic.gdx.utils.Align;
+&nbsp;import com.badlogic.gdx.utils.Disposable;
+&nbsp;import com.badlogic.gdx.utils.viewport.FitViewport;
+&nbsp;import com.badlogic.gdx.utils.viewport.Viewport;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Label;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;
+&nbsp;
+&nbsp;public class HUD implements Disposable {
+&nbsp;    public Stage stage;
+&nbsp;    private Boolean scenarioComplete;
+&nbsp;
+&nbsp;    private Integer worldTimerM;
+&nbsp;    private Integer worldTimerS;
+&nbsp;
+&nbsp;    private Integer score;
+<b class="nc">&nbsp;    Integer repPoints = 3;</b>
+&nbsp;
+<b class="nc">&nbsp;    Boolean boost = false;</b>
+&nbsp;
+&nbsp;    public String timeStr;
+&nbsp;
+&nbsp;    public Table table;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    Label timeLabelT;
+&nbsp;    Label timeLabel;
+&nbsp;
+&nbsp;    Label scoreLabel;
+&nbsp;    Label scoreLabelT;
+&nbsp;    Label orderNumL;
+&nbsp;    Label orderNumLT;
+&nbsp;
+&nbsp;    Label reputation;
+&nbsp;    public BitmapFont font;
+&nbsp;    Label reputationT;
+&nbsp;    Label powerUpTextLabel;
+&nbsp;
+<b class="nc">&nbsp;    public HUD(SpriteBatch sb){</b>
+<b class="nc">&nbsp;        this.scenarioComplete = Boolean.FALSE;</b>
+<b class="nc">&nbsp;        worldTimerM = 0;</b>
+<b class="nc">&nbsp;        worldTimerS = 0;</b>
+<b class="nc">&nbsp;        score = 0;//score = money in game</b>
+<b class="nc">&nbsp;        timeStr = String.format(&quot;%d&quot;, worldTimerM) + &quot; : &quot; + String.format(&quot;%d&quot;, worldTimerS);</b>
+<b class="nc">&nbsp;        float fontX = 0.5F;</b>
+<b class="nc">&nbsp;        float fontY = 0.3F;</b>
+<b class="nc">&nbsp;        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();</b>
+&nbsp;        //textButtonStyle.font = Font.ITALIC;
+<b class="nc">&nbsp;        textButtonStyle.fontColor = Color.WHITE;</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        font = new BitmapFont();</b>
+<b class="nc">&nbsp;        font.getData().setScale(fontX, fontY);</b>
+<b class="nc">&nbsp;        Viewport viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, new OrthographicCamera());</b>
+<b class="nc">&nbsp;        stage = new Stage(viewport, sb);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        table = new Table();</b>
+<b class="nc">&nbsp;        table.left().top();</b>
+<b class="nc">&nbsp;        table.setFillParent(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        timeLabel = new Label(String.format(&quot;%d&quot;, worldTimerM, &quot;:&quot;, &quot;%i&quot;, worldTimerS), new Label.LabelStyle(font, Color.WHITE));</b>
+<b class="nc">&nbsp;        timeLabelT = new Label(&quot;TIME&quot;, new Label.LabelStyle(font, Color.BLACK));</b>
+<b class="nc">&nbsp;        orderNumLT = new Label(&quot;ORDER&quot;, new Label.LabelStyle(font, Color.BLACK));</b>
+<b class="nc">&nbsp;        orderNumL = new Label(String.format(&quot;%d&quot;, 0), new Label.LabelStyle(font, Color.WHITE));</b>
+&nbsp;
+<b class="nc">&nbsp;        scoreLabel = new Label(String.format(&quot;%d&quot;, score), new Label.LabelStyle(font, Color.WHITE));</b>
+<b class="nc">&nbsp;        scoreLabelT = new Label(&quot;MONEY&quot;, new Label.LabelStyle(font, Color.BLACK));</b>
+&nbsp;
+<b class="nc">&nbsp;        reputationT = new Label(&quot;REP&quot;, new Label.LabelStyle(font, Color.BLACK));</b>
+<b class="nc">&nbsp;        reputation = new Label(String.format(&quot;%d&quot;, repPoints), new Label.LabelStyle(font, Color.WHITE));</b>
+&nbsp;
+<b class="nc">&nbsp;        Label powerUpLabel = new Label(&quot;PowerUp:&quot;, new Label.LabelStyle(font, Color.BLACK));</b>
+<b class="nc">&nbsp;        powerUpTextLabel = new Label(&quot;None&quot;, new Label.LabelStyle(font, Color.GREEN));</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        table.add(timeLabelT).padTop(2).padLeft(2);</b>
+<b class="nc">&nbsp;        table.add(scoreLabelT).padTop(2).padLeft(2);</b>
+<b class="nc">&nbsp;        table.add(orderNumLT).padTop(2).padLeft(2);</b>
+<b class="nc">&nbsp;        table.add(reputationT).padTop(2).padLeft(2);;</b>
+<b class="nc">&nbsp;        table.row();</b>
+<b class="nc">&nbsp;        table.add(timeLabel).padTop(2).padLeft(2);</b>
+<b class="nc">&nbsp;        table.add(scoreLabel).padTop(2).padLeft(2);</b>
+<b class="nc">&nbsp;        table.add(orderNumL).padTop(2).padLeft(2);</b>
+<b class="nc">&nbsp;        table.add(reputation).padTop(2).padLeft(2);</b>
+<b class="nc">&nbsp;        table.row();</b>
+<b class="nc">&nbsp;        table.add(powerUpLabel).colspan(2).padTop(2).padLeft(2); // add the new label here</b>
+<b class="nc">&nbsp;        table.add(powerUpTextLabel).padTop(2).padLeft(2);</b>
+&nbsp;
+<b class="nc">&nbsp;        table.left().top();</b>
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+&nbsp;
+&nbsp;        //labelStyle.font = new BitmapFont(); // replace with your desired font
+&nbsp;
+&nbsp;        //stage.addActor(new TextButton(&quot;Custom Btn &quot;, textButtonStyle));
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the time label.
+&nbsp;     *
+&nbsp;     * @param scenarioComplete Whether the game scenario has been completed.
+&nbsp;     */
+&nbsp;    public void updateTime(Boolean scenarioComplete){
+<b class="nc">&nbsp;        if(scenarioComplete){</b>
+<b class="nc">&nbsp;            timeLabel.setColor(Color.GREEN);</b>
+<b class="nc">&nbsp;            timeStr = String.format(&quot;%d&quot;, worldTimerM) + &quot;:&quot; + String.format(&quot;%d&quot;, worldTimerS);</b>
+<b class="nc">&nbsp;            timeLabel.setText(String.format(&quot;TIME: &quot; + timeStr + &quot; MONEY: %d&quot;, score));</b>
+<b class="nc">&nbsp;            timeLabelT.setText(&quot;SCENARIO COMPLETE&quot;);</b>
+<b class="nc">&nbsp;            table.center().top();</b>
+<b class="nc">&nbsp;            stage.addActor(table);</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            if (worldTimerS == 59) {</b>
+<b class="nc">&nbsp;                worldTimerM += 1;</b>
+<b class="nc">&nbsp;                worldTimerS = 0;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                worldTimerS += 1;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        table.left().top();</b>
+<b class="nc">&nbsp;        if(worldTimerS &lt; 10){</b>
+<b class="nc">&nbsp;            timeStr = String.format(&quot;%d&quot;, worldTimerM) + &quot;:0&quot; + String.format(&quot;%d&quot;, worldTimerS);</b>
+&nbsp;        }
+&nbsp;        else {
+<b class="nc">&nbsp;            timeStr = String.format(&quot;%d&quot;, worldTimerM) + &quot;:&quot; + String.format(&quot;%d&quot;, worldTimerS);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        timeLabel.setText(timeStr);</b>
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Calculates the user&#39;s score per order and updates the label.
+&nbsp;     *
+&nbsp;     * @param scenarioComplete Whether the game scenario has been completed.
+&nbsp;     * @param expectedTime The expected time an order should be completed in.
+&nbsp;     */
+&nbsp;    public void updateScore(Boolean scenarioComplete, Integer expectedTime){
+&nbsp;        int addScore;
+&nbsp;        int currentTime;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if(this.scenarioComplete == Boolean.FALSE){</b>
+<b class="nc">&nbsp;            currentTime = (worldTimerM * 60) + worldTimerS;</b>
+&nbsp;
+<b class="nc">&nbsp;            if (currentTime &lt;= expectedTime) {</b>
+<b class="nc">&nbsp;                if (boost == Boolean.TRUE){</b>
+<b class="nc">&nbsp;                    addScore = 200;</b>
+<b class="nc">&nbsp;                    boost = Boolean.FALSE;}</b>
+&nbsp;                else {
+<b class="nc">&nbsp;                    addScore = 100;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            else{
+<b class="nc">&nbsp;                if (boost == Boolean.TRUE){</b>
+<b class="nc">&nbsp;                    addScore = 2 * (100 - (5 * (currentTime -expectedTime)));</b>
+<b class="nc">&nbsp;                    boost = Boolean.FALSE;</b>
+&nbsp;                }
+&nbsp;                else{
+<b class="nc">&nbsp;                    addScore = 100 - (5 * (currentTime -expectedTime));</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if(addScore &lt; 0){</b>
+<b class="nc">&nbsp;                    addScore = 0;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            score += 20;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if(scenarioComplete==Boolean.TRUE){</b>
+<b class="nc">&nbsp;            scoreLabel.setColor(Color.GREEN);</b>
+<b class="nc">&nbsp;            scoreLabel.setText(&quot;&quot;);</b>
+<b class="nc">&nbsp;            scoreLabelT.setText(&quot;&quot;);</b>
+<b class="nc">&nbsp;            scoreLabelT.remove();</b>
+<b class="nc">&nbsp;            scoreLabel.remove();</b>
+<b class="nc">&nbsp;            table.center().top();</b>
+<b class="nc">&nbsp;            stage.addActor(table);</b>
+<b class="nc">&nbsp;            this.scenarioComplete = Boolean.TRUE;</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        table.left().top();</b>
+<b class="nc">&nbsp;        scoreLabel.setText(String.format(&quot;%d&quot;, score));</b>
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the order label.
+&nbsp;     *
+&nbsp;     * @param scenarioComplete Whether the game scenario has been completed.
+&nbsp;     * @param orderNum The index number of the order.
+&nbsp;     */
+&nbsp;    public void updateOrder(Boolean scenarioComplete, Integer orderNum){
+<b class="nc">&nbsp;        if(scenarioComplete==Boolean.TRUE){</b>
+<b class="nc">&nbsp;            orderNumL.remove();</b>
+<b class="nc">&nbsp;            orderNumLT.remove();</b>
+<b class="nc">&nbsp;            table.center().top();</b>
+<b class="nc">&nbsp;            stage.addActor(table);</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        table.left().top();</b>
+<b class="nc">&nbsp;        orderNumL.setText(String.format(&quot;%d&quot;, orderNum));</b>
+<b class="nc">&nbsp;        orderNumLT.setText(&quot;ORDER&quot;);</b>
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public int decrementReps(){
+<b class="nc">&nbsp;        System.out.println(&quot;I ran&quot;);</b>
+<b class="nc">&nbsp;        repPoints --;</b>
+<b class="nc">&nbsp;        reputation.setText(String.format(&quot;%d&quot;, repPoints));</b>
+&nbsp;
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+<b class="nc">&nbsp;        return  repPoints;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getRepPoints() {
+<b class="nc">&nbsp;        return repPoints;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void dispose() {
+<b class="nc">&nbsp;        stage.dispose();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getScore() {
+<b class="nc">&nbsp;        return score;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getWorldTimerM() {
+<b class="nc">&nbsp;        return worldTimerM;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Integer getWorldTimerS() {
+<b class="nc">&nbsp;        return worldTimerS;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public void setScore(Integer expectedTime){
+&nbsp;        int addScore;
+&nbsp;        int currentTime;
+&nbsp;
+&nbsp;        if(true){
+<b class="nc">&nbsp;            currentTime = (worldTimerM * 60) + worldTimerS;</b>
+<b class="nc">&nbsp;            if (currentTime &lt;= expectedTime) {</b>
+<b class="nc">&nbsp;                addScore = 100;</b>
+&nbsp;            }
+&nbsp;            else{
+<b class="nc">&nbsp;                addScore = 100 - (5 * (currentTime -expectedTime));</b>
+<b class="nc">&nbsp;                if(addScore &lt; 0){</b>
+<b class="nc">&nbsp;                    addScore = 0;</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            score = expectedTime;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if(scenarioComplete==Boolean.TRUE){</b>
+<b class="nc">&nbsp;            scoreLabel.setColor(Color.GREEN);</b>
+<b class="nc">&nbsp;            scoreLabel.setText(&quot;&quot;);</b>
+<b class="nc">&nbsp;            scoreLabelT.setText(&quot;&quot;);</b>
+<b class="nc">&nbsp;            scoreLabelT.remove();</b>
+<b class="nc">&nbsp;            scoreLabel.remove();</b>
+<b class="nc">&nbsp;            table.center().top();</b>
+<b class="nc">&nbsp;            stage.addActor(table);</b>
+<b class="nc">&nbsp;            this.scenarioComplete = Boolean.TRUE;</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        table.left().top();</b>
+<b class="nc">&nbsp;        scoreLabel.setText(String.format(&quot;%d&quot;, score));</b>
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void purchase(Integer price){
+<b class="nc">&nbsp;        score -= price;</b>
+<b class="nc">&nbsp;        if(scenarioComplete==Boolean.TRUE){</b>
+<b class="nc">&nbsp;            scoreLabel.setColor(Color.GREEN);</b>
+<b class="nc">&nbsp;            scoreLabel.setText(&quot;&quot;);</b>
+<b class="nc">&nbsp;            scoreLabelT.setText(&quot;&quot;);</b>
+<b class="nc">&nbsp;            scoreLabelT.remove();</b>
+<b class="nc">&nbsp;            scoreLabel.remove();</b>
+<b class="nc">&nbsp;            table.center().top();</b>
+<b class="nc">&nbsp;            stage.addActor(table);</b>
+<b class="nc">&nbsp;            this.scenarioComplete = Boolean.TRUE;</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        table.left().top();</b>
+<b class="nc">&nbsp;        scoreLabel.setText(String.format(&quot;%d&quot;, score));</b>
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public void setWorldTimerM(Integer worldTimerM) {
+<b class="nc">&nbsp;        this.worldTimerM = worldTimerM;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public int setRepPoints(Integer repPoint){
+&nbsp;        //System.out.println(&quot;I ran&quot;);
+<b class="nc">&nbsp;        repPoints = repPoint;</b>
+<b class="nc">&nbsp;        reputation.setText(String.format(&quot;%d&quot;, repPoints));</b>
+&nbsp;
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+<b class="nc">&nbsp;        return  repPoints;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setWorldTimerS(Integer worldTimerS) {
+<b class="nc">&nbsp;        this.worldTimerS = worldTimerS;</b>
+&nbsp;    }
+&nbsp;    public void addRep() {
+<b class="nc">&nbsp;        repPoints += 1;</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Added reputation you now you have a reputation of &quot; + repPoints);</b>
+<b class="nc">&nbsp;        setRepPoints(repPoints);</b>
+&nbsp;    }
+&nbsp;    public void doublePoints() {
+<b class="nc">&nbsp;        boost = Boolean.TRUE;</b>
+<b class="nc">&nbsp;        System.out.println(&quot;Double Points for next order&quot;);</b>
+&nbsp;    }
+&nbsp;    public void updatePowerUp(int powerUpType) {
+&nbsp;        String powerUpText;
+&nbsp;
+&nbsp;        // Determine the power up text based on the powerUpType integer input
+<b class="nc">&nbsp;        switch (powerUpType) {</b>
+&nbsp;            case 0:
+<b class="nc">&nbsp;                powerUpText = &quot;x2 Points!&quot;;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case 1:
+<b class="nc">&nbsp;                powerUpText = &quot;Speed!&quot;;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case 2:
+<b class="nc">&nbsp;                powerUpText = &quot;x2 Cooking!&quot;;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case 3:
+<b class="nc">&nbsp;                powerUpText = &quot;Extra Time!&quot;;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case 4:
+<b class="nc">&nbsp;                powerUpText = &quot;+1 Rep!&quot;;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            default:
+<b class="nc">&nbsp;                powerUpText = &quot;None&quot;;</b>
+&nbsp;                break;
+&nbsp;        }
+&nbsp;
+&nbsp;        // Set the text of the powerUpTextLabel to the power up text
+<b class="nc">&nbsp;        powerUpTextLabel.setText(powerUpText);</b>
+<b class="nc">&nbsp;        System.out.println(powerUpTextLabel);</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

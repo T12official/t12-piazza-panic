@@ -1,0 +1,243 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > RecipeTests</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: RecipeTests (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">RecipeTests</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (72/72)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import Ingredients.*;
+&nbsp;import Recipe.*;
+&nbsp;import Sprites.Chef;
+&nbsp;import Sprites.CompletedDishStation;
+&nbsp;import Sprites.PlateStation;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+&nbsp;import com.badlogic.gdx.math.Rectangle;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.BodyDef;
+&nbsp;import com.badlogic.gdx.physics.box2d.World;
+&nbsp;import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
+&nbsp;import org.junit.Test;
+&nbsp;import org.junit.runner.RunWith;
+&nbsp;
+&nbsp;import static org.junit.Assert.*;
+&nbsp;
+&nbsp;@RunWith(GdxTestRunner.class)
+<b class="fc">&nbsp;public class RecipeTests {</b>
+<b class="fc">&nbsp;    public World world = new World(new Vector2(0, 0), true);</b>
+<b class="fc">&nbsp;    public TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());</b>
+<b class="fc">&nbsp;    public TiledMap map = mapLoader.load(&quot;Kitchen.tmx&quot;);</b>
+<b class="fc">&nbsp;    public MainGame game = new MainGame();</b>
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void MakeSaladRecipeTest(){
+<b class="fc">&nbsp;        PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        Onion onion = new Onion(0, 0,0);</b>
+<b class="fc">&nbsp;        Tomato tomato = new Tomato(0, 0,0);</b>
+<b class="fc">&nbsp;        Lettuce lettuce = new Lettuce(0, 0,0);</b>
+&nbsp;
+<b class="fc">&nbsp;        onion.setPrepared();</b>
+<b class="fc">&nbsp;        tomato.setPrepared();</b>
+<b class="fc">&nbsp;        lettuce.setPrepared();</b>
+&nbsp;
+<b class="fc">&nbsp;        plate.dropItem(onion);</b>
+<b class="fc">&nbsp;        plate.dropItem(tomato);</b>
+<b class="fc">&nbsp;        plate.dropItem(lettuce);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(&quot;This will only pass if salad contains correct ingredients&quot;,</b>
+<b class="fc">&nbsp;                    new SaladRecipe(), plate.getCompletedRecipe());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void IncorrectSaladRecipeTest(){
+<b class="fc">&nbsp;        PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        Onion onion = new Onion(0, 0,0);</b>
+<b class="fc">&nbsp;        Tomato tomato = new Tomato(0, 0,0);</b>
+<b class="fc">&nbsp;        Lettuce lettuce = new Lettuce(0, 0,0);</b>
+&nbsp;
+<b class="fc">&nbsp;        plate.dropItem(onion);</b>
+<b class="fc">&nbsp;        plate.dropItem(tomato);</b>
+<b class="fc">&nbsp;        plate.dropItem(lettuce);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertNull(&quot;This will only pass if salad contains correct ingredients&quot;,</b>
+<b class="fc">&nbsp;                plate.getCompletedRecipe());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void MakeBurgerRecipeTest(){
+<b class="fc">&nbsp;        PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        Steak steak = new Steak(0, 0, 0);</b>
+<b class="fc">&nbsp;        Bun bun = new Bun(0, 0, 0);</b>
+<b class="fc">&nbsp;        steak.setPrepared();</b>
+<b class="fc">&nbsp;        steak.setCooked();</b>
+<b class="fc">&nbsp;        bun.setCooked();</b>
+&nbsp;
+<b class="fc">&nbsp;        plate.dropItem(steak);</b>
+<b class="fc">&nbsp;        plate.dropItem(bun);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(&quot;This will only pass if burger contains correct ingredients&quot;,</b>
+<b class="fc">&nbsp;                new BurgerRecipe(), plate.getCompletedRecipe());</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void IncorrectBurgerRecipeTest(){
+<b class="fc">&nbsp;        PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        Steak steak = new Steak(0, 0, 0);</b>
+<b class="fc">&nbsp;        Bun bun = new Bun(0, 0, 0);</b>
+&nbsp;
+<b class="fc">&nbsp;        plate.dropItem(steak);</b>
+<b class="fc">&nbsp;        plate.dropItem(bun);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertNull(&quot;This will only pass if burger contains incorrect ingredients&quot;,</b>
+<b class="fc">&nbsp;               plate.getCompletedRecipe());</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void MakeJacketPotatoTest(){
+<b class="fc">&nbsp;        PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        Potatoes potatoes = new Potatoes(0, 0, 0);</b>
+<b class="fc">&nbsp;        Cheese cheese = new Cheese(0,0,0);</b>
+&nbsp;
+<b class="fc">&nbsp;        potatoes.setPrepared();</b>
+<b class="fc">&nbsp;        cheese.setPrepared();</b>
+&nbsp;
+<b class="fc">&nbsp;        plate.dropItem(potatoes);</b>
+<b class="fc">&nbsp;        plate.dropItem(cheese);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(&quot;This will only pass if burger contains correct ingredients&quot;,</b>
+<b class="fc">&nbsp;                new jacketPotato(), plate.getCompletedRecipe());</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void IncorrectJacketPotatoTest(){
+<b class="fc">&nbsp;        PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        Potatoes potatoes = new Potatoes(0, 0, 0);</b>
+<b class="fc">&nbsp;        Cheese cheese = new Cheese(0,0,0);</b>
+<b class="fc">&nbsp;        Lettuce lettuce = new Lettuce(0, 0,0);</b>
+&nbsp;
+<b class="fc">&nbsp;        plate.dropItem(potatoes);</b>
+<b class="fc">&nbsp;        plate.dropItem(lettuce);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertNull(&quot;This will only pass if jacket potato contains incorrect ingredients&quot;,</b>
+<b class="fc">&nbsp;                plate.getCompletedRecipe());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void MakePizzaTest(){
+<b class="fc">&nbsp;        PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        pizzaDough pd = new pizzaDough(0,0,0);</b>
+<b class="fc">&nbsp;        Cheese cheese = new Cheese(0,0,0);</b>
+<b class="fc">&nbsp;        Tomato tomato = new Tomato(0,0,0);</b>
+&nbsp;
+<b class="fc">&nbsp;        pd.setPrepared();</b>
+<b class="fc">&nbsp;        cheese.setPrepared();</b>
+<b class="fc">&nbsp;        tomato.setPrepared();</b>
+&nbsp;
+<b class="fc">&nbsp;        plate.dropItem(pd);</b>
+<b class="fc">&nbsp;        plate.dropItem(tomato);</b>
+<b class="fc">&nbsp;        plate.dropItem(cheese);</b>
+&nbsp;
+<b class="fc">&nbsp;        Recipe r = plate.getCompletedRecipe();</b>
+<b class="fc">&nbsp;        System.out.println(r);</b>
+&nbsp;        //assertEquals(new pizzaRecipy(), plate.getCompletedRecipe());
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Ingredient</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Ingredients</a>
+</div>
+
+<h1>Coverage Summary for Class: Ingredient (Ingredients)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Ingredient</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    54.5%
+  </span>
+  <span class="absValue">
+    (6/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    46.7%
+  </span>
+  <span class="absValue">
+    (14/30)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package Ingredients;
+&nbsp;
+&nbsp;import com.badlogic.gdx.graphics.Texture;
+&nbsp;import com.badlogic.gdx.graphics.g2d.Sprite;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.team13.piazzapanic.MainGame;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;public abstract class Ingredient extends Sprite {
+&nbsp;
+&nbsp;    private float burnTime;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The time required to prepare the ingredient.
+&nbsp;     */
+&nbsp;    public float prepareTime;
+&nbsp;    /**
+&nbsp;     * The time required to cook the ingredient.
+&nbsp;     */
+&nbsp;    public float cookTime;
+&nbsp;    /**
+&nbsp;     * A flag to indicate whether the ingredient has been cooked.
+&nbsp;     */
+&nbsp;    private boolean amICooked;
+&nbsp;    /**
+&nbsp;     * A flag to indicate whether the ingredient has been prepared.
+&nbsp;     */
+&nbsp;    private boolean amIPrepared;
+&nbsp;    /**
+&nbsp;     * An array of textures representing different states of the ingredient.
+&nbsp;     */
+&nbsp;    public ArrayList&lt;Texture&gt; tex;
+&nbsp;    public boolean isBurned;
+&nbsp;    /**
+&nbsp;     * Constructs a new Ingredient object with the specified preparation and cooking times.
+&nbsp;     *
+&nbsp;     * @param prepareTime The time required to prepare the ingredient.
+&nbsp;     * @param cookTime The time required to cook the ingredient.
+&nbsp;     */
+<b class="fc">&nbsp;    public Ingredient(float prepareTime, float cookTime, float burnTime) {</b>
+<b class="fc">&nbsp;        this.burnTime = burnTime;</b>
+<b class="fc">&nbsp;        this.prepareTime = prepareTime;</b>
+<b class="fc">&nbsp;        this.cookTime = cookTime;</b>
+<b class="fc">&nbsp;        this.amICooked = false;</b>
+<b class="fc">&nbsp;        this.amIPrepared = false;</b>
+<b class="fc">&nbsp;        this.tex = null;</b>
+<b class="fc">&nbsp;        this.isBurned = false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the flag indicating that the ingredient has been prepared.
+&nbsp;     *
+&nbsp;     */
+&nbsp;    public void setPrepared() {
+<b class="fc">&nbsp;        amIPrepared = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the value of the flag indicating whether the ingredient has been prepared.
+&nbsp;     *
+&nbsp;     * @return A boolean indicating whether the ingredient has been prepared.
+&nbsp;     */
+&nbsp;    public boolean isPrepared() {
+<b class="fc">&nbsp;        return amIPrepared;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Sets the flag indicating that the ingredient has been cooked.
+&nbsp;     *
+&nbsp;     */
+&nbsp;    public void setCooked() {
+<b class="fc">&nbsp;        amICooked= true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;    public void setBurned(){isBurned = true; }</b>
+&nbsp;
+<b class="nc">&nbsp;    public boolean isBurned(){return isBurned;}</b>
+&nbsp;
+<b class="nc">&nbsp;    public float getBurnTime(){return burnTime;}</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the value of the flag indicating whether the ingredient has been cooked.
+&nbsp;     *
+&nbsp;     * @return A boolean indicating whether the ingredient has been cooked.
+&nbsp;     */
+&nbsp;    public boolean isCooked() {
+<b class="fc">&nbsp;        return amICooked;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates and draws a new Sprite object representing the ingredient.
+&nbsp;     *
+&nbsp;     * @param x The x coordinate of the ingredient.
+&nbsp;     * @param y The y coordinate of the ingredient.
+&nbsp;     * @param batch The SpriteBatch object used to draw the ingredient.
+&nbsp;     */
+&nbsp;    public void create(float x, float y, SpriteBatch batch){
+<b class="nc">&nbsp;        Sprite sprite = new Sprite(tex.get(findCorrectSkin()));</b>
+<b class="nc">&nbsp;        float adjustedX =  x - (5/MainGame.PPM);</b>
+<b class="nc">&nbsp;        float adjustedY =  y - (4.95f / MainGame.PPM);</b>
+<b class="nc">&nbsp;        sprite.setBounds(adjustedX,adjustedY,10/ MainGame.PPM,10/ MainGame.PPM);</b>
+<b class="nc">&nbsp;        sprite.draw(batch);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Determines the correct texture to use for the ingredient sprite based on its prepare and cook state.
+&nbsp;     * @return int - The correct skin of the ingredient, either 0, 1, or 2.
+&nbsp;     * 0 represents the uncooked and unprepared ingredient.
+&nbsp;     * 1 represents the prepared but uncooked ingredient.
+&nbsp;     * 2 represents the fully cooked and prepared ingredient.
+&nbsp;     *
+&nbsp;     * */
+&nbsp;    private int findCorrectSkin(){
+<b class="nc">&nbsp;        if(isBurned()){</b>
+<b class="nc">&nbsp;            return 3;</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        if (isPrepared() &amp;&amp; isCooked()){</b>
+<b class="nc">&nbsp;            return 2;</b>
+<b class="nc">&nbsp;        } else if (isPrepared()){</b>
+<b class="nc">&nbsp;            return 1;</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            return 0;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean equals(Object obj) {
+<b class="fc">&nbsp;        if (obj.getClass().equals(this.getClass())){</b>
+<b class="fc">&nbsp;            return ((Ingredient) obj).cookTime == this.cookTime &amp;&amp; ((Ingredient) obj).prepareTime == this.prepareTime &amp;&amp; this.isBurned == ((Ingredient) obj).isBurned ;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

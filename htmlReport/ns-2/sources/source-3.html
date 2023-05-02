@@ -1,0 +1,152 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Recipe</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">Recipe</a>
+</div>
+
+<h1>Coverage Summary for Class: Recipe (Recipe)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Recipe</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    28.6%
+  </span>
+  <span class="absValue">
+    (2/7)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package Recipe;
+&nbsp;
+&nbsp;import Ingredients.Ingredient;
+&nbsp;import com.badlogic.gdx.graphics.Texture;
+&nbsp;import com.badlogic.gdx.graphics.g2d.Sprite;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.team13.piazzapanic.MainGame;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;/**
+&nbsp; * The Recipe class is a subclass of Sprite that represents a completed dish in the kitchen game.
+&nbsp; * It holds an ArrayList of {@link Ingredients.Ingredient}s and a Texture of the completed dish image.
+&nbsp; *
+&nbsp; */
+&nbsp;public class Recipe extends Sprite {
+&nbsp;    protected ArrayList&lt;Ingredient&gt; ingredients;
+&nbsp;    protected Texture completedImg;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the Recipe class.
+&nbsp;     */
+<b class="fc">&nbsp;    public Recipe(){</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Returns the ArrayList of ingredients used in the recipe.
+&nbsp;     * @return ingredients The list of ingredients used in the recipe.
+&nbsp;     */
+&nbsp;    public ArrayList&lt;Ingredient&gt; getIngredients(){
+<b class="fc">&nbsp;        return ingredients;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the completed dish sprite and draws it to the screen.
+&nbsp;     * @param x The x-coordinate of the dish&#39;s location.
+&nbsp;     * @param y The y-coordinate of the dish&#39;s location.
+&nbsp;     * @param batch The SpriteBatch used to draw the sprite.
+&nbsp;     * @see com.badlogic.gdx.graphics.g2d.SpriteBatch
+&nbsp;     */
+&nbsp;    public void create(float x, float y, SpriteBatch batch){
+<b class="nc">&nbsp;        Sprite sprite = new Sprite(completedImg);</b>
+<b class="nc">&nbsp;        float adjustedX =  x - (5/ MainGame.PPM);</b>
+<b class="nc">&nbsp;        float adjustedY =  y - (4.5f / MainGame.PPM);</b>
+<b class="nc">&nbsp;        sprite.setBounds(adjustedX,adjustedY,10/ MainGame.PPM,10/ MainGame.PPM);</b>
+<b class="nc">&nbsp;        sprite.draw(batch);</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

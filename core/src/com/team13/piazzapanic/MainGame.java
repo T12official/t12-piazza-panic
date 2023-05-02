@@ -68,7 +68,7 @@ public class MainGame extends Game {
 	}
 	@Override
 	public void create() {
-		batch = new SpriteBatch();
+		batch = getBatch();
 		startScreen = new StartScreen(this);
 		playScreen = new PlayScreen(this);
 

@@ -1,0 +1,144 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Orders</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: Orders (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Orders</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import Recipe.Order;
+&nbsp;import com.badlogic.gdx.graphics.OrthographicCamera;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.Stage;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Table;
+&nbsp;import com.badlogic.gdx.utils.Disposable;
+&nbsp;import com.badlogic.gdx.utils.viewport.FitViewport;
+&nbsp;import com.badlogic.gdx.utils.viewport.Viewport;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Label;
+&nbsp;
+&nbsp;public class Orders implements Disposable {
+&nbsp;    public Stage stage;
+&nbsp;
+&nbsp;    private Order[] orders[];
+&nbsp;
+&nbsp;    Label timeLabelT;
+&nbsp;    Label timeLabel;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for the class, initialises an area for the orders to be placed.
+&nbsp;     *
+&nbsp;     * @param sb The spritebatch to be able to draw to the screen.
+&nbsp;     */
+<b class="nc">&nbsp;    public Orders(SpriteBatch sb){</b>
+<b class="nc">&nbsp;        Viewport viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, new OrthographicCamera());</b>
+<b class="nc">&nbsp;        stage = new Stage(viewport, sb);</b>
+&nbsp;
+<b class="nc">&nbsp;        Table table = new Table();</b>
+<b class="nc">&nbsp;        table.top();</b>
+<b class="nc">&nbsp;        table.setFillParent(true);</b>
+&nbsp;
+<b class="nc">&nbsp;        stage.addActor(table);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void dispose() {
+<b class="nc">&nbsp;        stage.dispose();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>
