@@ -190,7 +190,7 @@ public class PlayScreen implements Playable {
         System.out.println(chefList.toString());
 
         controlledChef = getChef();
-        world.setContactListener(new WorldContactListener(world,this, orderTimer, hud));
+
 
         controlledChef.notificationSetBounds("Down");
 
@@ -247,6 +247,7 @@ public class PlayScreen implements Playable {
         Orders orders = new Orders(game.getBatch());
         hud.stage.addActor(orderTimer);
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
+        world.setContactListener(new WorldContactListener(world,this, orderTimer, hud));
         addToHud("welcome");
         messageLabel.remove();
     }
