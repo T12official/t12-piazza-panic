@@ -498,6 +498,15 @@ public class PlayScreen implements Playable {
         float period = 1f;
         if(timeSeconds > period) {
             timeSeconds -= period;
+            ///Chef movement stuff needed for testing
+
+            float chef2X = chef2.getX();
+            float chef2Y = chef2.getY();
+
+            String xFormatted = String.format("%.4g",chef2X);
+            String yFormatted = String.format("%.3g",chef2Y);
+
+            System.out.println(yFormatted);
             hud.updateTime(scenarioComplete);
         }
 

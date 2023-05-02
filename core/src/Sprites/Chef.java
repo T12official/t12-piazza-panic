@@ -809,6 +809,7 @@ public class Chef extends Sprite implements InputProcessor {
     public void setRunSpeedModifier(float v) {
         runSpeedModifier = v;
         System.out.println("Speed Up");
+
     }
 
 }
