@@ -245,12 +245,10 @@ public class PlayScreen implements Playable {
         inputMultiplexer.getProcessors();
         Gdx.input.setInputProcessor(inputMultiplexer);
         Orders orders = new Orders(game.getBatch());
+        hud.stage.addActor(orderTimer);
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
         addToHud("welcome");
         messageLabel.remove();
-
-
-
     }
 
 
