@@ -118,7 +118,12 @@ public class OrderTimer extends Actor {
     public void stopTimer(float x) {
         // The timer will stop for x seconds.
         // The timer will not decrease during this time.
-        setOrderTime(1);
+        if(orderTime > 0.5f){
+            setOrderTime(1);
+        }
+        else{
+            setOrderTime(orderTime + 0.5f);
+        }
         System.out.println("Added order time");
 
     }
