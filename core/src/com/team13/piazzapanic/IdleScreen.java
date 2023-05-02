@@ -351,13 +351,13 @@ public class IdleScreen implements Playable {
      */
     public void updateOrder(){
         if(scenarioComplete==Boolean.TRUE) {
-            hud.updateScore(Boolean.TRUE, (6 - ordersArray.size()) * 35);
+            hud.updateScore(Boolean.TRUE, (6 - ordersArray.size()) * 35, orderTimer.getOrderTime());
             hud.updateOrder(Boolean.TRUE, 0);
             return;
         }
         if(ordersArray.size() != 0) {
             if (ordersArray.get(0).orderComplete) {
-                hud.updateScore(Boolean.FALSE, (6 - ordersArray.size()) * 35);
+                hud.updateScore(Boolean.FALSE, (6 - ordersArray.size()) * 35, orderTimer.getOrderTime());
                 ordersArray.remove(0);
                 hud.updateOrder(Boolean.FALSE, 6 - ordersArray.size());
                 return;

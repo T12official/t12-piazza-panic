@@ -157,7 +157,7 @@ public class HUD implements Disposable {
      * @param scenarioComplete Whether the game scenario has been completed.
      * @param expectedTime The expected time an order should be completed in.
      */
-    public void updateScore(Boolean scenarioComplete, Integer expectedTime){
+    public void updateScore(Boolean scenarioComplete, Integer expectedTime, float orderTime){
         int addScore;
         int currentTime;
 
@@ -165,24 +165,24 @@ public class HUD implements Disposable {
         if(this.scenarioComplete == Boolean.FALSE){
             currentTime = (worldTimerM * 60) + worldTimerS;
 
-            if (currentTime <= expectedTime) {
+            if (orderTime > 0) {
                 if (boost == Boolean.TRUE){
-                    addScore = 200;
+                    addScore = 100;
                     boost = Boolean.FALSE;}
                 else {
-                    addScore = 100;
+                    addScore = 50;
                 }
             }
             else{
                 if (boost == Boolean.TRUE){
-                    addScore = 2 * (100 - (5 * (currentTime -expectedTime)));
+                    addScore = 40;
                     boost = Boolean.FALSE;
                 }
                 else{
-                    addScore = 100 - (5 * (currentTime -expectedTime));
+                    addScore = 20;
                 }
                 if(currentTime < 0){
-                    addScore = 0;
+                    addScore = 20;
                 }
             }
             score += addScore;

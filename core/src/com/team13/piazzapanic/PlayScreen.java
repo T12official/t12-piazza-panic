@@ -451,7 +451,7 @@ public class PlayScreen implements Playable {
      */
     public void updateOrder(){
         if(scenarioComplete==Boolean.TRUE) {
-            hud.updateScore(Boolean.TRUE, (numberOfOrders + 1 - ordersArray.size()) * 35);
+            hud.updateScore(Boolean.TRUE, (numberOfOrders + 1 - ordersArray.size()) * 35, orderTimer.getOrderTime());
             hud.updateOrder(Boolean.TRUE, orderNum);
             return;
         }
@@ -460,7 +460,7 @@ public class PlayScreen implements Playable {
                 orderNum ++;
                 isActiveOrder = true;
                 orderTimer.setOrderTime(1);
-                hud.updateScore(Boolean.FALSE, (numberOfOrders + 1 - ordersArray.size()) * 35);
+                hud.updateScore(Boolean.FALSE, (numberOfOrders + 1 - ordersArray.size()) * 35, orderTimer.getOrderTime());
                 ordersArray.remove(0);
                 hud.updateOrder(Boolean.FALSE, orderNum);
                 return;
