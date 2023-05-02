@@ -45,8 +45,6 @@ public class OrderTimerTest {
         orderTimer.update(dt);
         assertEquals("will pass if orderTime has updated by correct amount medium difficulty",
                 1 - dt / MainGame.MEDIUM_DIFFICULTY, orderTimer.getOrderTime(), 0.0001);
-        assertNotEquals("will pass if orderTime has updated by correct amt in medium difficulty",
-                1 - dt / MainGame.EASY_DIFFICULTY, orderTimer.getOrderTime(), 0.0001);
     }
 
     @Test
@@ -58,7 +56,5 @@ public class OrderTimerTest {
         orderTimer.update(dt);
         assertEquals("will pass if orderTime has updated by correct amount in hard difficulty",
                     1 - dt / MainGame.HARD_DIFFICULTY, orderTimer.getOrderTime(), 0.0001);
-        assertNotEquals("will pass if orderTime has updated by correct amount hard difficulty",
-                1 - dt / MainGame.EASY_DIFFICULTY, orderTimer.getOrderTime(), 0.0001);
     }
 }

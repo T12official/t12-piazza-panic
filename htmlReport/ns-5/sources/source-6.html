@@ -1,0 +1,181 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FoodAssetTests</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: FoodAssetTests (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FoodAssetTests</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (18/18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import org.junit.Test;
+&nbsp;import org.junit.runner.RunWith;
+&nbsp;import static org.junit.Assert.assertTrue;
+&nbsp;@RunWith(GdxTestRunner.class)
+<b class="fc">&nbsp;public class FoodAssetTests {</b>
+&nbsp;    @Test
+&nbsp;    public void testBurgerAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Burger.png asset exists.&quot;, Gdx.files.internal(&quot;Food/Burger.png&quot;).exists());</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testBurgerBunsAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Burger_buns.png asset exists.&quot;, Gdx.files.internal(&quot;Food/Burger_buns.png&quot;).exists());</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testBurgerRecipeAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when burger_recipe.png asset exists.&quot;, Gdx.files.internal(&quot;Food/burger_recipe.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testBurnedPattyAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when burned_patty.png asset exists.&quot;, Gdx.files.internal(&quot;Food/burned_patty.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testChoppedLettuceAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Chopped_lettuce.png asset exists&quot;, Gdx.files.internal(&quot;Food/Chopped_lettuce.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testChoppedOnionAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Chopped_onion.png asset exists&quot;, Gdx.files.internal(&quot;Food/Chopped_onion.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testChoppedTomatoAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Chopped_tomato.png asset exists&quot;, Gdx.files.internal(&quot;Food/Chopped_tomato.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testCookedPattyAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Cooked_patty.png asset exists&quot;, Gdx.files.internal(&quot;Food/Cooked_patty.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testLettuceAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Lettuce.png asset exists&quot;, Gdx.files.internal(&quot;Food/Lettuce.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testMeatAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Meat.png asset exists&quot;, Gdx.files.internal(&quot;Food/Meat.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testOnionAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Onion.png asset exists&quot;, Gdx.files.internal(&quot;Food/Onion.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testPattyAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Patty.png asset exists&quot;, Gdx.files.internal(&quot;Food/Patty.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testPizzaDoneAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when pizzaDone.png asset exists&quot;, Gdx.files.internal(&quot;Food/pizzaDone.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testSaladAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Salad.png asset exists&quot;, Gdx.files.internal(&quot;Food/Salad.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testSaladRecipeExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when salad_recipe.png asset exists&quot;, Gdx.files.internal(&quot;Food/salad_recipe.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testToasterBurgerBunsAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Toasted_burger_buns.png asset exists&quot;, Gdx.files.internal(&quot;Food/Toasted_burger_buns.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void testTomatoAssetExists(){
+<b class="fc">&nbsp;        assertTrue(&quot;This test will only pass when Tomato.png asset exists&quot;, Gdx.files.internal(&quot;Food/Tomato.png&quot;).exists());//Maybe add to change log? (24/02/2023)</b>
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

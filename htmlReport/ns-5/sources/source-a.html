@@ -1,0 +1,636 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > IdleScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: IdleScreen (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">IdleScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/218)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">IdleScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/220)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import Ingredients.Ingredient;
+&nbsp;import Recipe.Order;
+&nbsp;import Recipe.Recipe;
+&nbsp;import Sprites.*;
+&nbsp;import Tools.B2WorldCreator;
+&nbsp;import Tools.WorldContactListener;
+&nbsp;import Tools.chefAI;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.Input;
+&nbsp;
+&nbsp;import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+&nbsp;import com.badlogic.gdx.graphics.*;
+&nbsp;import com.badlogic.gdx.graphics.g2d.BitmapFont;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+&nbsp;import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.World;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.InputEvent;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+&nbsp;import com.badlogic.gdx.utils.viewport.FitViewport;
+&nbsp;import com.badlogic.gdx.utils.viewport.Viewport;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.concurrent.ThreadLocalRandom;
+&nbsp;
+&nbsp;
+&nbsp;public class IdleScreen implements Playable {
+&nbsp;
+&nbsp;    private final MainGame game;
+&nbsp;    private final TextButton returnToGame;
+&nbsp;    private final OrthographicCamera gamecam;
+&nbsp;    private final Viewport gameport;
+&nbsp;    private final HUD hud;
+&nbsp;
+&nbsp;    private OrderTimer orderTimer;
+<b class="nc">&nbsp;    private float orderTime = 1;</b>
+<b class="nc">&nbsp;    private boolean isActiveOrder = false;</b>
+&nbsp;    private GameOverScreen gameover;
+&nbsp;    public final TiledMap map;
+&nbsp;    private final OrthogonalTiledMapRenderer renderer;
+&nbsp;
+&nbsp;    private final World world;
+&nbsp;    public final Chef chef1;
+&nbsp;    public final Chef chef2;
+&nbsp;
+&nbsp;    private Chef controlledChef;
+&nbsp;
+&nbsp;    public ArrayList&lt;Order&gt; ordersArray;
+&nbsp;
+&nbsp;    public PlateStation plateStation;
+&nbsp;
+&nbsp;
+&nbsp;    public Boolean scenarioComplete;
+&nbsp;    public Boolean createdOrder;
+&nbsp;
+&nbsp;    public static float trayX;
+&nbsp;    public static float trayY;
+&nbsp;
+<b class="nc">&nbsp;    private float timeSeconds = 0f;</b>
+&nbsp;
+<b class="nc">&nbsp;    private float timeSecondsCount = 0f;</b>
+&nbsp;    private chefAI aiChef;
+&nbsp;
+&nbsp;    /**
+&nbsp;     * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
+&nbsp;     * creates and initializes game camera and viewport,
+&nbsp;     * creates and initializes HUD and orders hud, loads and initializes the map,
+&nbsp;     * creates and initializes world, creates and initializes chefs and sets them, sets contact listener for world, and initializes ordersArray.
+&nbsp;     * @param game The MainGame instance that the PlayScreen will be a part of.
+&nbsp;     */
+&nbsp;
+<b class="nc">&nbsp;    public IdleScreen(MainGame game){</b>
+<b class="nc">&nbsp;        returnToGame = getButton(&quot;Press X to return to game&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        this.game = game;</b>
+&nbsp;
+<b class="nc">&nbsp;        gameover = new GameOverScreen(game);</b>
+&nbsp;
+<b class="nc">&nbsp;        scenarioComplete = Boolean.FALSE;</b>
+<b class="nc">&nbsp;        createdOrder = Boolean.FALSE;</b>
+<b class="nc">&nbsp;        gamecam = new OrthographicCamera();</b>
+&nbsp;        // FitViewport to maintain aspect ratio whilst scaling to screen size
+<b class="nc">&nbsp;        gameport = new FitViewport(MainGame.V_WIDTH / MainGame.PPM, MainGame.V_HEIGHT / MainGame.PPM, gamecam);</b>
+&nbsp;        // create HUD for score &amp; time
+<b class="nc">&nbsp;        hud = new HUD(game.batch);</b>
+&nbsp;        // create orders hud
+<b class="nc">&nbsp;        Orders orders = new Orders(game.batch);</b>
+&nbsp;        // create map
+<b class="nc">&nbsp;        TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());</b>
+<b class="nc">&nbsp;        map = mapLoader.load(&quot;Kitchen.tmx&quot;);</b>
+<b class="nc">&nbsp;        renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);</b>
+<b class="nc">&nbsp;        gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);</b>
+&nbsp;
+<b class="nc">&nbsp;        world = new World(new Vector2(0,0), true);</b>
+<b class="nc">&nbsp;        new B2WorldCreator(world, map, this);</b>
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        chef1 = new Chef(this, 31.5F,65);</b>
+<b class="nc">&nbsp;        chef2 = new Chef(this, 128,65);</b>
+<b class="nc">&nbsp;        aiChef = new chefAI(this);</b>
+<b class="nc">&nbsp;        controlledChef = chef1;</b>
+&nbsp;        //TODO FIX THE NEED FOR PASSING A MAIN GAME IN THE IDLE SCREEN AKA MAKE THIS INHERIT FROM PLAYSCREEN OR HAVE A DIFFERENT CONTACT LISTENER
+<b class="nc">&nbsp;        world.setContactListener(new WorldContactListener(world, new PlayScreen(this.game), orderTimer, hud));</b>
+&nbsp;
+<b class="nc">&nbsp;        controlledChef.notificationSetBounds(&quot;Down&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        ordersArray = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public World getWorld(){
+<b class="nc">&nbsp;        return world;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void resetIdleTimer() {
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public PlateStation getPlateStation() {
+<b class="nc">&nbsp;        return plateStation;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void show(){
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;
+&nbsp;    /**
+&nbsp;
+&nbsp;            The handle input is simalr to the handle input in the playscreen implemention but with one very key difference.
+&nbsp;            @param AIinput -  AIinput is the input key press that is requested by the AI playing the game. This is how the AI is able to make
+&nbsp;                            &quot;keyboard inputs&quot; into the game
+&nbsp;     */
+&nbsp;
+&nbsp;    public void handleInput(float dt, String AIinput){
+&nbsp;        /**
+&nbsp;         * The X key has been mapped to the ability to go from the idle screen back to the main game
+&nbsp;         */
+<b class="nc">&nbsp;        if (Gdx.input.isKeyJustPressed(Input.Keys.X)){</b>
+<b class="nc">&nbsp;            game.disableIdle();</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if ((AIinput == &quot;r&quot;  &amp;&amp;</b>
+<b class="nc">&nbsp;                chef1.getUserControlChef() &amp;&amp;</b>
+<b class="nc">&nbsp;                chef2.getUserControlChef())) {</b>
+&nbsp;
+<b class="nc">&nbsp;            if (controlledChef.equals(chef1)) {</b>
+<b class="nc">&nbsp;                controlledChef.b2body.setLinearVelocity(0, 0);</b>
+<b class="nc">&nbsp;                controlledChef = chef2;</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                controlledChef.b2body.setLinearVelocity(0, 0);</b>
+<b class="nc">&nbsp;                controlledChef = chef1;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (!controlledChef.getUserControlChef()){</b>
+<b class="nc">&nbsp;            if (chef1.getUserControlChef()){</b>
+<b class="nc">&nbsp;                controlledChef.b2body.setLinearVelocity(0, 0);</b>
+<b class="nc">&nbsp;                controlledChef = chef1;</b>
+<b class="nc">&nbsp;            } else if(chef2.getUserControlChef()) {</b>
+<b class="nc">&nbsp;                controlledChef.b2body.setLinearVelocity(0, 0);</b>
+<b class="nc">&nbsp;                controlledChef = chef2;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (controlledChef.getUserControlChef()) {</b>
+<b class="nc">&nbsp;            float xVelocity = 0;</b>
+<b class="nc">&nbsp;            float yVelocity = 0;</b>
+&nbsp;
+<b class="nc">&nbsp;            if (AIinput == &quot;w&quot;) {</b>
+<b class="nc">&nbsp;                yVelocity += 0.5f;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (AIinput == &quot;a&quot;) {</b>
+<b class="nc">&nbsp;                xVelocity -= 0.5f;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (AIinput == &quot;s&quot;) {</b>
+<b class="nc">&nbsp;                yVelocity -= 0.5f;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            if (AIinput == &quot;d&quot;) {</b>
+<b class="nc">&nbsp;                xVelocity += 0.5f;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            controlledChef.b2body.setLinearVelocity(xVelocity, yVelocity);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;        else {
+<b class="nc">&nbsp;            controlledChef.b2body.setLinearVelocity(0, 0);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (controlledChef.b2body.getLinearVelocity().x &gt; 0){</b>
+<b class="nc">&nbsp;            controlledChef.notificationSetBounds(&quot;Right&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (controlledChef.b2body.getLinearVelocity().x &lt; 0){</b>
+<b class="nc">&nbsp;            controlledChef.notificationSetBounds(&quot;Left&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (controlledChef.b2body.getLinearVelocity().y &gt; 0){</b>
+<b class="nc">&nbsp;            controlledChef.notificationSetBounds(&quot;Up&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (controlledChef.b2body.getLinearVelocity().y &lt; 0){</b>
+<b class="nc">&nbsp;            controlledChef.notificationSetBounds(&quot;Down&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        if(AIinput == &quot;e&quot;){</b>
+<b class="nc">&nbsp;            if(controlledChef.getTouchingTile() != null){</b>
+<b class="nc">&nbsp;                InteractiveTileObject tile = (InteractiveTileObject) controlledChef.getTouchingTile().getUserData();</b>
+<b class="nc">&nbsp;                String tileName = tile.getClass().getName();</b>
+<b class="nc">&nbsp;                if (controlledChef.getInHandsIng() == null &amp;&amp; controlledChef.getInHandsRecipe() == null) {</b>
+<b class="nc">&nbsp;                    switch (tileName) {</b>
+&nbsp;                        case &quot;Sprites.TomatoStation&quot;:
+<b class="nc">&nbsp;                            TomatoStation tomatoTile = (TomatoStation) tile;</b>
+<b class="nc">&nbsp;                            controlledChef.setInHandsIng(tomatoTile.getIngredient());</b>
+<b class="nc">&nbsp;                            controlledChef.setChefSkin(controlledChef.getInHandsIng());</b>
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case &quot;Sprites.BunsStation&quot;:
+<b class="nc">&nbsp;                            BunsStation bunTile = (BunsStation) tile;</b>
+<b class="nc">&nbsp;                            controlledChef.setInHandsIng(bunTile.getIngredient());</b>
+<b class="nc">&nbsp;                            controlledChef.setChefSkin(controlledChef.getInHandsIng());</b>
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case &quot;Sprites.OnionStation&quot;:
+<b class="nc">&nbsp;                            OnionStation onionTile = (OnionStation) tile;</b>
+<b class="nc">&nbsp;                            controlledChef.setInHandsIng(onionTile.getIngredient());</b>
+<b class="nc">&nbsp;                            controlledChef.setChefSkin(controlledChef.getInHandsIng());</b>
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case &quot;Sprites.SteakStation&quot;:
+<b class="nc">&nbsp;                            SteakStation steakTile = (SteakStation) tile;</b>
+<b class="nc">&nbsp;                            controlledChef.setInHandsIng(steakTile.getIngredient());</b>
+<b class="nc">&nbsp;                            controlledChef.setChefSkin(controlledChef.getInHandsIng());</b>
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case &quot;Sprites.LettuceStation&quot;:
+<b class="nc">&nbsp;                            LettuceStation lettuceTile = (LettuceStation) tile;</b>
+<b class="nc">&nbsp;                            controlledChef.setInHandsIng(lettuceTile.getIngredient());</b>
+<b class="nc">&nbsp;                            controlledChef.setChefSkin(controlledChef.getInHandsIng());</b>
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;                        case &quot;Sprites.PlateStation&quot;:
+<b class="nc">&nbsp;                            if(plateStation.getPlate().size() &gt; 0 || plateStation.getCompletedRecipe() != null){</b>
+<b class="nc">&nbsp;                                controlledChef.pickUpItemFrom(tile);</b>
+&nbsp;
+&nbsp;                            }
+&nbsp;
+&nbsp;                    }
+&nbsp;                } else {
+<b class="nc">&nbsp;                    switch (tileName) {</b>
+&nbsp;                        case &quot;Sprites.Bin&quot;:
+<b class="nc">&nbsp;                            controlledChef.setInHandsRecipe(null);</b>
+<b class="nc">&nbsp;                            controlledChef.setInHandsIng(null);</b>
+<b class="nc">&nbsp;                            controlledChef.setChefSkin(null);</b>
+<b class="nc">&nbsp;                            break;</b>
+&nbsp;
+&nbsp;                        case &quot;Sprites.ChoppingBoard&quot;:
+<b class="nc">&nbsp;                            if(controlledChef.getInHandsIng() != null){</b>
+<b class="nc">&nbsp;                                if(controlledChef.getInHandsIng().prepareTime &gt; 0){</b>
+<b class="nc">&nbsp;                                    controlledChef.setUserControlChef(false);</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            break;
+&nbsp;                        case &quot;Sprites.PlateStation&quot;:
+<b class="nc">&nbsp;                            if (controlledChef.getInHandsRecipe() == null){</b>
+<b class="nc">&nbsp;                                controlledChef.dropItemOn(tile, controlledChef.getInHandsIng());</b>
+<b class="nc">&nbsp;                                controlledChef.setChefSkin(null);</b>
+&nbsp;                            }
+&nbsp;                            break;
+&nbsp;                        case &quot;Sprites.Pan&quot;:
+<b class="nc">&nbsp;                            if(controlledChef.getInHandsIng() != null) {</b>
+<b class="nc">&nbsp;                                if (controlledChef.getInHandsIng().isPrepared() &amp;&amp; controlledChef.getInHandsIng().cookTime &gt; 0){</b>
+<b class="nc">&nbsp;                                    controlledChef.setUserControlChef(false);</b>
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;
+&nbsp;                            break;
+&nbsp;                        case &quot;Sprites.CompletedDishStation&quot;:
+<b class="nc">&nbsp;                            if (controlledChef.getInHandsRecipe() != null){</b>
+<b class="nc">&nbsp;                                if(controlledChef.getInHandsRecipe().getClass().equals(ordersArray.get(0).recipe.getClass())){</b>
+&nbsp;                                    //TODO UPDATE CHANGE LOG FOR THIS
+<b class="nc">&nbsp;                                    if (orderTime == 0){</b>
+<b class="nc">&nbsp;                                        hud.decrementReps();</b>
+<b class="nc">&nbsp;                                        if (hud.getRepPoints() == 0){System.out.println(&quot;game over&quot;); game.goToGameOver();}</b>
+&nbsp;                                    }
+<b class="nc">&nbsp;                                    controlledChef.dropItemOn(tile);</b>
+<b class="nc">&nbsp;                                    ordersArray.get(0).orderComplete = true;</b>
+<b class="nc">&nbsp;                                    controlledChef.setChefSkin(null);</b>
+<b class="nc">&nbsp;                                    if(ordersArray.size()==1){</b>
+<b class="nc">&nbsp;                                        scenarioComplete = Boolean.TRUE;</b>
+&nbsp;                                    }
+&nbsp;                                }
+&nbsp;                            }
+&nbsp;                            break;
+&nbsp;                    }
+&nbsp;                }
+&nbsp;
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The update method updates the game elements, such as camera and characters,
+&nbsp;     * based on a specified time interval &quot;dt&quot;.
+&nbsp;     * @param dt time interval for the update
+&nbsp;     */
+&nbsp;    public void update(float dt){
+&nbsp;
+<b class="nc">&nbsp;        hud.stage.addActor(returnToGame);</b>
+&nbsp;
+&nbsp;        /**
+&nbsp;         * The update function has been adapted to request a keybaord input from the AI, given the state of the current game world
+&nbsp;         */
+<b class="nc">&nbsp;        aiChef.returnKeyboardInput();</b>
+<b class="nc">&nbsp;        handleInput(dt, aiChef.returnKeyboardInput());</b>
+&nbsp;
+<b class="nc">&nbsp;        gamecam.update();</b>
+<b class="nc">&nbsp;        renderer.setView(gamecam);</b>
+<b class="nc">&nbsp;        chef1.update(dt);</b>
+<b class="nc">&nbsp;        chef2.update(dt);</b>
+<b class="nc">&nbsp;        world.step(1/60f, 6, 2);</b>
+&nbsp;        //aiChef.defineShortestPath(6,1, 7,6);
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Creates the orders randomly and adds to an array, updates the HUD.
+&nbsp;     */
+&nbsp;    public void createOrder() {
+<b class="nc">&nbsp;        isActiveOrder = true;</b>
+<b class="nc">&nbsp;        orderTime = 1;</b>
+&nbsp;
+<b class="nc">&nbsp;        int randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);</b>
+<b class="nc">&nbsp;        Texture burger_recipe = new Texture(&quot;Food/burger_recipe.png&quot;);</b>
+<b class="nc">&nbsp;        Texture salad_recipe = new Texture(&quot;Food/salad_recipe.png&quot;);</b>
+&nbsp;        Order order;
+&nbsp;
+<b class="nc">&nbsp;        for(int i = 0; i&lt;5; i++){</b>
+<b class="nc">&nbsp;            if(randomNum==1) {</b>
+<b class="nc">&nbsp;                order = new Order(PlateStation.burgerRecipe, burger_recipe);</b>
+&nbsp;            }
+&nbsp;            else {
+<b class="nc">&nbsp;                order = new Order(PlateStation.saladRecipe, salad_recipe);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            ordersArray.add(order);</b>
+<b class="nc">&nbsp;            randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        hud.updateOrder(Boolean.FALSE, 1);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Updates the orders as they are completed, or if the game scenario has been completed.
+&nbsp;     */
+&nbsp;    public void updateOrder(){
+<b class="nc">&nbsp;        if(scenarioComplete==Boolean.TRUE) {</b>
+<b class="nc">&nbsp;            hud.updateScore(Boolean.TRUE, (6 - ordersArray.size()) * 35);</b>
+<b class="nc">&nbsp;            hud.updateOrder(Boolean.TRUE, 0);</b>
+&nbsp;            return;
+&nbsp;        }
+<b class="nc">&nbsp;        if(ordersArray.size() != 0) {</b>
+<b class="nc">&nbsp;            if (ordersArray.get(0).orderComplete) {</b>
+<b class="nc">&nbsp;                hud.updateScore(Boolean.FALSE, (6 - ordersArray.size()) * 35);</b>
+<b class="nc">&nbsp;                ordersArray.remove(0);</b>
+<b class="nc">&nbsp;                hud.updateOrder(Boolean.FALSE, 6 - ordersArray.size());</b>
+&nbsp;                return;
+&nbsp;            }
+<b class="nc">&nbsp;            ordersArray.get(0).create(trayX, trayY, game.batch);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;
+&nbsp;     The render method updates the screen by calling the update method with the given delta time, and rendering the graphics of the game.
+&nbsp;
+&nbsp;     It updates the HUD time, clears the screen, and renders the renderer and the hud.
+&nbsp;
+&nbsp;     Additionally, it checks the state of the game and draws the ingredients, completed recipes, and notifications on the screen.
+&nbsp;
+&nbsp;     @param delta The time in seconds since the last frame.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void render(float delta){
+<b class="nc">&nbsp;        update(delta);</b>
+&nbsp;
+&nbsp;        //Execute handleEvent each 1 second
+<b class="nc">&nbsp;        timeSeconds +=Gdx.graphics.getRawDeltaTime();</b>
+<b class="nc">&nbsp;        timeSecondsCount += Gdx.graphics.getDeltaTime();</b>
+&nbsp;
+<b class="nc">&nbsp;        if(Math.round(timeSecondsCount) == 5 &amp;&amp; createdOrder == Boolean.FALSE){</b>
+<b class="nc">&nbsp;            createdOrder = Boolean.TRUE;</b>
+<b class="nc">&nbsp;            createOrder();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        float period = 1f;</b>
+<b class="nc">&nbsp;        if(timeSeconds &gt; period) {</b>
+<b class="nc">&nbsp;            timeSeconds -= period;</b>
+<b class="nc">&nbsp;            hud.updateTime(scenarioComplete);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        Gdx.gl.glClear(1);</b>
+<b class="nc">&nbsp;        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
+&nbsp;
+<b class="nc">&nbsp;        renderer.render();</b>
+&nbsp;
+<b class="nc">&nbsp;        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);</b>
+<b class="nc">&nbsp;        hud.stage.draw();</b>
+<b class="nc">&nbsp;        game.batch.setProjectionMatrix(gamecam.combined);</b>
+<b class="nc">&nbsp;        game.batch.begin();</b>
+&nbsp;
+<b class="nc">&nbsp;        updateOrder();</b>
+<b class="nc">&nbsp;        chef1.draw(game.batch);</b>
+<b class="nc">&nbsp;        chef2.draw(game.batch);</b>
+<b class="nc">&nbsp;        controlledChef.drawNotification(game.batch);</b>
+<b class="nc">&nbsp;        if (isActiveOrder){</b>
+&nbsp;
+&nbsp;        }
+<b class="nc">&nbsp;        if (plateStation.getPlate().size() &gt; 0){</b>
+<b class="nc">&nbsp;            for(Object ing : plateStation.getPlate()){</b>
+<b class="nc">&nbsp;                Ingredient ingNew = (Ingredient) ing;</b>
+<b class="nc">&nbsp;                ingNew.create(plateStation.getX(), plateStation.getY(),game.batch);</b>
+<b class="nc">&nbsp;            }</b>
+<b class="nc">&nbsp;        } else if (plateStation.getCompletedRecipe() != null){</b>
+<b class="nc">&nbsp;            Recipe recipeNew = plateStation.getCompletedRecipe();</b>
+<b class="nc">&nbsp;            recipeNew.create(plateStation.getX(), plateStation.getY(), game.batch);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (!chef1.getUserControlChef()) {</b>
+<b class="nc">&nbsp;            if (chef1.getTouchingTile() != null &amp;&amp; chef1.getInHandsIng() != null){</b>
+<b class="nc">&nbsp;                if (chef1.getTouchingTile().getUserData() instanceof InteractiveTileObject){</b>
+<b class="nc">&nbsp;                    chef1.displayIngStatic(game.batch);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (!chef2.getUserControlChef()) {</b>
+<b class="nc">&nbsp;            if (chef2.getTouchingTile() != null &amp;&amp; chef2.getInHandsIng() != null) {</b>
+<b class="nc">&nbsp;                if (chef2.getTouchingTile().getUserData() instanceof InteractiveTileObject) {</b>
+<b class="nc">&nbsp;                    chef2.displayIngStatic(game.batch);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+<b class="nc">&nbsp;        if (chef1.previousInHandRecipe != null){</b>
+<b class="nc">&nbsp;            chef1.displayIngDynamic(game.batch);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        if (chef2.previousInHandRecipe != null){</b>
+<b class="nc">&nbsp;            chef2.displayIngDynamic(game.batch);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        game.batch.end();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void resize(int width, int height){
+<b class="nc">&nbsp;        gameport.update(width, height);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void pause(){
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void resume(){
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void hide(){
+&nbsp;
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void dispose(){
+<b class="nc">&nbsp;        map.dispose();</b>
+<b class="nc">&nbsp;        renderer.dispose();</b>
+<b class="nc">&nbsp;        world.dispose();</b>
+<b class="nc">&nbsp;        hud.dispose();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    private TextButton getButton(final String message) {
+<b class="nc">&nbsp;        Skin skin = new Skin();</b>
+<b class="nc">&nbsp;        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);</b>
+<b class="nc">&nbsp;        pixmap.setColor(Color.WHITE);</b>
+<b class="nc">&nbsp;        pixmap.fill();</b>
+<b class="nc">&nbsp;        skin.add(&quot;white&quot;, new Texture(pixmap));</b>
+&nbsp;
+<b class="nc">&nbsp;        skin.add(&quot;default&quot;, new BitmapFont());</b>
+<b class="nc">&nbsp;        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();</b>
+<b class="nc">&nbsp;        textButtonStyle.up = skin.newDrawable(&quot;white&quot;, Color.DARK_GRAY);</b>
+<b class="nc">&nbsp;        textButtonStyle.down = skin.newDrawable(&quot;white&quot;, Color.DARK_GRAY);</b>
+<b class="nc">&nbsp;        textButtonStyle.checked = skin.newDrawable(&quot;white&quot;, Color.BLUE);</b>
+<b class="nc">&nbsp;        textButtonStyle.over = skin.newDrawable(&quot;white&quot;, Color.LIGHT_GRAY);</b>
+<b class="nc">&nbsp;        textButtonStyle.font = skin.getFont(&quot;default&quot;);</b>
+<b class="nc">&nbsp;        skin.add(&quot;default&quot;, textButtonStyle);</b>
+&nbsp;
+<b class="nc">&nbsp;        TextButton button = new TextButton(message, skin);</b>
+&nbsp;
+<b class="nc">&nbsp;        button.addListener(new ClickListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void clicked (InputEvent event, float x, float y) {
+<b class="nc">&nbsp;            }</b>
+&nbsp;        });
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="nc">&nbsp;        return button;</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

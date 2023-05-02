@@ -1,0 +1,347 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > StartScreen</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: StartScreen (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StartScreen</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/70)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">StartScreen$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/17)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/86)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import Tools.PlayScreenButton;
+&nbsp;import Tools.StartScreenButton;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.graphics.*;
+&nbsp;import com.badlogic.gdx.graphics.g2d.BitmapFont;
+&nbsp;import com.badlogic.gdx.graphics.g2d.Sprite;
+&nbsp;import com.badlogic.gdx.Screen;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.InputEvent;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.Stage;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+&nbsp;import com.badlogic.gdx.utils.TimeUtils;
+&nbsp;import com.badlogic.gdx.utils.viewport.*;
+&nbsp;
+&nbsp;
+&nbsp;/**
+&nbsp; * This class implements the `Screen` interface and represents the start screen of the game.
+&nbsp; */
+<b class="nc">&nbsp;public class StartScreen implements Screen {</b>
+&nbsp;    private final MainGame game;
+&nbsp;    private final Texture backgroundImage;
+&nbsp;    private final Sprite backgroundSprite;
+&nbsp;    private final OrthographicCamera camera;
+&nbsp;    private final Viewport viewport;
+&nbsp;    private Stage stage;
+&nbsp;    private Slider slider;
+&nbsp;    private final StartScreenButton EASY;
+&nbsp;    private final StartScreenButton MEDIUM;
+&nbsp;    private  final StartScreenButton HARD;
+&nbsp;    private final StartScreenButton loadSave;
+&nbsp;    private final StartScreenButton gamemode1;
+&nbsp;    private final StartScreenButton gamemode2;
+<b class="nc">&nbsp;    public double diff = MainGame.EASY_DIFFICULTY;</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Constructor for StartScreen.
+&nbsp;     *
+&nbsp;     * @param game the game object.
+&nbsp;     */
+<b class="nc">&nbsp;    public StartScreen(MainGame game) {</b>
+<b class="nc">&nbsp;        camera = new OrthographicCamera();</b>
+<b class="nc">&nbsp;        viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, camera);</b>
+<b class="nc">&nbsp;        stage = new Stage(viewport, game.batch);</b>
+<b class="nc">&nbsp;        Gdx.input.setInputProcessor(stage);</b>
+<b class="nc">&nbsp;        EASY = new StartScreenButton(&quot;Easy&quot;, PlayScreenButton.Functionality.EASY, this);</b>
+<b class="nc">&nbsp;        MEDIUM = new StartScreenButton(&quot;Normal&quot;, PlayScreenButton.Functionality.NORMAL, this);;</b>
+<b class="nc">&nbsp;        HARD = new StartScreenButton(&quot;Hard&quot;, PlayScreenButton.Functionality.HARD, this);;</b>
+<b class="nc">&nbsp;        loadSave = new StartScreenButton(&quot;Load&quot;, PlayScreenButton.Functionality.LOAD, this);;</b>
+<b class="nc">&nbsp;        gamemode1 =new StartScreenButton(&quot;Scenario&quot;, PlayScreenButton.Functionality.SCENARIO, this);;</b>
+<b class="nc">&nbsp;        gamemode2 = new StartScreenButton(&quot;Endless&quot;, PlayScreenButton.Functionality.ENDLESS, this);;</b>
+<b class="nc">&nbsp;        MEDIUM.setPosition(50, 0);</b>
+<b class="nc">&nbsp;        HARD.setPosition(130, 0);</b>
+<b class="nc">&nbsp;        loadSave.setPosition(0,30);</b>
+<b class="nc">&nbsp;        gamemode1.setPosition(40, 30);</b>
+<b class="nc">&nbsp;        gamemode2.setPosition(110, 30);</b>
+<b class="nc">&nbsp;        stage.addActor(EASY.getButton());</b>
+<b class="nc">&nbsp;        stage.addActor(MEDIUM.getButton());</b>
+<b class="nc">&nbsp;        stage.addActor(HARD.getButton());</b>
+<b class="nc">&nbsp;        stage.addActor(loadSave.getButton());</b>
+<b class="nc">&nbsp;        stage.addActor(gamemode1.getButton());</b>
+<b class="nc">&nbsp;        stage.addActor(gamemode2.getButton());</b>
+<b class="nc">&nbsp;        this.game = game;</b>
+<b class="nc">&nbsp;        backgroundImage = new Texture(&quot;startImage.png&quot;);</b>
+<b class="nc">&nbsp;        backgroundSprite = new Sprite(backgroundImage);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    private TextButton getButton(final String message) {
+<b class="nc">&nbsp;        Skin skin = new Skin();</b>
+<b class="nc">&nbsp;        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);</b>
+<b class="nc">&nbsp;        pixmap.setColor(Color.WHITE);</b>
+<b class="nc">&nbsp;        pixmap.fill();</b>
+<b class="nc">&nbsp;        skin.add(&quot;white&quot;, new Texture(pixmap));</b>
+&nbsp;
+<b class="nc">&nbsp;        skin.add(&quot;default&quot;, new BitmapFont());</b>
+<b class="nc">&nbsp;        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();</b>
+<b class="nc">&nbsp;        textButtonStyle.up = skin.newDrawable(&quot;white&quot;, Color.DARK_GRAY);</b>
+<b class="nc">&nbsp;        textButtonStyle.down = skin.newDrawable(&quot;white&quot;, Color.DARK_GRAY);</b>
+<b class="nc">&nbsp;        textButtonStyle.checked = skin.newDrawable(&quot;white&quot;, Color.BLUE);</b>
+<b class="nc">&nbsp;        textButtonStyle.over = skin.newDrawable(&quot;white&quot;, Color.LIGHT_GRAY);</b>
+<b class="nc">&nbsp;        textButtonStyle.font = skin.getFont(&quot;default&quot;);</b>
+<b class="nc">&nbsp;        skin.add(&quot;default&quot;, textButtonStyle);</b>
+&nbsp;
+<b class="nc">&nbsp;        TextButton button = new TextButton(message, skin);</b>
+&nbsp;
+<b class="nc">&nbsp;        button.addListener(new ClickListener() {</b>
+&nbsp;            @Override
+&nbsp;            public void clicked (InputEvent event, float x, float y) {
+<b class="nc">&nbsp;                if (message == &quot;easy&quot;){</b>
+<b class="nc">&nbsp;                    diff = MainGame.EASY_DIFFICULTY;</b>
+&nbsp;
+&nbsp;                }
+<b class="nc">&nbsp;                if (message == &quot;medium&quot;){</b>
+<b class="nc">&nbsp;                    diff = MainGame.MEDIUM_DIFFICULTY;</b>
+&nbsp;
+&nbsp;                }
+<b class="nc">&nbsp;                if (message == &quot;hard&quot;){</b>
+<b class="nc">&nbsp;                    diff = MainGame.HARD_DIFFICULTY;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (message == &quot;Load&quot;){</b>
+<b class="nc">&nbsp;                    game.playScreen.onStartLoadGame();</b>
+<b class="nc">&nbsp;                    game.playScreen.idleGametimer = TimeUtils.millis();</b>
+<b class="nc">&nbsp;                    game.isPlayScreen = true;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (message == &quot;Scenario&quot;){</b>
+<b class="nc">&nbsp;                    game.isPlayScreen = true;</b>
+&nbsp;                }
+<b class="nc">&nbsp;                if (message == &quot;Endless&quot;){</b>
+<b class="nc">&nbsp;                    game.isPlayScreen = false;</b>
+<b class="nc">&nbsp;                    game.isEndless = true;</b>
+&nbsp;                }
+&nbsp;                //game.goToGameOver();
+&nbsp;            }
+&nbsp;        });
+<b class="nc">&nbsp;        return button;</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Method called when the screen is shown.
+&nbsp;     * Initializes the sprite and camera position.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void show() {
+<b class="nc">&nbsp;        backgroundSprite.setSize(MainGame.V_WIDTH, MainGame.V_HEIGHT);</b>
+<b class="nc">&nbsp;        backgroundSprite.setPosition(0, 0);</b>
+<b class="nc">&nbsp;        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Method to render the screen.
+&nbsp;     * Clears the screen and draws the background sprite.
+&nbsp;     *
+&nbsp;     * @param delta the time in seconds since the last frame.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void render(float delta) {
+&nbsp;
+<b class="nc">&nbsp;        Gdx.gl.glClearColor(0, 0.5f, 0, 1);</b>
+<b class="nc">&nbsp;        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</b>
+&nbsp;
+<b class="nc">&nbsp;        camera.update();</b>
+<b class="nc">&nbsp;        game.batch.setProjectionMatrix(camera.combined);</b>
+<b class="nc">&nbsp;        game.batch.begin();</b>
+&nbsp;
+<b class="nc">&nbsp;        backgroundSprite.draw(game.batch);</b>
+&nbsp;        //button2.draw(game.batch,1f);
+&nbsp;
+&nbsp;        //MEDIUM.draw(game.batch,1f);
+&nbsp;        //HARD.draw(game.batch,1f);
+&nbsp;        //orderBar a  = new  orderBar(30,30,50,5, Color.RED);
+&nbsp;        //a.draw(game.batch, 1);
+<b class="nc">&nbsp;        game.batch.end();</b>
+<b class="nc">&nbsp;        stage.draw();</b>
+<b class="nc">&nbsp;        Gdx.input.setInputProcessor(stage);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Method called when the screen is resized.
+&nbsp;     * Updates the viewport and camera position.
+&nbsp;     *
+&nbsp;     * @param width the new screen width.
+&nbsp;     * @param height the new screen height.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void resize(int width, int height) {
+<b class="nc">&nbsp;        viewport.update(width, height);</b>
+<b class="nc">&nbsp;        camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);</b>
+&nbsp;    }
+&nbsp;    @Override
+&nbsp;    public void pause() {
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void resume() {
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void hide() {
+<b class="nc">&nbsp;    }</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * Dispose method that is called when the screen is no longer used.
+&nbsp;     * It is used to free up resources and memory that the screen was using.
+&nbsp;     */
+&nbsp;    @Override
+&nbsp;    public void dispose() {
+<b class="nc">&nbsp;        backgroundImage.dispose();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void reActivateInput(){
+<b class="nc">&nbsp;        Gdx.input.setInputProcessor(stage);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setDiff(double diff) {
+<b class="nc">&nbsp;        this.diff = diff;</b>
+&nbsp;    }
+&nbsp;    public void setPlayScreen(){
+<b class="nc">&nbsp;        game.isEndless = false;</b>
+<b class="nc">&nbsp;        game.isPlayScreen = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setEndlessMode(){
+<b class="nc">&nbsp;        game.isPlayScreen = false;</b>
+<b class="nc">&nbsp;        game.isEndless = true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void loadGame(){
+<b class="nc">&nbsp;        game.playScreen.onStartLoadGame();</b>
+<b class="nc">&nbsp;        game.playScreen.idleGametimer = TimeUtils.millis();</b>
+<b class="nc">&nbsp;        game.isPlayScreen = true;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,209 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > cookingSpeedBoost</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">powerUps</a>
+</div>
+
+<h1>Coverage Summary for Class: cookingSpeedBoost (powerUps)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">cookingSpeedBoost</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (2/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    60.7%
+  </span>
+  <span class="absValue">
+    (17/28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package powerUps;
+&nbsp;import Sprites.Chef;
+&nbsp;import com.badlogic.gdx.graphics.Texture;
+&nbsp;import com.badlogic.gdx.graphics.g2d.Sprite;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.badlogic.gdx.graphics.g2d.TextureRegion;
+&nbsp;import com.badlogic.gdx.math.MathUtils;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.*;
+&nbsp;import com.team13.piazzapanic.MainGame;
+&nbsp;
+&nbsp;/**
+&nbsp; * cookingSpeedBoost is a badly named class. This class is used to render a token into the game screen that represents a power up collectable. It is
+&nbsp; * also  responsible for adding the power up token to the world so that it can be seen in the collsion detection system in worldConstactListener.
+&nbsp; */
+&nbsp;
+&nbsp;public class cookingSpeedBoost extends Sprite {
+&nbsp;
+&nbsp;    private World world;
+&nbsp;    public TextureRegion textureRegion;
+&nbsp;    public Body body;
+&nbsp;    public powerUpGeneric powerUp;
+&nbsp;
+&nbsp;    public cookingSpeedBoost(World world, TextureRegion textureRegion, float x, float y) {
+&nbsp;        /**
+&nbsp;         * This construction creates a collidable body and stores it to the class gloabal varibale body. It then ceeates the textures of the coin
+&nbsp;         * Finally, it sets the X, Y location of the coin
+&nbsp;         *
+&nbsp;         * @param world - this is a reference to instance of world used in the game.Adding the body of this to the world allows for collision to
+&nbsp;         *              be detected in worldContactListener
+&nbsp;         * @param textureRegion - the textureRegion allows the input of what texture should be used to render the coin. This can allow for coins of different
+&nbsp;         *                      powers to have different appearences, that make them distinguishable. (currently only one texture has ben made so all coins look the same)
+&nbsp;         *
+&nbsp;         * @param x - the x pos to render the coin
+&nbsp;         * @param y - the y pos to render the coin
+&nbsp;         */
+&nbsp;
+<b class="fc">&nbsp;        super(textureRegion);</b>
+<b class="fc">&nbsp;        this.world = world;</b>
+<b class="fc">&nbsp;        this.textureRegion = textureRegion;</b>
+<b class="fc">&nbsp;        float chefWidth = 20 / MainGame.PPM;</b>
+<b class="fc">&nbsp;        float chefHeight = 20 / MainGame.PPM;</b>
+<b class="fc">&nbsp;        setBounds(x, y, chefWidth, chefHeight);</b>
+<b class="fc">&nbsp;        BodyDef bodyDef = new BodyDef();</b>
+<b class="fc">&nbsp;        bodyDef.position.set(x,y);</b>
+<b class="fc">&nbsp;        bodyDef.type = BodyDef.BodyType.DynamicBody;</b>
+<b class="fc">&nbsp;        body = world.createBody(bodyDef);</b>
+<b class="fc">&nbsp;        FixtureDef fdef = new FixtureDef();</b>
+<b class="fc">&nbsp;        CircleShape shape = new CircleShape();</b>
+<b class="fc">&nbsp;        shape.setRadius(4.5f / MainGame.PPM);</b>
+<b class="fc">&nbsp;        shape.setPosition(new Vector2(shape.getPosition().x + (0.5f / MainGame.PPM), shape.getPosition().y - (5.5f / MainGame.PPM)));</b>
+<b class="fc">&nbsp;        fdef.shape = shape;</b>
+<b class="fc">&nbsp;        body.createFixture(fdef).setUserData(this);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void update(float delta) {
+<b class="nc">&nbsp;        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void render(SpriteBatch batch) {
+&nbsp;        /**
+&nbsp;         * Usedd to render the sprite itself
+&nbsp;         */
+<b class="nc">&nbsp;        setRotation(body.getAngle() * MathUtils.radiansToDegrees);</b>
+<b class="nc">&nbsp;        draw(batch);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    // Getter and setter methods for the body
+&nbsp;    public Body getBody() {
+<b class="nc">&nbsp;        return body;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setBody(Body body) {
+<b class="nc">&nbsp;        this.body = body;</b>
+&nbsp;    }
+&nbsp;    public void dispose() {
+<b class="nc">&nbsp;        getTexture().dispose(); // Dispose the texture used by the sprite</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void onContractCreated(){
+<b class="nc">&nbsp;        System.out.println(&quot;please resolve the contact&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public powerUpGeneric getPowerUp() {
+<b class="nc">&nbsp;        return powerUp;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setPowerUp(powerUpGeneric powerUp) {
+&nbsp;        /**
+&nbsp;         * This is a VERY IMPORTANT SETTER. This setter allows the developer to attatch a specific power up to a coin after it has been created.
+&nbsp;         * if this setter is not used a powerUp token will not do anything
+&nbsp;         */
+<b class="fc">&nbsp;        this.powerUp = powerUp;</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;    public void DestroyBody(){
+<b class="nc">&nbsp;        for (Fixture a :body.getFixtureList()){</b>
+<b class="nc">&nbsp;            body.destroyFixture(a);</b>
+<b class="nc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

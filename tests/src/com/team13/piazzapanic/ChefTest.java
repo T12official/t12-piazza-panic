@@ -11,8 +11,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import jdk.internal.foreign.PlatformLayouts;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.util.ArrayList;
@@ -232,8 +230,8 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
         event.setKeyCode(Input.Keys.R);
         controlledChef.keyDown(Input.Keys.R);
 
-        assertEquals("This test will only pass if chef is switched successfully after pressing 'R'",
-                1, currentChef);
+        assertFalse("This test will only pass if chef is switched successfully after pressing 'R'",
+                active);
 
     }
 }

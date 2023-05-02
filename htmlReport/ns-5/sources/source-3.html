@@ -1,0 +1,341 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ChefTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: ChefTest (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ChefTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (10/20)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    69.9%
+  </span>
+  <span class="absValue">
+    (72/103)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;
+&nbsp;import Sprites.Chef;
+&nbsp;import com.badlogic.gdx.*;
+&nbsp;import com.team13.piazzapanic.PlayScreen;
+&nbsp;import com.team13.piazzapanic.MainGame;
+&nbsp;import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.World;
+&nbsp;import com.badlogic.gdx.scenes.scene2d.InputEvent;
+&nbsp;import org.junit.Test;
+&nbsp;import org.junit.runner.RunWith;
+&nbsp;import java.util.ArrayList;
+&nbsp;import static org.junit.Assert.*;
+&nbsp;
+&nbsp;
+&nbsp;@RunWith(GdxTestRunner.class)
+&nbsp;
+<b class="fc">&nbsp;public class ChefTest extends ApplicationAdapter implements InputProcessor {</b>
+&nbsp;
+<b class="fc">&nbsp;    public float runSpeedModifier = 1F;</b>
+<b class="fc">&nbsp;    private float yVelocity = 0;</b>
+<b class="fc">&nbsp;    private float xVelocity = 0;</b>
+<b class="fc">&nbsp;    public World world = new World(new Vector2(0, 0), true);</b>
+<b class="fc">&nbsp;    public TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());</b>
+<b class="fc">&nbsp;    public TiledMap map = mapLoader.load(&quot;Kitchen.tmx&quot;);</b>
+<b class="fc">&nbsp;    public MainGame game = new MainGame();</b>
+<b class="fc">&nbsp;    public boolean active = false;</b>
+&nbsp;    public ArrayList&lt;Chef&gt; chefList;
+<b class="fc">&nbsp;    public int currentChef = 0;</b>
+<b class="fc">&nbsp;    private final InputMultiplexer inputMultiplexer = new InputMultiplexer();</b>
+&nbsp;
+&nbsp;    public Chef getChef1() {
+<b class="fc">&nbsp;        return chefList.get(0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Chef getChef2() {
+<b class="fc">&nbsp;        return chefList.get(1);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Chef getChef3() {
+<b class="fc">&nbsp;        return chefList.get(2);</b>
+&nbsp;    }
+&nbsp;    private Chef chef1;
+&nbsp;    private Chef chef2;
+&nbsp;    private Chef chef3;
+&nbsp;    private Chef controlledChef;
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean keyDown(int keycode) {
+<b class="nc">&nbsp;        switch (keycode) {</b>
+&nbsp;            case Input.Keys.R:
+<b class="nc">&nbsp;                rest();</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.D:
+<b class="nc">&nbsp;                xVelocity += 0.5f * runSpeedModifier;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.A:
+<b class="nc">&nbsp;                xVelocity -= 0.5f * runSpeedModifier;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.W:
+<b class="nc">&nbsp;                yVelocity += 0.5f * runSpeedModifier;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.S:
+<b class="nc">&nbsp;                yVelocity -= 0.5f * runSpeedModifier;</b>
+&nbsp;                break;
+&nbsp;        }
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;    public Chef getChef(){
+<b class="fc">&nbsp;        return chefList.get(currentChef%chefList.size());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Chef switchChef(){
+<b class="nc">&nbsp;        getChef().rest();</b>
+<b class="nc">&nbsp;        currentChef += 1;</b>
+<b class="nc">&nbsp;        getChef().active = true;</b>
+<b class="nc">&nbsp;        InputProcessor[] cars = {getChef()};</b>
+<b class="nc">&nbsp;        inputMultiplexer.setProcessors(cars);</b>
+<b class="nc">&nbsp;        return getChef();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void rest() {
+<b class="nc">&nbsp;        active = false;</b>
+<b class="nc">&nbsp;        xVelocity = 0;</b>
+<b class="nc">&nbsp;        yVelocity = 0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean keyUp(int keycode) {
+<b class="nc">&nbsp;        switch (keycode) {</b>
+&nbsp;            case Input.Keys.D:
+&nbsp;            case Input.Keys.A:
+<b class="nc">&nbsp;                yVelocity = 0;</b>
+<b class="nc">&nbsp;                break;</b>
+&nbsp;            case Input.Keys.W:
+&nbsp;            case Input.Keys.S:
+<b class="nc">&nbsp;                xVelocity = 0;</b>
+&nbsp;                break;
+&nbsp;        }
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean keyTyped(char character) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean touchDragged(int screenX, int screenY, int pointer) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean mouseMoved(int screenX, int screenY) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean scrolled(float amountX, float amountY) {
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void MoveChefRightTest() {
+<b class="fc">&nbsp;        MainGame maingame = new MainGame();</b>
+<b class="fc">&nbsp;        PlayScreen playscreen = new PlayScreen(maingame);</b>
+<b class="fc">&nbsp;        Chef chef = new Chef(playscreen, 0, 0);</b>
+&nbsp;
+<b class="fc">&nbsp;        Gdx.input.setInputProcessor(chef);</b>
+<b class="fc">&nbsp;        InputEvent event = new InputEvent();</b>
+<b class="fc">&nbsp;        event.setType(InputEvent.Type.keyDown);</b>
+<b class="fc">&nbsp;        event.setKeyCode(Input.Keys.D);</b>
+<b class="fc">&nbsp;        chef.keyDown(Input.Keys.D);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(&quot;This test will only pass if, after pressing &#39;D&#39;, the chef moves to the right&quot;,</b>
+<b class="fc">&nbsp;                0.5f, chef.getxVelocity(), 0.001f);</b>
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void MoveChefLeftTest() {
+&nbsp;
+<b class="fc">&nbsp;        MainGame maingame = new MainGame();</b>
+<b class="fc">&nbsp;        PlayScreen playscreen = new PlayScreen(maingame);</b>
+<b class="fc">&nbsp;        Chef chef = new Chef(playscreen, 0, 0);</b>
+&nbsp;
+<b class="fc">&nbsp;        Gdx.input.setInputProcessor(chef);</b>
+<b class="fc">&nbsp;        InputEvent event = new InputEvent();</b>
+<b class="fc">&nbsp;        event.setType(InputEvent.Type.keyDown);</b>
+<b class="fc">&nbsp;        event.setKeyCode(Input.Keys.A);</b>
+<b class="fc">&nbsp;        chef.keyDown(Input.Keys.A);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(&quot;This test will only pass if, after pressing &#39;A&#39;, the chef moves to the right&quot;,</b>
+<b class="fc">&nbsp;                -0.5f, chef.getxVelocity(), 0.001f);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void MoveChefUpTest() {
+&nbsp;
+<b class="fc">&nbsp;        MainGame maingame = new MainGame();</b>
+<b class="fc">&nbsp;        PlayScreen playscreen = new PlayScreen(maingame);</b>
+<b class="fc">&nbsp;        Chef chef = new Chef(playscreen, 0, 0);</b>
+&nbsp;
+<b class="fc">&nbsp;        Gdx.input.setInputProcessor(chef);</b>
+<b class="fc">&nbsp;        InputEvent event = new InputEvent();</b>
+<b class="fc">&nbsp;        event.setType(InputEvent.Type.keyDown);</b>
+<b class="fc">&nbsp;        event.setKeyCode(Input.Keys.W);</b>
+<b class="fc">&nbsp;        chef.keyDown(Input.Keys.W);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(&quot;This test will only pass if, after pressing &#39;W&#39;, the chef moves up&quot;,</b>
+<b class="fc">&nbsp;                0.5f, chef.getyVelocity(), 0.001f);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void MoveChefDownTest() {
+&nbsp;
+<b class="fc">&nbsp;        MainGame maingame = new MainGame();</b>
+<b class="fc">&nbsp;        PlayScreen playscreen = new PlayScreen(maingame);</b>
+<b class="fc">&nbsp;        Chef chef = new Chef(playscreen, 0, 0);</b>
+&nbsp;
+<b class="fc">&nbsp;        Gdx.input.setInputProcessor(chef);</b>
+<b class="fc">&nbsp;        InputEvent event = new InputEvent();</b>
+<b class="fc">&nbsp;        event.setType(InputEvent.Type.keyDown);</b>
+<b class="fc">&nbsp;        event.setKeyCode(Input.Keys.S);</b>
+<b class="fc">&nbsp;        chef.keyDown(Input.Keys.S);</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        assertEquals(&quot;This test will only pass if, after pressing &#39;S&#39;, the chef moves down&quot;,</b>
+<b class="fc">&nbsp;                -0.5f, chef.getyVelocity(), 0.001f);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void SwitchChefTest(){
+&nbsp;
+<b class="fc">&nbsp;        MainGame maingame = new MainGame();</b>
+<b class="fc">&nbsp;        PlayScreen playscreen = new PlayScreen(maingame);</b>
+&nbsp;        //Chef chef = new Chef(playscreen, 0, 0);
+&nbsp;
+<b class="fc">&nbsp;        chefList = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        chefList.add(new Chef(playscreen, 0, 0));</b>
+<b class="fc">&nbsp;        chefList.add(new Chef(playscreen, 50, 50));</b>
+<b class="fc">&nbsp;        chefList.add(new Chef(playscreen, 100, 100));</b>
+<b class="fc">&nbsp;        getChef().active = true;</b>
+<b class="fc">&nbsp;        chef1 = getChef1();</b>
+<b class="fc">&nbsp;        chef2 = getChef2();</b>
+<b class="fc">&nbsp;        chef3 = getChef3();</b>
+<b class="fc">&nbsp;        controlledChef = getChef();</b>
+&nbsp;
+<b class="fc">&nbsp;        Gdx.input.setInputProcessor(controlledChef);</b>
+<b class="fc">&nbsp;        InputEvent event = new InputEvent();</b>
+<b class="fc">&nbsp;        event.setType(InputEvent.Type.keyDown);</b>
+<b class="fc">&nbsp;        event.setKeyCode(Input.Keys.R);</b>
+<b class="fc">&nbsp;        controlledChef.keyDown(Input.Keys.R);</b>
+&nbsp;
+<b class="fc">&nbsp;        assertFalse(&quot;This test will only pass if chef is switched successfully after pressing &#39;R&#39;&quot;,</b>
+&nbsp;                active);
+&nbsp;
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

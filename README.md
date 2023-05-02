@@ -14,7 +14,7 @@
     <a href="https://github.com/team13eng1/piazza-panic"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://team13eng1.github.io/">View Website</a>
+    <a href="https://t12official.github.io/t12squared/">View Website</a>
   </p>
 </div>
 

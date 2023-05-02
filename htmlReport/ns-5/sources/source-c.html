@@ -1,0 +1,235 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MainGame</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: MainGame (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MainGame</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    10%
+  </span>
+  <span class="absValue">
+    (1/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    15%
+  </span>
+  <span class="absValue">
+    (6/40)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import com.badlogic.gdx.Gdx;
+&nbsp;import com.badlogic.gdx.Input;
+&nbsp;import com.badlogic.gdx.Screen;
+&nbsp;import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+&nbsp;import com.badlogic.gdx.Game;
+&nbsp;
+&nbsp;public class MainGame extends Game {
+&nbsp;
+&nbsp;	/**
+&nbsp;	 * MainGame class is the central class of the game that creates and manages the two screens, PlayScreen and StartScreen.
+&nbsp;	 *
+&nbsp;	 * Class Members:
+&nbsp;	 *     V_WIDTH (int): Width of the view.
+&nbsp;	 *     V_HEIGHT (int): Height of the view.
+&nbsp;	 *     TILE_SIZE (int): Size of the tile.
+&nbsp;	 *     PPM (float): Pixels per meter.
+&nbsp;	 *     batch (SpriteBatch): Instance of SpriteBatch.
+&nbsp;	 *     isPlayScreen (bool): Flag indicating whether the PlayScreen is displayed or not.
+&nbsp;	 *     playScreen (PlayScreen): Instance of PlayScreen.
+&nbsp;	 *     startScreen (StartScreen): Instance of StartScreen.
+&nbsp;	 *
+&nbsp;	 * Methods:
+&nbsp;	 *     __init__: Initializes the MainGame class.
+&nbsp;	 *     create: Creates the instances of StartScreen and PlayScreen and initializes the SpriteBatch instance.
+&nbsp;	 *     render: Renders the StartScreen or PlayScreen based on the value of isPlayScreen flag.
+&nbsp;	 * 	   dispose: Releases resources used by the MainGame class.
+&nbsp;	 */
+&nbsp;	public static final int V_WIDTH = 160;
+&nbsp;	public static final int V_HEIGHT = 160;
+&nbsp;	public static final int TILE_SIZE = 16;
+&nbsp;
+&nbsp;	public static final float PPM = 100;
+&nbsp;
+&nbsp;	public SpriteBatch getBatch() {
+<b class="nc">&nbsp;		if (batch == null) {</b>
+<b class="nc">&nbsp;			return new SpriteBatch();</b>
+&nbsp;		}
+&nbsp;		else {
+<b class="nc">&nbsp;			return batch;</b>
+&nbsp;		}
+&nbsp;	}
+&nbsp;
+&nbsp;
+&nbsp;	public SpriteBatch batch;
+&nbsp;	public boolean isPlayScreen;
+&nbsp;	public PlayScreen playScreen;
+&nbsp;
+&nbsp;	public StartScreen startScreen;
+&nbsp;	private IdleScreen idleScreen;
+&nbsp;	private GameOverScreen gameoverScreen;
+&nbsp;	private EndlessScreen endlessScreen;
+<b class="fc">&nbsp;	public boolean isStartScreen = true;</b>
+&nbsp;
+<b class="fc">&nbsp;	private boolean isGameOver = false;</b>
+<b class="fc">&nbsp;	private boolean isIdleScreen = false;</b>
+<b class="fc">&nbsp;	public boolean isEndless = false;</b>
+&nbsp;
+&nbsp;	public static final double EASY_DIFFICULTY = 150d;
+&nbsp;	public static final double MEDIUM_DIFFICULTY = 100d;
+&nbsp;	public static final double HARD_DIFFICULTY = 75d;
+&nbsp;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;	public MainGame(){</b>
+<b class="fc">&nbsp;		isPlayScreen = false;</b>
+&nbsp;	}
+&nbsp;	@Override
+&nbsp;	public void create() {
+<b class="nc">&nbsp;		batch = getBatch();</b>
+<b class="nc">&nbsp;		startScreen = new StartScreen(this);</b>
+<b class="nc">&nbsp;		playScreen = new PlayScreen(this);</b>
+&nbsp;
+<b class="nc">&nbsp;		gameoverScreen = new GameOverScreen(this);</b>
+<b class="nc">&nbsp;		idleScreen = new IdleScreen(this);</b>
+<b class="nc">&nbsp;		endlessScreen = new EndlessScreen(this);</b>
+&nbsp;
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void render() {
+<b class="nc">&nbsp;		super.render();</b>
+<b class="nc">&nbsp;		if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)){</b>
+<b class="nc">&nbsp;			isStartScreen = !isStartScreen;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		Screen currentScreen = getScreen();</b>
+<b class="nc">&nbsp;		setScreen(currentScreen);</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public void dispose() {
+<b class="nc">&nbsp;		super.dispose();</b>
+<b class="nc">&nbsp;		batch.dispose();</b>
+&nbsp;	}
+&nbsp;	public void goToGameOver(){
+<b class="nc">&nbsp;		this.isGameOver = true;</b>
+&nbsp;	}
+&nbsp;	public void goToIdle(){
+<b class="nc">&nbsp;		isPlayScreen = false;</b>
+<b class="nc">&nbsp;		isEndless = false;</b>
+<b class="nc">&nbsp;		isIdleScreen = true;</b>
+&nbsp;
+&nbsp;	}
+&nbsp;	public void disableIdle(){
+<b class="nc">&nbsp;		isIdleScreen = false;</b>
+<b class="nc">&nbsp;		playScreen.resetIdleTimer();</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	public void setGameScreen(){
+<b class="nc">&nbsp;		setScreen(getScreen());</b>
+&nbsp;	}
+&nbsp;
+&nbsp;	@Override
+&nbsp;	public Screen getScreen() {
+<b class="nc">&nbsp;		if (isStartScreen){</b>
+<b class="nc">&nbsp;			return startScreen;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		else if (isEndless) {</b>
+<b class="nc">&nbsp;			endlessScreen.setDifficultyScore(startScreen.diff);</b>
+<b class="nc">&nbsp;			return endlessScreen;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		else if (isGameOver){</b>
+<b class="nc">&nbsp;			return gameoverScreen;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		else if (isIdleScreen){</b>
+<b class="nc">&nbsp;			return idleScreen;</b>
+&nbsp;		}
+<b class="nc">&nbsp;		playScreen.setDifficultyScore(startScreen.diff);</b>
+<b class="nc">&nbsp;		return playScreen;</b>
+&nbsp;	}
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,165 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > StationTests</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.team13.piazzapanic</a>
+</div>
+
+<h1>Coverage Summary for Class: StationTests (com.team13.piazzapanic)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StationTests</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (24/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.team13.piazzapanic;
+&nbsp;
+&nbsp;import Ingredients.*;
+&nbsp;import Sprites.*;
+&nbsp;import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+&nbsp;import com.badlogic.gdx.maps.tiled.TiledMap;
+&nbsp;import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+&nbsp;import com.badlogic.gdx.math.Rectangle;
+&nbsp;import com.badlogic.gdx.math.Vector2;
+&nbsp;import com.badlogic.gdx.physics.box2d.BodyDef;
+&nbsp;import com.badlogic.gdx.physics.box2d.World;
+&nbsp;import org.junit.Test;
+&nbsp;import org.junit.runner.RunWith;
+&nbsp;
+&nbsp;import static org.junit.Assert.assertEquals;
+&nbsp;import static org.junit.Assert.assertTrue;
+&nbsp;
+&nbsp;@RunWith(GdxTestRunner.class)
+<b class="fc">&nbsp;public class StationTests {</b>
+<b class="fc">&nbsp;    public World world = new World(new Vector2(0, 0), true);</b>
+<b class="fc">&nbsp;    public TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());</b>
+<b class="fc">&nbsp;    public TiledMap map = mapLoader.load(&quot;Kitchen.tmx&quot;);</b>
+<b class="fc">&nbsp;    Bun bun = new Bun(0, 3, 8);</b>
+<b class="fc">&nbsp;    Lettuce lettuce = new Lettuce(2, 0, 0);</b>
+<b class="fc">&nbsp;    Onion onion = new Onion(2,0, 0);</b>
+<b class="fc">&nbsp;    Steak steak = new Steak(2,3, 8);</b>
+<b class="fc">&nbsp;    Tomato tomato = new Tomato(2,0, 0);</b>
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void checkBunsStationHasIngredient() {
+<b class="fc">&nbsp;        BunsStation bunsStation = new BunsStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        assertEquals(&quot;Will be work if BunStation has Bun ingredient&quot;,</b>
+<b class="fc">&nbsp;                bunsStation.getIngredient(), bun);</b>
+&nbsp;    }
+&nbsp;    @Test
+&nbsp;    public void checkLettuceStationHasIngredient() {
+<b class="fc">&nbsp;        LettuceStation tile = new LettuceStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        assertEquals(&quot;Will be work if LettuceStation has Lettuce ingredient&quot;,</b>
+<b class="fc">&nbsp;                tile.getIngredient(), lettuce);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public  void checkOnionStationHasIngredient(){
+<b class="fc">&nbsp;        OnionStation tile = new OnionStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        assertEquals(&quot;Will be work if OnionStation has Onion ingredient&quot;,</b>
+<b class="fc">&nbsp;                tile.getIngredient(), onion);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void checkSteakStationHasIngredient(){
+<b class="fc">&nbsp;        SteakStation tile = new SteakStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        assertEquals(&quot;Will be work if SteakStation has Steak ingredient&quot;,</b>
+<b class="fc">&nbsp;                tile.getIngredient(), steak);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    public void checkTomatoStationHasIngredient(){
+<b class="fc">&nbsp;        TomatoStation tile = new TomatoStation(world, map, new BodyDef(), new Rectangle());</b>
+<b class="fc">&nbsp;        assertEquals(&quot;Will be work if TomatoStation has Tomato ingredient&quot;,</b>
+<b class="fc">&nbsp;                tile.getIngredient(), tomato);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-05-02 18:46</div>
+</div>
+</body>
+</html>
