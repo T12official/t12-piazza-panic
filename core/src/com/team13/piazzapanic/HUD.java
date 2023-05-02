@@ -185,7 +185,7 @@ public class HUD implements Disposable {
                     addScore = 0;
                 }
             }
-            score += addScore;
+            score += 20;
         }
 
 

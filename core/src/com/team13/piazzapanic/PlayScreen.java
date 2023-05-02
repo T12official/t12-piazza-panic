@@ -205,6 +205,7 @@ public class PlayScreen implements Playable {
     public void onStartLoadGame(){
         loadMyGame = true;
     }
+    public void dontLoadGame(){loadMyGame = false;}
 
     public void resetIdleTimer(){
         idleGametimer = TimeUtils.millis();
