@@ -232,8 +232,8 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
         event.setKeyCode(Input.Keys.R);
         controlledChef.keyDown(Input.Keys.R);
 
-        assertEquals("This test will only pass if chef is switched successfully after pressing 'R'",
-                1, currentChef);
+        assertFalse("This test will only pass if chef is switched successfully after pressing 'R'",
+                active);
 
     }
 }
