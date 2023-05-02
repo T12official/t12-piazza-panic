@@ -238,12 +238,12 @@ public class PlayScreen implements Playable {
 
     @Override
     public void show(){
+        hud = new HUD(game.getBatch());
+        stage = new Stage(gameport, game.getBatch());
         InputProcessor[] cars = {getChef(), hud.stage};
         inputMultiplexer.setProcessors(cars);
         inputMultiplexer.getProcessors();
         Gdx.input.setInputProcessor(inputMultiplexer);
-        hud = new HUD(game.getBatch());
-        stage = new Stage(gameport, game.getBatch());
         Orders orders = new Orders(game.getBatch());
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
         addToHud("welcome");
