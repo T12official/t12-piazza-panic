@@ -94,7 +94,6 @@ public class MainGame extends Game {
 	public void disableIdle(){
 		isIdleScreen = false;
 		playScreen.resetIdleTimer();
-		playScreen.dontLoadGame();
 	}
 
 	public void setGameScreen(){
