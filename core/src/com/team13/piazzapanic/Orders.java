@@ -8,22 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class Orders implements Disposable {
     public Stage stage;
-
-    private Order[] orders[];
-
-    Label timeLabelT;
-    Label timeLabel;
+    private Order[][] orders;
 
     /**
      * Constructor for the class, initialises an area for the orders to be placed.
      *
      * @param sb The spritebatch to be able to draw to the screen.
      */
-    public Orders(SpriteBatch sb){
+    public Orders(SpriteBatch sb) {
         Viewport viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
 

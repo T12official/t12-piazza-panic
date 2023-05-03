@@ -17,8 +17,9 @@ public class SteakStation extends InteractiveTileObject {
         super(world, map, bdef, rectangle);
         fixture.setUserData(this);
     }
-    public Ingredient getIngredient(){
-       return new Steak(2,3, 8);
+
+    public Ingredient getIngredient() {
+        return new Steak(2, 3, 8);
     }
 }
 

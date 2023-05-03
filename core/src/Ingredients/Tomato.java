@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-public class Tomato extends Ingredient{
+public class Tomato extends Ingredient {
 
     /**
      * The Tomato class represents a specific type of ingredient in the game, specifically tomatoes.

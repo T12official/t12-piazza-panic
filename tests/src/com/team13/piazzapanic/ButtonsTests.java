@@ -2,28 +2,27 @@ package com.team13.piazzapanic;
 
 import Tools.PlayScreenButton;
 import Tools.PlayScreenButton.Functionality;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(GdxTestRunner.class)
 public class ButtonsTests {
     @Test
-    public void testShopButtonExists(){
+    public void testShopButtonExists() {
         PlayScreen playscreen = new PlayScreen(new MainGame());
         PlayScreenButton button = new PlayScreenButton("Shop", Functionality.SHOP, playscreen);
         assertNotNull(button.getButton());
     }
+
     @Test
-    public void testChopButtonExists(){
+    public void testChopButtonExists() {
         PlayScreen playscreen = new PlayScreen(new MainGame());
         PlayScreenButton button = new PlayScreenButton("Chop", Functionality.CHOP, playscreen);
         assertNotNull(button.getButton());
     }
+
     @Test
     public void testPanButtonExists() {
         PlayScreen playscreen = new PlayScreen(new MainGame());

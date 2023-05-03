@@ -1,6 +1,6 @@
 package Sprites;
 
-import Ingredients.*;
+import Ingredients.Ingredient;
 import Recipe.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
@@ -12,37 +12,42 @@ import java.util.List;
 
 /**
  * PlateStation class represents a Plate Station in the game where the player can drop or pick up ingredients.
- *
+ * <p>
  * It extends InteractiveTileObject and provides the functionality of checking if a recipe is complete,
  * and getting the completed recipe or individual ingredients from the plate.
- *
+ * <p>
  * It also has a List of ingredients placed on the plate and two static recipes (burger and salad).
  * The checkRecipeCreated method checks if the ingredients on the plate match any of the two recipes.
  */
 
 public class PlateStation extends InteractiveTileObject {
 
-    /** List of ingredients placed on the plate */
-    private final List<Ingredient> plate;
-
-    /** Static recipe for a burger */
+    /**
+     * Static recipe for a burger
+     */
     public static Recipe burgerRecipe;
-
-    /** Static recipe for a salad */
+    /**
+     * Static recipe for a salad
+     */
     public static Recipe saladRecipe;
-
-    /** Recipe that has been completed on the plate */
-    private Recipe recipeDone;
     public static Recipe jacketPotatoRec;
     public static Recipe mypizzaRecipy;
+    /**
+     * List of ingredients placed on the plate
+     */
+    private final List<Ingredient> plate;
+    /**
+     * Recipe that has been completed on the plate
+     */
+    private Recipe recipeDone;
 
 
     /**
      * Constructor for the PlateStation class
      *
-     * @param world the world object representing the game world
-     * @param map the TiledMap object representing the game map
-     * @param bdef the BodyDef object representing the plate's physical body
+     * @param world     the world object representing the game world
+     * @param map       the TiledMap object representing the game map
+     * @param bdef      the BodyDef object representing the plate's physical body
      * @param rectangle the Rectangle object representing the plate's hitbox
      */
     public PlateStation(World world, TiledMap map, BodyDef bdef, Rectangle rectangle) {
@@ -70,7 +75,7 @@ public class PlateStation extends InteractiveTileObject {
      * Check if the ingredients on the plate match any of the two recipes (burger or salad) then clear the plate
      * if a recipe is found and set the recipeDone
      */
-    public void checkRecipeCreated(){
+    public void checkRecipeCreated() {
         if (plate.size() == burgerRecipe.getIngredients().size()) {
             boolean burgerSame = true;
             boolean burgerIngFound;
@@ -113,7 +118,7 @@ public class PlateStation extends InteractiveTileObject {
                 recipeDone = saladRecipe;
             }
         }
-        if (plate.size() == jacketPotatoRec.getIngredients().size()){
+        if (plate.size() == jacketPotatoRec.getIngredients().size()) {
 
             boolean saladSame = true;
             boolean saladIngFound;
@@ -138,7 +143,7 @@ public class PlateStation extends InteractiveTileObject {
         }
 
 
-        if (plate.size() == mypizzaRecipy.getIngredients().size()){
+        if (plate.size() == mypizzaRecipy.getIngredients().size()) {
 
             boolean saladSame = true;
             boolean saladIngFound;
@@ -168,7 +173,7 @@ public class PlateStation extends InteractiveTileObject {
      *
      * @return An ArrayList of ingredients on the plate.
      */
-    public ArrayList getPlate(){
+    public ArrayList getPlate() {
         return (ArrayList) this.plate;
     }
 
@@ -177,7 +182,7 @@ public class PlateStation extends InteractiveTileObject {
      *
      * @return The completed recipe on the plate, or null if no recipe is completed.
      */
-    public Recipe getCompletedRecipe(){
+    public Recipe getCompletedRecipe() {
         return recipeDone;
     }
 
@@ -186,7 +191,7 @@ public class PlateStation extends InteractiveTileObject {
      *
      * @return The x-coordinate of the plate station.
      */
-    public float getX(){
+    public float getX() {
         return super.bdefNew.position.x;
     }
 
@@ -195,7 +200,7 @@ public class PlateStation extends InteractiveTileObject {
      *
      * @return The y-coordinate of the plate station.
      */
-    public float getY(){
+    public float getY() {
         return super.bdefNew.position.y;
     }
 
@@ -206,13 +211,13 @@ public class PlateStation extends InteractiveTileObject {
      * @return A Recipe object if a recipe is completed, or an Ingredient object if no recipe is completed.
      */
     public Object pickUpItem() {
-        if (recipeDone != null){
+        if (recipeDone != null) {
             Recipe temp = recipeDone;
             recipeDone = null;
             return temp;
         } else {
-            Ingredient item = plate.get(plate.size()-1);
-            plate.remove(plate.size()-1);
+            Ingredient item = plate.get(plate.size() - 1);
+            plate.remove(plate.size() - 1);
             return item;
         }
     }

@@ -3,6 +3,7 @@ package Ingredients;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
+
 /**
  * The pizzaDough class represents a specific type of ingredient in the game, specifically pizza dough.
  * It extends the {@link Ingredient} class and has a preparation time and cooking time.
@@ -16,5 +17,5 @@ public class pizzaDough extends Ingredient {
         super.tex.add(new Texture("Food/Patty.png"));
         super.tex.add(new Texture("Food/Cooked_patty.png"));
         super.tex.add(new Texture("Food/burned_patty.png"));
-}
+    }
 }

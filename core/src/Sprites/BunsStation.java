@@ -17,9 +17,9 @@ public class BunsStation extends InteractiveTileObject {
      * Constructor for BunsStation.
      * Creates a new BunsStation with a Box2D body and fixture.
      *
-     * @param world The playable world.
-     * @param map The tiled map.
-     * @param bdef The body definition of a tile.
+     * @param world     The playable world.
+     * @param map       The tiled map.
+     * @param bdef      The body definition of a tile.
      * @param rectangle Rectangle shape.
      */
     public BunsStation(World world, TiledMap map, BodyDef bdef, Rectangle rectangle) {

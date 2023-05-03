@@ -2,13 +2,12 @@ package Sprites;
 
 import Ingredients.Cheese;
 import Ingredients.Ingredient;
-import Ingredients.Steak;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class cheeseStation extends  InteractiveTileObject {
+public class cheeseStation extends InteractiveTileObject {
 
     /**
      * cheeseStation is a class that extends from InteractieTileObject that is used to represent a location from which the player can pick up cheese.
@@ -19,7 +18,8 @@ public class cheeseStation extends  InteractiveTileObject {
         super(world, map, bdef, rectangle);
         fixture.setUserData(this);
     }
-    public Ingredient getIngredient(){
-        return new Cheese(2,0, 0);
+
+    public Ingredient getIngredient() {
+        return new Cheese(2, 0, 0);
     }
 }

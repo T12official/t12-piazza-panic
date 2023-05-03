@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-public class Onion extends Ingredient{
+public class Onion extends Ingredient {
 
     /**
      * The Onion class represents a specific type of ingredient in the game, specifically onions.

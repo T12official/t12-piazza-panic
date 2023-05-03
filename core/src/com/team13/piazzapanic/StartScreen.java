@@ -3,10 +3,10 @@ package com.team13.piazzapanic;
 import Tools.PlayScreenButton;
 import Tools.StartScreenButton;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,7 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.*;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 /**
@@ -26,15 +27,15 @@ public class StartScreen implements Screen {
     private final Sprite backgroundSprite;
     private final OrthographicCamera camera;
     private final Viewport viewport;
-    private Stage stage;
-    private Slider slider;
+    private final Stage stage;
     private final StartScreenButton EASY;
     private final StartScreenButton MEDIUM;
-    private  final StartScreenButton HARD;
+    private final StartScreenButton HARD;
     private final StartScreenButton loadSave;
     private final StartScreenButton gamemode1;
     private final StartScreenButton gamemode2;
     public double diff = MainGame.EASY_DIFFICULTY;
+    private Slider slider;
 
     /**
      * Constructor for StartScreen.
@@ -47,14 +48,14 @@ public class StartScreen implements Screen {
         stage = new Stage(viewport, game.batch);
         Gdx.input.setInputProcessor(stage);
         EASY = new StartScreenButton("Easy", PlayScreenButton.Functionality.EASY, this);
-        MEDIUM = new StartScreenButton("Normal", PlayScreenButton.Functionality.NORMAL, this);;
-        HARD = new StartScreenButton("Hard", PlayScreenButton.Functionality.HARD, this);;
-        loadSave = new StartScreenButton("Load", PlayScreenButton.Functionality.LOAD, this);;
-        gamemode1 =new StartScreenButton("Scenario", PlayScreenButton.Functionality.SCENARIO, this);;
-        gamemode2 = new StartScreenButton("Endless", PlayScreenButton.Functionality.ENDLESS, this);;
+        MEDIUM = new StartScreenButton("Normal", PlayScreenButton.Functionality.NORMAL, this);
+        HARD = new StartScreenButton("Hard", PlayScreenButton.Functionality.HARD, this);
+        loadSave = new StartScreenButton("Load", PlayScreenButton.Functionality.LOAD, this);
+        gamemode1 = new StartScreenButton("Scenario", PlayScreenButton.Functionality.SCENARIO, this);
+        gamemode2 = new StartScreenButton("Endless", PlayScreenButton.Functionality.ENDLESS, this);
         MEDIUM.setPosition(50, 0);
         HARD.setPosition(130, 0);
-        loadSave.setPosition(0,30);
+        loadSave.setPosition(0, 30);
         gamemode1.setPosition(40, 30);
         gamemode2.setPosition(110, 30);
         stage.addActor(EASY.getButton());
@@ -89,27 +90,27 @@ public class StartScreen implements Screen {
 
         button.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
-                if (message == "easy"){
+            public void clicked(InputEvent event, float x, float y) {
+                if (message == "easy") {
                     diff = MainGame.EASY_DIFFICULTY;
 
                 }
-                if (message == "medium"){
+                if (message == "medium") {
                     diff = MainGame.MEDIUM_DIFFICULTY;
 
                 }
-                if (message == "hard"){
+                if (message == "hard") {
                     diff = MainGame.HARD_DIFFICULTY;
                 }
-                if (message == "Load"){
+                if (message == "Load") {
                     game.playScreen.onStartLoadGame();
-                    game.playScreen.idleGametimer = TimeUtils.millis();
+                    game.playScreen.idleGameTimer = TimeUtils.millis();
                     game.isPlayScreen = true;
                 }
-                if (message == "Scenario"){
+                if (message == "Scenario") {
                     game.isPlayScreen = true;
                 }
-                if (message == "Endless"){
+                if (message == "Endless") {
                     game.isPlayScreen = false;
                     game.isEndless = true;
                 }
@@ -141,21 +142,7 @@ public class StartScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        Gdx.gl.glClearColor(0, 0.5f, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
-
-        backgroundSprite.draw(game.batch);
-        //button2.draw(game.batch,1f);
-
-        //MEDIUM.draw(game.batch,1f);
-        //HARD.draw(game.batch,1f);
-        //orderBar a  = new  orderBar(30,30,50,5, Color.RED);
-        //a.draw(game.batch, 1);
-        game.batch.end();
+        GameOverScreen.configBatch(camera, game, backgroundSprite);
         stage.draw();
         Gdx.input.setInputProcessor(stage);
     }
@@ -164,7 +151,7 @@ public class StartScreen implements Screen {
      * Method called when the screen is resized.
      * Updates the viewport and camera position.
      *
-     * @param width the new screen width.
+     * @param width  the new screen width.
      * @param height the new screen height.
      */
     @Override
@@ -172,6 +159,7 @@ public class StartScreen implements Screen {
         viewport.update(width, height);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
     }
+
     @Override
     public void pause() {
     }
@@ -193,26 +181,27 @@ public class StartScreen implements Screen {
         backgroundImage.dispose();
     }
 
-    public void reActivateInput(){
+    public void reActivateInput() {
         Gdx.input.setInputProcessor(stage);
     }
 
     public void setDiff(double diff) {
         this.diff = diff;
     }
-    public void setPlayScreen(){
+
+    public void setPlayScreen() {
         game.isEndless = false;
         game.isPlayScreen = true;
     }
 
-    public void setEndlessMode(){
+    public void setEndlessMode() {
         game.isPlayScreen = false;
         game.isEndless = true;
     }
 
-    public void loadGame(){
+    public void loadGame() {
         game.playScreen.onStartLoadGame();
-        game.playScreen.idleGametimer = TimeUtils.millis();
+        game.playScreen.idleGameTimer = TimeUtils.millis();
         game.isPlayScreen = true;
     }
 }

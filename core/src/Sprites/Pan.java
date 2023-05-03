@@ -18,11 +18,11 @@ public class Pan extends InteractiveTileObject {
 
     }
 
-    public float getX(){
+    public float getX() {
         return super.bdefNew.position.x;
     }
 
-    public float getY(){
+    public float getY() {
         return super.bdefNew.position.y;
     }
 }

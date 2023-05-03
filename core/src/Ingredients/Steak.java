@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-public class Steak extends Ingredient{
+public class Steak extends Ingredient {
 
     /**
      * The Steak class represents a specific type of ingredient in the game, specifically steak.
@@ -12,7 +12,7 @@ public class Steak extends Ingredient{
      * The Steak class sets up an ArrayList of textures for its different skins.
      */
 
-    public Steak(float prepareTime, float cookTime,float burnTime) {
+    public Steak(float prepareTime, float cookTime, float burnTime) {
         super(prepareTime, cookTime, burnTime);
         super.tex = new ArrayList<>();
         super.tex.add(new Texture("Food/Meat.png"));

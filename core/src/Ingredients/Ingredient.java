@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class Ingredient extends Sprite {
 
-    private float burnTime;
+    private final float burnTime;
 
     /**
      * The time required to prepare the ingredient.
@@ -20,6 +20,11 @@ public abstract class Ingredient extends Sprite {
      */
     public float cookTime;
     /**
+     * An array of textures representing different states of the ingredient.
+     */
+    public ArrayList<Texture> tex;
+    public boolean isBurned;
+    /**
      * A flag to indicate whether the ingredient has been cooked.
      */
     private boolean amICooked;
@@ -27,16 +32,12 @@ public abstract class Ingredient extends Sprite {
      * A flag to indicate whether the ingredient has been prepared.
      */
     private boolean amIPrepared;
-    /**
-     * An array of textures representing different states of the ingredient.
-     */
-    public ArrayList<Texture> tex;
-    public boolean isBurned;
+
     /**
      * Constructs a new Ingredient object with the specified preparation and cooking times.
      *
      * @param prepareTime The time required to prepare the ingredient.
-     * @param cookTime The time required to cook the ingredient.
+     * @param cookTime    The time required to cook the ingredient.
      */
     public Ingredient(float prepareTime, float cookTime, float burnTime) {
         this.burnTime = burnTime;
@@ -50,7 +51,6 @@ public abstract class Ingredient extends Sprite {
 
     /**
      * Sets the flag indicating that the ingredient has been prepared.
-     *
      */
     public void setPrepared() {
         amIPrepared = true;
@@ -67,18 +67,23 @@ public abstract class Ingredient extends Sprite {
 
     /**
      * Sets the flag indicating that the ingredient has been cooked.
-     *
      */
     public void setCooked() {
-        amICooked= true;
+        amICooked = true;
     }
 
 
-    public void setBurned(){isBurned = true; }
+    public void setBurned() {
+        isBurned = true;
+    }
 
-    public boolean isBurned(){return isBurned;}
+    public boolean isBurned() {
+        return isBurned;
+    }
 
-    public float getBurnTime(){return burnTime;}
+    public float getBurnTime() {
+        return burnTime;
+    }
 
     /**
      * Returns the value of the flag indicating whether the ingredient has been cooked.
@@ -92,34 +97,34 @@ public abstract class Ingredient extends Sprite {
     /**
      * Creates and draws a new Sprite object representing the ingredient.
      *
-     * @param x The x coordinate of the ingredient.
-     * @param y The y coordinate of the ingredient.
+     * @param x     The x coordinate of the ingredient.
+     * @param y     The y coordinate of the ingredient.
      * @param batch The SpriteBatch object used to draw the ingredient.
      */
-    public void create(float x, float y, SpriteBatch batch){
+    public void create(float x, float y, SpriteBatch batch) {
         Sprite sprite = new Sprite(tex.get(findCorrectSkin()));
-        float adjustedX =  x - (5/MainGame.PPM);
-        float adjustedY =  y - (4.95f / MainGame.PPM);
-        sprite.setBounds(adjustedX,adjustedY,10/ MainGame.PPM,10/ MainGame.PPM);
+        float adjustedX = x - (5 / MainGame.PPM);
+        float adjustedY = y - (4.95f / MainGame.PPM);
+        sprite.setBounds(adjustedX, adjustedY, 10 / MainGame.PPM, 10 / MainGame.PPM);
         sprite.draw(batch);
     }
 
     /**
      * Determines the correct texture to use for the ingredient sprite based on its prepare and cook state.
+     *
      * @return int - The correct skin of the ingredient, either 0, 1, or 2.
      * 0 represents the uncooked and unprepared ingredient.
      * 1 represents the prepared but uncooked ingredient.
      * 2 represents the fully cooked and prepared ingredient.
-     *
-     * */
-    private int findCorrectSkin(){
-        if(isBurned()){
+     */
+    private int findCorrectSkin() {
+        if (isBurned()) {
             return 3;
         }
 
-        if (isPrepared() && isCooked()){
+        if (isPrepared() && isCooked()) {
             return 2;
-        } else if (isPrepared()){
+        } else if (isPrepared()) {
             return 1;
         } else {
             return 0;
@@ -127,8 +132,8 @@ public abstract class Ingredient extends Sprite {
     }
 
     public boolean equals(Object obj) {
-        if (obj.getClass().equals(this.getClass())){
-            return ((Ingredient) obj).cookTime == this.cookTime && ((Ingredient) obj).prepareTime == this.prepareTime && this.isBurned == ((Ingredient) obj).isBurned ;
+        if (obj.getClass().equals(this.getClass())) {
+            return ((Ingredient) obj).cookTime == this.cookTime && ((Ingredient) obj).prepareTime == this.prepareTime && this.isBurned == ((Ingredient) obj).isBurned;
         }
         return false;
     }

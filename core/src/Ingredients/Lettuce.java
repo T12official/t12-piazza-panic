@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-public class Lettuce extends Ingredient{
+public class Lettuce extends Ingredient {
 
     /**
      * The Lettuce class represents a specific type of ingredient in the game, specifically lettuce.

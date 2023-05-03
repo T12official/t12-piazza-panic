@@ -2,15 +2,17 @@ package powerUps;
 
 import Sprites.Chef;
 import Sprites.OrderTimer;
-import java.util.Random;
 import com.team13.piazzapanic.HUD;
 
-public class powerUpRandom extends powerUpGeneric{
-    private Random randomGenerator = new Random();
+import java.util.Random;
+
+public class powerUpRandom extends powerUpGeneric {
+    private final Random randomGenerator = new Random();
+
     @Override
-    public void improveChef(Chef chefToModify, OrderTimer orderTimer, HUD hud){
+    public void improveChef(Chef chefToModify, OrderTimer orderTimer, HUD hud) {
         int randNumber = randomGenerator.nextInt(5);
-        switch(randNumber){
+        switch (randNumber) {
             case 1:
                 hud.updatePowerUp(1);
                 chefToModify.setRunSpeedModifier(1.5F);

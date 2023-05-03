@@ -3,8 +3,6 @@ package com.team13.piazzapanic;
 
 import Sprites.Chef;
 import com.badlogic.gdx.*;
-import com.team13.piazzapanic.PlayScreen;
-import com.team13.piazzapanic.MainGame;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -13,17 +11,19 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import java.util.ArrayList;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 @RunWith(GdxTestRunner.class)
 
 public class ChefTest extends ApplicationAdapter implements InputProcessor {
 
+    private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
     public float runSpeedModifier = 1F;
-    private float yVelocity = 0;
-    private float xVelocity = 0;
     public World world = new World(new Vector2(0, 0), true);
     public TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
     public TiledMap map = mapLoader.load("Kitchen.tmx");
@@ -31,7 +31,12 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     public boolean active = false;
     public ArrayList<Chef> chefList;
     public int currentChef = 0;
-    private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
+    private float yVelocity = 0;
+    private float xVelocity = 0;
+    private Chef chef1;
+    private Chef chef2;
+    private Chef chef3;
+    private Chef controlledChef;
 
     public Chef getChef1() {
         return chefList.get(0);
@@ -44,11 +49,6 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     public Chef getChef3() {
         return chefList.get(2);
     }
-    private Chef chef1;
-    private Chef chef2;
-    private Chef chef3;
-    private Chef controlledChef;
-
 
     @Override
     public boolean keyDown(int keycode) {
@@ -71,11 +71,12 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
         }
         return true;
     }
-    public Chef getChef(){
-        return chefList.get(currentChef%chefList.size());
+
+    public Chef getChef() {
+        return chefList.get(currentChef % chefList.size());
     }
 
-    public Chef switchChef(){
+    public Chef switchChef() {
         getChef().rest();
         currentChef += 1;
         getChef().active = true;
@@ -208,7 +209,7 @@ public class ChefTest extends ApplicationAdapter implements InputProcessor {
     }
 
     @Test
-    public void SwitchChefTest(){
+    public void SwitchChefTest() {
 
         MainGame maingame = new MainGame();
         PlayScreen playscreen = new PlayScreen(maingame);

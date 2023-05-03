@@ -13,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(GdxTestRunner.class)
 public class StationTests {
@@ -22,9 +21,9 @@ public class StationTests {
     public TiledMap map = mapLoader.load("Kitchen.tmx");
     Bun bun = new Bun(0, 3, 8);
     Lettuce lettuce = new Lettuce(2, 0, 0);
-    Onion onion = new Onion(2,0, 0);
-    Steak steak = new Steak(2,3, 8);
-    Tomato tomato = new Tomato(2,0, 0);
+    Onion onion = new Onion(2, 0, 0);
+    Steak steak = new Steak(2, 3, 8);
+    Tomato tomato = new Tomato(2, 0, 0);
 
     @Test
     public void checkBunsStationHasIngredient() {
@@ -32,6 +31,7 @@ public class StationTests {
         assertEquals("Will be work if BunStation has Bun ingredient",
                 bunsStation.getIngredient(), bun);
     }
+
     @Test
     public void checkLettuceStationHasIngredient() {
         LettuceStation tile = new LettuceStation(world, map, new BodyDef(), new Rectangle());
@@ -40,21 +40,21 @@ public class StationTests {
     }
 
     @Test
-    public  void checkOnionStationHasIngredient(){
+    public void checkOnionStationHasIngredient() {
         OnionStation tile = new OnionStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if OnionStation has Onion ingredient",
                 tile.getIngredient(), onion);
     }
 
     @Test
-    public void checkSteakStationHasIngredient(){
+    public void checkSteakStationHasIngredient() {
         SteakStation tile = new SteakStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if SteakStation has Steak ingredient",
                 tile.getIngredient(), steak);
     }
 
     @Test
-    public void checkTomatoStationHasIngredient(){
+    public void checkTomatoStationHasIngredient() {
         TomatoStation tile = new TomatoStation(world, map, new BodyDef(), new Rectangle());
         assertEquals("Will be work if TomatoStation has Tomato ingredient",
                 tile.getIngredient(), tomato);

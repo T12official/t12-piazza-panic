@@ -1,11 +1,10 @@
 package Sprites;
 
 import Ingredients.*;
-import Recipe.BurgerRecipe;
-import Recipe.Recipe;
 import Recipe.*;
-import Recipe.SaladRecipe;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,8 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.team13.piazzapanic.MainGame;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.team13.piazzapanic.Playable;
 
 import java.util.Objects;
@@ -29,32 +26,8 @@ import java.util.Objects;
  */
 
 public class Chef extends Sprite implements InputProcessor {
-    public World world;
-    public Body b2body;
-    public double cookingSpeedModifier = 1;
-    public float runSpeedModifier = 1F;
     private final float initialX;
     private final float initialY;
-
-    public float getyVelocity() {
-        return yVelocity;
-    }
-
-    private float yVelocity = 0;
-
-    public float getxVelocity() {
-        return xVelocity;
-    }
-
-    private float xVelocity = 0;
-
-    public boolean active = false;
-
-    public Vector2 startVector;
-    private float waitTimer;
-
-    private float putDownWaitTimer;
-    public boolean chefOnChefCollision;
     private final Texture normalChef;
     private final Texture bunsChef;
     private final Texture bunsToastedChef;
@@ -71,46 +44,46 @@ public class Chef extends Sprite implements InputProcessor {
     private final Texture completedBurgerChef;
     private final Texture meatChef;
     private final Texture rawDoughChef;
-    private Texture saladChef;
+    private final Texture saladChef;
     private final Texture newDough;
     private final Texture doneDough;
     private final Texture pizzaChef;
     private final Texture jacketChef;
-
-    public enum State {UP, DOWN, LEFT, RIGHT}
-
+    private final Sprite circleSprite;
+    private final Playable level;
+    public World world;
+    public Body b2body;
+    public double cookingSpeedModifier = 1;
+    public float runSpeedModifier = 1F;
+    public boolean active = false;
+    public Vector2 startVector;
+    public boolean chefOnChefCollision;
     public State currentState;
+    public boolean isCooking = false;
+    public int nextOrderAppearTime;
+    public Recipe previousInHandRecipe;
+    private float yVelocity = 0;
+    private float xVelocity = 0;
+    private float waitTimer;
+    private float putDownWaitTimer;
     private TextureRegion currentSkin;
-
     private Texture skinNeeded;
-
     private Fixture whatTouching;
-
     private Ingredient inHandsIng;
     private Recipe inHandsRecipe;
-
     private Boolean userControlChef;
-
-    private final Sprite circleSprite;
-
     private float notificationX;
     private float notificationY;
     private float notificationWidth;
     private float notificationHeight;
-
     private CompletedDishStation completedStation;
-    public boolean isCooking = false;
-
-    public int nextOrderAppearTime;
-    public Recipe previousInHandRecipe;
-
-    private Playable level;
 
     /**
      * Chef class constructor that initializes all the fields
+     *
      * @param baseLevel the parent of the world the chef exists in
-     * @param startX starting X position
-     * @param startY starting Y position
+     * @param startX    starting X position
+     * @param startY    starting Y position
      */
 
     public Chef(Playable baseLevel, float startX, float startY) {
@@ -164,6 +137,13 @@ public class Chef extends Sprite implements InputProcessor {
         completedStation = null;
     }
 
+    public float getyVelocity() {
+        return yVelocity;
+    }
+
+    public float getxVelocity() {
+        return xVelocity;
+    }
 
     /**
      * Update the position and region of the chef and set the notification position based on the chef's current state.
@@ -245,7 +225,7 @@ public class Chef extends Sprite implements InputProcessor {
                 //waitTimer = 0;
 
             }
-            if (waitTimer > inHandsIng.getBurnTime()){
+            if (waitTimer > inHandsIng.getBurnTime()) {
                 waitTimer = 0;
                 userControlChef = true;
                 inHandsIng.setBurned();
@@ -259,8 +239,9 @@ public class Chef extends Sprite implements InputProcessor {
 
     /**
      * This method sets the bounds for the notification based on the given direction.
+     *
      * @param direction - A string representing the direction of the notification.
-     *                   Can be "Left", "Right", "Up", or "Down".
+     *                  Can be "Left", "Right", "Up", or "Down".
      */
 
     public void notificationSetBounds(String direction) {
@@ -282,9 +263,10 @@ public class Chef extends Sprite implements InputProcessor {
     }
 
     /**
-     Draws a notification to help the user understand what chef they are controlling.
-     The notification is a sprite that looks like at "C" on the controlled chef.
-     @param batch The sprite batch that the notification should be drawn with.
+     * Draws a notification to help the user understand what chef they are controlling.
+     * The notification is a sprite that looks like at "C" on the controlled chef.
+     *
+     * @param batch The sprite batch that the notification should be drawn with.
      */
     public void drawNotification(SpriteBatch batch) {
         if (this.getUserControlChef()) {
@@ -323,10 +305,10 @@ public class Chef extends Sprite implements InputProcessor {
         return region;
     }
 
-
     /**
-     Returns the current state of the player based on the controlled chefs velocity.
-     @return current state of the player - UP, DOWN, LEFT, or RIGHT
+     * Returns the current state of the player based on the controlled chefs velocity.
+     *
+     * @return current state of the player - UP, DOWN, LEFT, or RIGHT
      */
     public State getState() {
         if (b2body.getLinearVelocity().y > 0)
@@ -343,7 +325,7 @@ public class Chef extends Sprite implements InputProcessor {
 
     /**
      * Define the body and fixture of the chef object.
-     *
+     * <p>
      * This method creates a dynamic body definition and sets its position with the `initialX` and `initialY`
      * variables, then creates the body in the physics world. A fixture definition is also created and a
      * circle shape is set with a radius of `4.5f / MainGame.PPM` and a position shifted by `(0.5f / MainGame.PPM)`
@@ -361,7 +343,6 @@ public class Chef extends Sprite implements InputProcessor {
         CircleShape shape = new CircleShape();
 
 
-
         shape.setRadius(4.5f / MainGame.PPM);
         shape.setPosition(new Vector2(shape.getPosition().x + (0.5f / MainGame.PPM), shape.getPosition().y - (5.5f / MainGame.PPM)));
 
@@ -371,32 +352,31 @@ public class Chef extends Sprite implements InputProcessor {
         b2body.createFixture(fdef).setUserData(this);
     }
 
-
     /**
      * Method to set the skin of the chef character based on the item the chef is holding.
      *
      * @param item the item that chef is holding
-     *
-     * The skin is set based on the following cases:
-     * - if item is null, then the skin is set to normalChef
-     * - if item is a Lettuce, then the skin is set to
-     *    - choppedLettuceChef if the lettuce is prepared
-     *    - lettuceChef if the lettuce is not prepared
-     * - if item is a Steak, then the skin is set to
-     *    - burgerChef if the steak is prepared and cooked
-     *    - pattyChef if the steak is prepared but not cooked
-     *    - meatChef if the steak is not prepared
-     * - if item is an Onion, then the skin is set to
-     *    - choppedOnionChef if the onion is prepared
-     *    - onionChef if the onion is not prepared
-     * - if item is a Tomato, then the skin is set to
-     *    - choppedTomatoChef if the tomato is prepared
-     *    - tomatoChef if the tomato is not prepared
-     * - if item is a Bun, then the skin is set to
-     *    - bunsToastedChef if the bun is cooked
-     *    - bunsChef if the bun is not cooked
-     * - if item is a BurgerRecipe, then the skin is set to completedBurgerChef
-     * - if item is a SaladRecipe, then the skin is set to saladChef
+     *             <p>
+     *             The skin is set based on the following cases:
+     *             - if item is null, then the skin is set to normalChef
+     *             - if item is a Lettuce, then the skin is set to
+     *             - choppedLettuceChef if the lettuce is prepared
+     *             - lettuceChef if the lettuce is not prepared
+     *             - if item is a Steak, then the skin is set to
+     *             - burgerChef if the steak is prepared and cooked
+     *             - pattyChef if the steak is prepared but not cooked
+     *             - meatChef if the steak is not prepared
+     *             - if item is an Onion, then the skin is set to
+     *             - choppedOnionChef if the onion is prepared
+     *             - onionChef if the onion is not prepared
+     *             - if item is a Tomato, then the skin is set to
+     *             - choppedTomatoChef if the tomato is prepared
+     *             - tomatoChef if the tomato is not prepared
+     *             - if item is a Bun, then the skin is set to
+     *             - bunsToastedChef if the bun is cooked
+     *             - bunsChef if the bun is not cooked
+     *             - if item is a BurgerRecipe, then the skin is set to completedBurgerChef
+     *             - if item is a SaladRecipe, then the skin is set to saladChef
      */
 
     public void setChefSkin(Object item) {
@@ -438,21 +418,16 @@ public class Chef extends Sprite implements InputProcessor {
             skinNeeded = completedBurgerChef;
         } else if (item instanceof SaladRecipe) {
             skinNeeded = saladChef;
-        }
-        else if (item instanceof pizzaRecipy){
+        } else if (item instanceof pizzaRecipy) {
             skinNeeded = pizzaChef;
-        }
-        else if (item instanceof jacketPotato){
+        } else if (item instanceof jacketPotato) {
             skinNeeded = jacketChef;
-        }
-        else if (item instanceof Potatoes){
+        } else if (item instanceof Potatoes) {
             skinNeeded = spudsChef;
-        }
-        else if (item instanceof Cheese){
+        } else if (item instanceof Cheese) {
             skinNeeded = cheeseChef;
             System.out.println("apples");
-        }
-        else if (item instanceof pizzaDough){
+        } else if (item instanceof pizzaDough) {
             if (inHandsIng.isPrepared() && inHandsIng.isCooked()) {
                 skinNeeded = doneDough;
             } else if (inHandsIng.isPrepared()) {
@@ -466,6 +441,7 @@ public class Chef extends Sprite implements InputProcessor {
 
     /**
      * Method to display the ingredient on the specific interactive tile objects (ChoppingBoard/Pan)
+     *
      * @param batch the SpriteBatch used to render the texture.
      */
 
@@ -492,8 +468,8 @@ public class Chef extends Sprite implements InputProcessor {
      * @param batch The batch used for drawing the sprite on the screen
      */
 
-    public void displayIngDynamic(SpriteBatch batch){
-        putDownWaitTimer += 1/60f;
+    public void displayIngDynamic(SpriteBatch batch) {
+        putDownWaitTimer += 1 / 60f;
         previousInHandRecipe.create(completedStation.getX(), completedStation.getY() - (0.01f / MainGame.PPM), batch);
         if (putDownWaitTimer > nextOrderAppearTime) {
             previousInHandRecipe = null;
@@ -502,35 +478,24 @@ public class Chef extends Sprite implements InputProcessor {
     }
 
     /**
-
-      * This method updates the state of the chef when it is in a collision with another chef.
-      * The method sets the userControlChef to false, meaning the user cannot control the chef while it's in collision.
-      * It also sets the chefOnChefCollision to true, indicating that the chef is in collision with another chef.
-      * Finally, it calls the setStartVector method to update the position of the chef.
+     * This method updates the state of the chef when it is in a collision with another chef.
+     * The method sets the userControlChef to false, meaning the user cannot control the chef while it's in collision.
+     * It also sets the chefOnChefCollision to true, indicating that the chef is in collision with another chef.
+     * Finally, it calls the setStartVector method to update the position of the chef.
      */
-        public void chefsColliding () {
-            b2body.setLinearVelocity(0f,0f);
-            //userControlChef = false;
-            //chefOnChefCollision = true;
-            //setStartVector();
-        }
+    public void chefsColliding() {
+        b2body.setLinearVelocity(0f, 0f);
+        //userControlChef = false;
+        //chefOnChefCollision = true;
+        //setStartVector();
+    }
 
     /**
      * Set the starting velocity vector of the chef
      * when the chef collides with another chef
-     *
      */
-    public void setStartVector () {
+    public void setStartVector() {
         startVector = new Vector2(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
-    }
-
-    /**
-     * Set the touching tile fixture
-     *
-     * @param obj fixture that the chef is touching
-     */
-    public void setTouchingTile (Fixture obj){
-        this.whatTouching = obj;
     }
 
     /**
@@ -538,7 +503,7 @@ public class Chef extends Sprite implements InputProcessor {
      *
      * @return the fixture that the chef is touching
      */
-    public Fixture getTouchingTile () {
+    public Fixture getTouchingTile() {
         if (whatTouching == null) {
             return null;
         } else {
@@ -547,21 +512,21 @@ public class Chef extends Sprite implements InputProcessor {
     }
 
     /**
+     * Set the touching tile fixture
+     *
+     * @param obj fixture that the chef is touching
+     */
+    public void setTouchingTile(Fixture obj) {
+        this.whatTouching = obj;
+    }
+
+    /**
      * Get the ingredient that the chef is holding
      *
      * @return the ingredient that the chef is holding
      */
-    public Ingredient getInHandsIng () {
+    public Ingredient getInHandsIng() {
         return inHandsIng;
-    }
-
-    /**
-     * Get the recipe that the chef is holding
-     *
-     * @return the recipe that the chef is holding
-     */
-    public Recipe getInHandsRecipe () {
-        return inHandsRecipe;
     }
 
     /**
@@ -569,9 +534,18 @@ public class Chef extends Sprite implements InputProcessor {
      *
      * @param ing the ingredient that the chef is holding
      */
-    public void setInHandsIng (Ingredient ing){
+    public void setInHandsIng(Ingredient ing) {
         inHandsIng = ing;
         inHandsRecipe = null;
+    }
+
+    /**
+     * Get the recipe that the chef is holding
+     *
+     * @return the recipe that the chef is holding
+     */
+    public Recipe getInHandsRecipe() {
+        return inHandsRecipe;
     }
 
     /**
@@ -579,9 +553,19 @@ public class Chef extends Sprite implements InputProcessor {
      *
      * @param recipe the recipe that the chef is holding
      */
-    public void setInHandsRecipe (Recipe recipe){
+    public void setInHandsRecipe(Recipe recipe) {
         inHandsRecipe = recipe;
         inHandsIng = null;
+    }
+
+    /**
+     * Returns a boolean value indicating whether the chef is under user control.
+     * If not specified, returns false.
+     *
+     * @return userControlChef The boolean value indicating chef's control.
+     */
+    public boolean getUserControlChef() {
+        return Objects.requireNonNullElse(userControlChef, false);
     }
 
     /**
@@ -589,32 +573,21 @@ public class Chef extends Sprite implements InputProcessor {
      *
      * @param value whether the chef is controlled by the user
      */
-    public void setUserControlChef ( boolean value){
+    public void setUserControlChef(boolean value) {
         userControlChef = value;
 
     }
 
     /**
-
-     * Returns a boolean value indicating whether the chef is under user control.
-     * If not specified, returns false.
+     * Drops the given ingredient on a plate station.
      *
-     * @return userControlChef The boolean value indicating chef's control.
-     */
-    public boolean getUserControlChef () {
-            return Objects.requireNonNullElse(userControlChef, false);
-        }
-
-
-    /**
-      * Drops the given ingredient on a plate station.
-      * @param station The plate station to drop the ingredient on.
-      * @param ing The ingredient to be dropped.
+     * @param station The plate station to drop the ingredient on.
+     * @param ing     The ingredient to be dropped.
      */
 
-    public void dropItemOn (InteractiveTileObject station, Ingredient ing){
+    public void dropItemOn(InteractiveTileObject station, Ingredient ing) {
         if (station instanceof PlateStation) {
-                ((PlateStation) station).dropItem(ing);
+            ((PlateStation) station).dropItem(ing);
         }
         setInHandsRecipe(null);
     }
@@ -624,27 +597,27 @@ public class Chef extends Sprite implements InputProcessor {
      *
      * @param station The completed dish station to drop the recipe on.
      */
-        public void dropItemOn (InteractiveTileObject station){
-            if (station instanceof CompletedDishStation) {
-                previousInHandRecipe = getInHandsRecipe();
-                completedStation = (CompletedDishStation) station;
-            }
-            setInHandsRecipe(null);
+    public void dropItemOn(InteractiveTileObject station) {
+        if (station instanceof CompletedDishStation) {
+            previousInHandRecipe = getInHandsRecipe();
+            completedStation = (CompletedDishStation) station;
         }
+        setInHandsRecipe(null);
+    }
 
     /**
      * Picks up an item from a plate station and sets it as in-hand ingredient or recipe.
      *
      * @param station The plate station to pick up the item from.
      */
-    public void pickUpItemFrom(InteractiveTileObject station){
-        if (station instanceof PlateStation){
+    public void pickUpItemFrom(InteractiveTileObject station) {
+        if (station instanceof PlateStation) {
             PlateStation pStation = (PlateStation) station;
             Object item = pStation.pickUpItem();
-            if (item instanceof Ingredient){
+            if (item instanceof Ingredient) {
                 setInHandsIng((Ingredient) item);
                 setChefSkin(item);
-            } else if (item instanceof Recipe){
+            } else if (item instanceof Recipe) {
                 setInHandsRecipe(((Recipe) item));
                 setChefSkin(item);
             }
@@ -655,17 +628,17 @@ public class Chef extends Sprite implements InputProcessor {
         return notificationY;
     }
 
+    public void setNotificationY(float notificationY) {
+        this.notificationY = notificationY;
+
+    }
+
     public float getNotificationX() {
         return notificationX;
     }
 
     public void setNotificationX(float notificationX) {
         this.notificationX = notificationX;
-    }
-
-    public void setNotificationY(float notificationY) {
-        this.notificationY = notificationY;
-
     }
 
     public Body getB2body() {
@@ -741,26 +714,26 @@ public class Chef extends Sprite implements InputProcessor {
                 yVelocity += 0.5f * runSpeedModifier;
                 break;
             case Input.Keys.S:
-                yVelocity -= 0.5f * runSpeedModifier ;
+                yVelocity -= 0.5f * runSpeedModifier;
                 break;
             case Input.Keys.A:
-                xVelocity -= 0.5f * runSpeedModifier ;
+                xVelocity -= 0.5f * runSpeedModifier;
                 break;
             case Input.Keys.D:
-                xVelocity += 0.5f * runSpeedModifier ;
+                xVelocity += 0.5f * runSpeedModifier;
                 break;
         }
         b2body.setLinearVelocity(xVelocity, yVelocity);
-        if (b2body.getLinearVelocity().x > 0){
+        if (b2body.getLinearVelocity().x > 0) {
             notificationSetBounds("Right");
         }
-        if (b2body.getLinearVelocity().x < 0){
+        if (b2body.getLinearVelocity().x < 0) {
             notificationSetBounds("Left");
         }
-        if (b2body.getLinearVelocity().y > 0){
+        if (b2body.getLinearVelocity().y > 0) {
             notificationSetBounds("Up");
         }
-        if (b2body.getLinearVelocity().y < 0){
+        if (b2body.getLinearVelocity().y < 0) {
             notificationSetBounds("Down");
         }
         return true;
@@ -782,7 +755,7 @@ public class Chef extends Sprite implements InputProcessor {
         return true;
     }
 
-    public void rest(){
+    public void rest() {
         active = false;
         xVelocity = 0;
         yVelocity = 0;
@@ -818,13 +791,14 @@ public class Chef extends Sprite implements InputProcessor {
         return false;
     }
 
-
-
     public void setRunSpeedModifier(float v) {
         runSpeedModifier = v;
         System.out.println("Speed Up");
 
     }
+
+
+    public enum State {UP, DOWN, LEFT, RIGHT}
 
 }
 

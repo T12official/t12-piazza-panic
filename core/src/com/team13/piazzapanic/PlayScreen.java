@@ -1,19 +1,17 @@
 package com.team13.piazzapanic;
 
 import Ingredients.Ingredient;
-import Recipe.Recipe;
-import Sprites.*;
 import Recipe.Order;
+import Recipe.Recipe;
+import Sprites.Chef;
+import Sprites.InteractiveTileObject;
+import Sprites.OrderTimer;
+import Sprites.PlateStation;
 import Tools.*;
-
-
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.assets.AssetManager;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
-
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
@@ -24,7 +22,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -40,16 +38,15 @@ import powerUps.powerUpRandom;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 /**
  * The PlayScreen class is responsible for displaying the game to the user and handling the user's interactions.
  * The PlayScreen class implements the Screen interface which is part of the LibGDX framework.
- *
+ * <p>
  * The PlayScreen class contains several important fields, including the game instance, stage instance, viewport instance,
  * and several other helper classes and variables. The game instance is used to access the global game configuration and
  * to switch between screens. The stage instance is used to display the graphics and handle user interactions, while the
  * viewport instance is used to manage the scaling and resizing of the game window.
- *
+ * <p>
  * The PlayScreen class also contains several methods for initializing and updating the game state, including the
  * constructor, show(), render(), update(), and dispose() methods. The constructor sets up the stage, viewport, and
  * other helper classes and variables. The show() method is called when the PlayScreen becomes the active screen. The
@@ -58,121 +55,85 @@ import java.util.concurrent.ThreadLocalRandom;
  * needed and is used to clean up resources and prevent memory leaks.
  */
 
-
 public class PlayScreen implements Playable {
 
+    public static float trayX;
+    public static float trayY;
     public final MainGame game;
-    private Stage stage;
-    private boolean loadMyGame = false;
-    public double difficultyScore;
-    private Label messageLabel;
-    private final OrthographicCamera gamecam;
-    private final Viewport gameport;
-
-    public HUD getHUD() {
-        if (hud == null){
-            return new HUD(game.getBatch());
-        }
-        return hud;
-    }
-
-    public HUD hud;
+    private final OrthographicCamera gameCam;
+    private final Viewport gamePort;
     private final TextButton button;
     private final TextButton button2;
     private final TextButton buttonPans;
     private final TextButton saveGame;
-
     private final InputMultiplexer inputMultiplexer = new InputMultiplexer();
-    private float orderTime = 1;
-
-    public OrderTimer orderTimer = new OrderTimer();
-
-    public boolean isActiveOrder = false;
-    private GameOverScreen gameover;
-
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
-    public boolean dispose = false;
-
-
     private final World world;
     private final Chef chef1;
     private final Chef chef2;
     private final Chef chef3;
-
+    private final kitchenChangerAPI kitchenEdit;
+    private final PlayScreen selfRef = this;
+    public double difficultyScore;
+    public HUD hud;
+    public OrderTimer orderTimer = new OrderTimer();
+    public boolean isActiveOrder = false;
+    public boolean dispose = false;
     public ArrayList<Chef> chefList;
     public int currentChef = 1;
-
-    public long idleGametimer;
-    private Chef controlledChef;
-    private kitchenChangerAPI kitchenEdit;
+    public long idleGameTimer;
     public cookingSpeedBoost toKill;
-
     public ArrayList<Order> ordersArray;
-
     public PlateStation plateStation;
-    private PlayScreen selfRef = this;
-
-
     public Boolean scenarioComplete;
     public Boolean createdOrder;
-
-    public static float trayX;
-    public static float trayY;
-
+    public ArrayList<cookingSpeedBoost> powerUpArray;
+    public cookingSpeedBoost powerUp;
+    public int numberOfOrders = 5;
+    private Stage stage;
+    private boolean loadMyGame = false;
+    private Label messageLabel;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+    private Chef controlledChef;
     private float timeSeconds = 0f;
     private long shopMessageTimer = 0;
     private boolean messageUp = false;
     private long spawnNewPowerUpTimer;
-    public ArrayList<cookingSpeedBoost> powerUpArray;
-
     private float timeSecondsCount = 0f;
-
-
-
     private boolean activateShop = false;
     private int addictionPanCount = 0;
     private int additionChopCount = 0;
-    public cookingSpeedBoost powerUp;
-    private int timeToNewPower = 22000;
-    public int numberOfOrders = 5;
     private Integer orderNum = 1;
-
     /**
      * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
      * creates and initializes game camera and viewport,
      * creates and initializes HUD and orders hud, loads and initializes the map,
      * creates and initializes world, creates and initializes chefs and sets them, sets contact listener for world, and initializes ordersArray.
+     *
      * @param game The MainGame instance that the PlayScreen will be a part of.
      */
 
-
-    public PlayScreen(MainGame game){
-
+    public PlayScreen(MainGame game) {
         spawnNewPowerUpTimer = TimeUtils.millis();
         kitchenEdit = new kitchenChangerAPI();
-
         chefList = new ArrayList<>();
-        powerUpArray = new ArrayList<>(); //The powerUpArray is an array containing all the powerups that need to be rendered. new powerups can be added to this array
-
+        powerUpArray = new ArrayList<>(); //The powerUpArray is an array containing all the power-ups that need to be rendered. new powe-rups can be added to this array
         kitchenEdit.readFile();
         resetIdleTimer();
         this.game = game;
-        gameover = new GameOverScreen(game);
+        new GameOverScreen(game);
 
-        scenarioComplete = Boolean.FALSE;
-        createdOrder = Boolean.FALSE;
-        gamecam = new OrthographicCamera();
+        scenarioComplete = false;
+        createdOrder = false;
+        gameCam = new OrthographicCamera();
         // FitViewport to maintain aspect ratio whilst scaling to screen size
-        gameport = new FitViewport(MainGame.V_WIDTH / MainGame.PPM, MainGame.V_HEIGHT / MainGame.PPM, gamecam);
-
-        // create orders hud
+        gamePort = new FitViewport(MainGame.V_WIDTH / MainGame.PPM, MainGame.V_HEIGHT / MainGame.PPM, gameCam);
 
         // create map
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
         map = mapLoader.load("Kitchen.tmx");
 
-        gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
+        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
         Gdx.input.setInputProcessor(stage);
         PlayScreenButton shopButton = new PlayScreenButton("shop", PlayScreenButton.Functionality.SHOP, this);
@@ -184,12 +145,12 @@ public class PlayScreen implements Playable {
         buttonPans = panButton.getButton();
         saveGame = saveButton.getButton();
 
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0, 0), true);
         new B2WorldCreator(world, map, this);
-        powerUp  = new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 126,85);
+        powerUp = new cookingSpeedBoost(this.world, new TextureRegion(new Texture("powerUps/powerUpCoin.png")), 126, 85);
         powerUp.setPowerUp(new powerUpRandom());
-        chefList.add(new Chef(this, 31.5F,65));
-        chefList.add(new Chef(this, 128,65));
+        chefList.add(new Chef(this, 31.5F, 65));
+        chefList.add(new Chef(this, 128, 65));
         chefList.add(new Chef(this, 128, 88));
         getChef().active = true;
         chef1 = getChef1();
@@ -198,23 +159,24 @@ public class PlayScreen implements Playable {
         System.out.println(chefList.toString());
 
         controlledChef = getChef();
-
-
         controlledChef.notificationSetBounds("Down");
-
         ordersArray = new ArrayList<>();
-
-
         orderTimer.setDifficulty(difficultyScore);
     }
 
-    public void onStartLoadGame(){
+    public HUD getHUD() {
+        if (hud == null) {
+            return new HUD(game.getBatch());
+        }
+        return hud;
+    }
+
+    public void onStartLoadGame() {
         loadMyGame = true;
     }
-    public void dontLoadGame(){loadMyGame = false;}
 
-    public void resetIdleTimer(){
-        idleGametimer = TimeUtils.millis();
+    public void resetIdleTimer() {
+        idleGameTimer = TimeUtils.millis();
     }
 
     @Override
@@ -222,15 +184,15 @@ public class PlayScreen implements Playable {
         return plateStation;
     }
 
-    public Chef getChef(){
-        return chefList.get(currentChef%chefList.size());
+    public Chef getChef() {
+        return chefList.get(currentChef % chefList.size());
     }
 
-    public World getWorld(){
+    public World getWorld() {
         return world;
     }
 
-    public Chef switchChef(){
+    public void switchChef() {
         getChef().rest();
         currentChef += 1;
         getChef().active = true;
@@ -241,21 +203,21 @@ public class PlayScreen implements Playable {
 
         InputProcessor[] cars = {getChef()};
         inputMultiplexer.setProcessors(cars);
-        return getChef();
+        getChef();
     }
 
     @Override
-    public void show(){
+    public void show() {
         hud = getHUD();
-        stage = new Stage(gameport, game.getBatch());
+        stage = new Stage(gamePort, game.getBatch());
         InputProcessor[] cars = {getChef(), hud.stage};
         inputMultiplexer.setProcessors(cars);
-        inputMultiplexer.getProcessors();
+        // inputMultiplexer.getProcessors();
         Gdx.input.setInputProcessor(inputMultiplexer);
-        Orders orders = new Orders(game.getBatch());
+        new Orders(game.getBatch());
         hud.stage.addActor(orderTimer);
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
-        world.setContactListener(new WorldContactListener(world,this, orderTimer, hud));
+        world.setContactListener(new WorldContactListener(world, this, orderTimer, hud));
         addToHud("welcome");
         messageLabel.remove();
     }
@@ -263,46 +225,36 @@ public class PlayScreen implements Playable {
 
     /**
      * The handleInput method is responsible for handling the input events of the game such as movement and interaction with objects.
-     *
+     * <p>
      * It checks if the 'R' key is just pressed and both chefs have the user control, if so,
      * it switches the control between the two chefs.
-     *
+     * <p>
      * If the controlled chef does not have the user control,
      * the method checks if chef1 or chef2 have the user control and sets the control to that chef.
-     *
+     * <p>
      * If the controlled chef has the user control,
      * it checks if the 'W', 'A', 'S', or 'D' keys are pressed and sets the velocity of the chef accordingly.
-     *
+     * <p>
      * If the 'E' key is just pressed and the chef is touching a tile,
      * it checks the type of tile and sets the chef's in-hands ingredient accordingly.
-     *
+     * <p>
      * The method also sets the direction of the chef based on its linear velocity.
      *
      * @param dt is the time delta between the current and previous frame.
      */
 
-    public void handleInput(float dt){
+    public void handleInput(float dt) {
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)){
-            //example load game
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             gameSaveTool.loadMyGame(this);
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V)){
-            //example save game
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
             gameSaveTool.saveMyGame(this);
         }
-//        for (Chef chef : chefList){
-//            if (!chef.getUserControlChef()){
-//                chef.b2body.setLinearVelocity(0, 0);
-//                currentChef = chefList.indexOf(chef);
-//            }
-//        }
-
         controlledChef = getChef();
-        if(Gdx.input.isKeyJustPressed(Input.Keys.E)){
-
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             resetIdleTimer();
-            if(controlledChef.getTouchingTile() != null){
+            if (controlledChef.getTouchingTile() != null) {
                 InteractiveTileObject tile = (InteractiveTileObject) controlledChef.getTouchingTile().getUserData();
                 String tileName = tile.getClass().getName();
                 System.out.println(tileName + " apples aaa");
@@ -318,59 +270,60 @@ public class PlayScreen implements Playable {
                             break;
 
                         case "Sprites.ChoppingBoard":
-                            if(controlledChef.getInHandsIng() != null){
-                                if(controlledChef.getInHandsIng().prepareTime > 0){
+                            if (controlledChef.getInHandsIng() != null) {
+                                if (controlledChef.getInHandsIng().prepareTime > 0) {
                                     controlledChef.setUserControlChef(false);
                                 }
                             }
-                           break;
+                            break;
                         case "Sprites.PlateStation":
-                            if (controlledChef.getInHandsRecipe() == null){
-                            controlledChef.dropItemOn(tile, controlledChef.getInHandsIng());
-                            controlledChef.setChefSkin(null);
-                        }
+                            if (controlledChef.getInHandsRecipe() == null) {
+                                controlledChef.dropItemOn(tile, controlledChef.getInHandsIng());
+                                controlledChef.setChefSkin(null);
+                            }
                             break;
                         case "Sprites.Pan":
-                            if(controlledChef.getInHandsIng() != null) {
-                                if (controlledChef.getInHandsIng().isPrepared() && controlledChef.getInHandsIng().cookTime > 0){
+                            if (controlledChef.getInHandsIng() != null) {
+                                if (controlledChef.getInHandsIng().isPrepared() && controlledChef.getInHandsIng().cookTime > 0) {
                                     controlledChef.setUserControlChef(false);
                                     controlledChef.isCooking = true;
                                 }
                             }
 
-                                break;
-                            case "Sprites.CompletedDishStation":
-                                if (controlledChef.getInHandsRecipe() != null){
-                                    if(controlledChef.getInHandsRecipe() == ordersArray.get(0).recipe){
-                                        //TODO UPDATE CHANGE LOG FOR THIS
-                                        if (orderTimer.getOrderTime() == 0){
-                                            hud.decrementReps();
-                                            if (hud.getRepPoints() == 0){System.out.println("game over"); game.goToGameOver();}
-                                        }
-                                        controlledChef.dropItemOn(tile);
-                                        ordersArray.get(0).orderComplete = true;
-                                        controlledChef.setChefSkin(null);
-                                        if(ordersArray.size()==1){
-                                            scenarioComplete = Boolean.TRUE;
-                                            //game.goToGameOver();
+                            break;
+                        case "Sprites.CompletedDishStation":
+                            if (controlledChef.getInHandsRecipe() != null) {
+                                if (controlledChef.getInHandsRecipe() == ordersArray.get(0).recipe) {
+                                    //TODO UPDATE CHANGE LOG FOR THIS
+                                    if (orderTimer.getOrderTime() == 0) {
+                                        hud.decrementReps();
+                                        if (hud.getRepPoints() == 0) {
+                                            System.out.println("game over");
+                                            game.goToGameOver();
                                         }
                                     }
+                                    controlledChef.dropItemOn(tile);
+                                    ordersArray.get(0).orderComplete = true;
+                                    controlledChef.setChefSkin(null);
+                                    if (ordersArray.size() == 1) {
+                                        scenarioComplete = true;
+                                        //game.goToGameOver();
+                                    }
                                 }
-                                break;
                             }
+                            break;
                     }
                 }
-
             }
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-            System.out.println("do stuff!!!!!!!!!!!!!!!");
+
+        }
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             resetIdleTimer();
-            //Some stuff
         }
 
     }
 
-    public void destroyPowerup(World world, cookingSpeedBoost toKill){
+    public void destroyPowerup(World world, cookingSpeedBoost toKill) {
         world.destroyBody(toKill.getBody());
         toKill.dispose();
     }
@@ -378,10 +331,10 @@ public class PlayScreen implements Playable {
     /**
      * The update method updates the game elements, such as camera and characters,
      * based on a specified time interval "dt".
+     *
      * @param dt time interval for the update
      */
-
-    public void update(float dt){
+    public void update(float dt) {
 
         if (loadMyGame) {
             gameSaveTool.loadMyGame(this);
@@ -390,7 +343,7 @@ public class PlayScreen implements Playable {
             loadMyGame = false;
         }
 
-        if (dispose){
+        if (dispose) {
             destroyPowerup(world, toKill);
             world.destroyBody(powerUp.getBody());
             powerUp.getTexture().dispose();
@@ -401,13 +354,13 @@ public class PlayScreen implements Playable {
 
         handleInput(dt);
 
-        gamecam.update();
-        renderer.setView(gamecam);
+        gameCam.update();
+        renderer.setView(gameCam);
         for (Chef chef : chefList) {
             chef.update(dt);
         }
         powerUp.update(dt);
-        world.step(1/60f, 6, 2);
+        world.step(1 / 60f, 6, 2);
         orderTimer.update(dt);
 
     }
@@ -423,46 +376,43 @@ public class PlayScreen implements Playable {
         int randomNum = ThreadLocalRandom.current().nextInt(1, 5);
         Texture burger_recipe = new Texture("Food/burger_recipe.png");
         Texture salad_recipe = new Texture("Food/salad_recipe.png");
-        Texture jacket_recipy = new Texture("Food/jacketPotato.png");
+        Texture jacket_recipe = new Texture("Food/jacketPotato.png");
         Texture pizza_recipe = new Texture("Food/pizza_recipe.png");
         Order order;
 
-        for(int i = 0; i<numberOfOrders; i++){
-            if(randomNum==1) {
+        for (int i = 0; i < numberOfOrders; i++) {
+            if (randomNum == 1) {
                 order = new Order(PlateStation.burgerRecipe, burger_recipe);
-            }
-            else if(randomNum==2) {
+            } else if (randomNum == 2) {
                 order = new Order(PlateStation.saladRecipe, salad_recipe);
-            }
-            else if (randomNum==3){
+            } else if (randomNum == 3) {
                 order = new Order(PlateStation.mypizzaRecipy, pizza_recipe);
-            }
-            else {
-                order = new Order(PlateStation.jacketPotatoRec, jacket_recipy );
+            } else {
+                order = new Order(PlateStation.jacketPotatoRec, jacket_recipe);
             }
             ordersArray.add(order);
             randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
         }
-        hud.updateOrder(Boolean.FALSE, orderNum);
+        hud.updateOrder(false, orderNum);
     }
 
     /**
      * Updates the orders as they are completed, or if the game scenario has been completed.
      */
-    public void updateOrder(){
-        if(scenarioComplete==Boolean.TRUE) {
-            hud.updateScore(Boolean.TRUE, (numberOfOrders + 1 - ordersArray.size()) * 35, orderTimer.getOrderTime());
-            hud.updateOrder(Boolean.TRUE, orderNum);
+    public void updateOrder() {
+        if (scenarioComplete) {
+            hud.updateScore(true, (numberOfOrders + 1 - ordersArray.size()) * 35, orderTimer.getOrderTime());
+            hud.updateOrder(true, orderNum);
             return;
         }
-        if(ordersArray.size() != 0) {
+        if (ordersArray.size() != 0) {
             if (ordersArray.get(0).orderComplete) {
-                orderNum ++;
+                orderNum++;
                 isActiveOrder = true;
                 orderTimer.setOrderTime(1);
-                hud.updateScore(Boolean.FALSE, (numberOfOrders + 1 - ordersArray.size()) * 35, orderTimer.getOrderTime());
+                hud.updateScore(false, (numberOfOrders + 1 - ordersArray.size()) * 35, orderTimer.getOrderTime());
                 ordersArray.remove(0);
-                hud.updateOrder(Boolean.FALSE, orderNum);
+                hud.updateOrder(false, orderNum);
                 return;
             }
             ordersArray.get(0).create(trayX, trayY, game.getBatch());
@@ -470,62 +420,61 @@ public class PlayScreen implements Playable {
     }
 
     /**
-
-     The render method updates the screen by calling the update method with the given delta time, and rendering the graphics of the game.
-
-     It updates the HUD time, clears the screen, and renders the renderer and the hud.
-
-     Additionally, it checks the state of the game and draws the ingredients, completed recipes, and notifications on the screen.
-
-     @param delta The time in seconds since the last frame.
+     * The render method updates the screen by calling the update method with the given delta time, and rendering the graphics of the game.
+     * <p>
+     * It updates the HUD time, clears the screen, and renders the renderer and the hud.
+     * <p>
+     * Additionally, it checks the state of the game and draws the ingredients, completed recipes, and notifications on the screen.
+     *
+     * @param delta The time in seconds since the last frame.
      */
 
     @Override
 
 
-    public void render(float delta){
+    public void render(float delta) {
         update(delta);
 
-        if (!getChef().active || !getChef().getUserControlChef()){
+        if (!getChef().active || !getChef().getUserControlChef()) {
             switchChef();
         }
 
-        if (TimeUtils.timeSinceMillis(idleGametimer) > 20000){
+        if (TimeUtils.timeSinceMillis(idleGameTimer) > 20000) {
             game.goToIdle();
         }
 
-        if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower){
+        int timeToNewPower = 22000;
+        if (TimeUtils.timeSinceMillis(spawnNewPowerUpTimer) > timeToNewPower) {
             // Ths if statement controls when a new powerup will spawn. they spawn a regular intervals defined by a timer
-            cookingSpeedBoost newPower =  new cookingSpeedBoost(this.world,new TextureRegion( new  Texture("powerUps/powerUpCoin.png")), 0.3f,0.3f);
+            cookingSpeedBoost newPower = new cookingSpeedBoost(this.world, new TextureRegion(new Texture("powerUps/powerUpCoin.png")), 0.3f, 0.3f);
             newPower.setPowerUp(new powerUpRandom());
             powerUpArray.add(newPower);
             spawnNewPowerUpTimer = TimeUtils.millis();
-
         }
 
-        if (messageUp && TimeUtils.timeSinceMillis(shopMessageTimer) > 5000){
+        if (messageUp && TimeUtils.timeSinceMillis(shopMessageTimer) > 5000) {
             messageLabel.remove();
             messageUp = false;
         }
 
         //Execute handleEvent each 1 second
-        timeSeconds +=Gdx.graphics.getRawDeltaTime();
+        timeSeconds += Gdx.graphics.getRawDeltaTime();
         timeSecondsCount += Gdx.graphics.getDeltaTime();
 
-        if(Math.round(timeSecondsCount) == 5 && createdOrder == Boolean.FALSE){
-            createdOrder = Boolean.TRUE;
+        if (Math.round(timeSecondsCount) == 5 && !createdOrder) {
+            createdOrder = true;
             createOrder();
         }
         float period = 1f;
-        if(timeSeconds > period) {
+        if (timeSeconds > period) {
             timeSeconds -= period;
             ///Chef movement stuff needed for testing
 
             float chef2X = chef2.getX();
             float chef2Y = chef2.getY();
 
-            String xFormatted = String.format("%.4g",chef2X);
-            String yFormatted = String.format("%.3g",chef2Y);
+            String xFormatted = String.format("%.4g", chef2X);
+            String yFormatted = String.format("%.3g", chef2Y);
 
             System.out.println(yFormatted);
             hud.updateTime(scenarioComplete);
@@ -540,7 +489,7 @@ public class PlayScreen implements Playable {
         Gdx.input.setInputProcessor(hud.stage);
 
         hud.stage.addActor(button);
-        if (activateShop){
+        if (activateShop) {
             //This lays out the buttons of the shop
             saveGame.setX(50);
             saveGame.setY(40);
@@ -551,21 +500,19 @@ public class PlayScreen implements Playable {
             buttonPans.setX(50);
             buttonPans.setY(20);
             hud.stage.addActor(buttonPans);
-        }
-        else {
+        } else {
             buttonPans.remove();
             button2.remove();
             saveGame.remove();
         }
 
-        game.getBatch().setProjectionMatrix(gamecam.combined);
+        game.getBatch().setProjectionMatrix(gameCam.combined);
         game.getBatch().begin();
-
 
         updateOrder();
         //powerUp.getBody().setTransform(new Vector2(0,0),30);
         //powerUp.render(game.getBatch());
-        for (int i = 0 ; i < powerUpArray.size(); i ++){
+        for (int i = 0; i < powerUpArray.size(); i++) {
             //The powerUpArray is an array containing all the powerups that need to be rendered. new powerups can be added to this array
             powerUpArray.get(i).render(game.getBatch());
         }
@@ -573,31 +520,30 @@ public class PlayScreen implements Playable {
             chef.draw(game.getBatch());
         }
         //System.out.println(chef1.getX());
-       // System.out.println(chef1.getY());
-
+        // System.out.println(chef1.getY());
 
         getChef().drawNotification(game.getBatch());
-        if (isActiveOrder){
+        if (isActiveOrder) {
             orderTimer.render(hud, game);
         }
-        if (plateStation.getPlate().size() > 0){
-            for(Object ing : plateStation.getPlate()){
+        if (plateStation.getPlate().size() > 0) {
+            for (Object ing : plateStation.getPlate()) {
                 Ingredient ingNew = (Ingredient) ing;
-                ingNew.create(plateStation.getX(), plateStation.getY(),game.getBatch());
+                ingNew.create(plateStation.getX(), plateStation.getY(), game.getBatch());
             }
-        } else if (plateStation.getCompletedRecipe() != null){
+        } else if (plateStation.getCompletedRecipe() != null) {
             Recipe recipeNew = plateStation.getCompletedRecipe();
             recipeNew.create(plateStation.getX(), plateStation.getY(), game.getBatch());
         }
         for (Chef chef : chefList) {
             if (!chef.getUserControlChef() || chef.isCooking) {
-                if (chef.getTouchingTile() != null && chef.getInHandsIng() != null){
-                    if (chef.getTouchingTile().getUserData() instanceof InteractiveTileObject){
+                if (chef.getTouchingTile() != null && chef.getInHandsIng() != null) {
+                    if (chef.getTouchingTile().getUserData() instanceof InteractiveTileObject) {
                         chef.displayIngStatic(game.getBatch());
                     }
                 }
             }
-            if (chef.previousInHandRecipe != null){
+            if (chef.previousInHandRecipe != null) {
                 chef.displayIngDynamic(game.getBatch());
             }
         }
@@ -605,12 +551,11 @@ public class PlayScreen implements Playable {
     }
 
     /**
-
-     This returns a button with application listener.
-
-     When button is pressed it will call the function specified in the clicked function
-
-     @param message The message you want to display on the button
+     * This returns a button with application listener.
+     * <p>
+     * When button is pressed it will call the function specified in the clicked function
+     *
+     * @param message The message you want to display on the button
      */
     private TextButton getButton(final String message) {
         Skin skin = new Skin();
@@ -632,9 +577,9 @@ public class PlayScreen implements Playable {
 
         button.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
 
-                switch(message){
+                switch (message) {
                     case "shop":
                         System.out.println("shopping");
                         activateShop = !activateShop;
@@ -651,36 +596,18 @@ public class PlayScreen implements Playable {
                             messageUp = true;
                             shopMessageTimer = TimeUtils.millis();
                             reRender();
-                        }
-                        else {
+                        } else {
                             messageLabel.remove();
                             addToHud("lack of money or at max chopping boards");
                             messageUp = true;
                             shopMessageTimer = TimeUtils.millis();
                         }
 
-
-
                         break;
                     case "pan":
 
                         System.out.println("buying pans");
-                        if (addictionPanCount < 3 && hud.getScore() >= 5) {
-                            hud.purchase(5);
-                            kitchenEdit.editCVSFile(9, 5 - addictionPanCount, "9");
-                            addictionPanCount++;
-                            messageLabel.remove();
-                            addToHud("bought pans");
-                            messageUp = true;
-                            shopMessageTimer = TimeUtils.millis();
-                            reRender();
-                        }
-                        else {
-                            messageLabel.remove();
-                            addToHud("lack of money or at max pans");
-                            messageUp = true;
-                            shopMessageTimer = TimeUtils.millis();
-                        }
+                        panCheck();
                         break;
                     case "save game":
                         gameSaveTool.saveMyGame(selfRef);
@@ -697,22 +624,39 @@ public class PlayScreen implements Playable {
 
     }
 
+    public void panCheck() {
+        if (addictionPanCount < 3 && hud.getScore() >= 5) {
+            hud.purchase(5);
+            kitchenEdit.editCVSFile(9, 5 - addictionPanCount, "9");
+            addictionPanCount++;
+            messageLabel.remove();
+            addToHud("bought pans");
+            messageUp = true;
+            shopMessageTimer = TimeUtils.millis();
+            reRender();
+        } else {
+            messageLabel.remove();
+            addToHud("lack of money or at max pans");
+            messageUp = true;
+            shopMessageTimer = TimeUtils.millis();
+        }
+    }
+
     /**
      * reRender is used to reload the kitchen onto the screen so any changes to the kitchen can be displaced on the screen
      */
 
-    private void reRender(){ //loads a kitchen from the tempory file for the current instance of the game
+    private void reRender() { // loads a kitchen from the temporary file for the current instance of the game
         TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
         map = mapLoader.load("KitchenTemp.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
-        //gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
         new B2WorldCreator(world, map, this);
-
     }
-    private void reRender(String inFile){ //loads a kitchen from perinant storage on game load
+
+    private void reRender(String inFile) { //loads a kitchen from perinant storage on game load
 
         FileHandle tmxFile = Gdx.files.internal("kitchenSave.txt");
-        if (tmxFile.exists()){
+        if (tmxFile.exists()) {
             String tmxContents = tmxFile.readString();
             FileHandle saveFile = Gdx.files.local("kitchenTemp.tmx");
             saveFile.writeString(tmxContents, false);
@@ -722,34 +666,33 @@ public class PlayScreen implements Playable {
         TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
         map = mapLoader.load("KitchenTemp.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
-        //gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
         new B2WorldCreator(world, map, this);
         tmxFile = null;
 
     }
 
     @Override
-    public void resize(int width, int height){
-        gameport.update(width, height);
+    public void resize(int width, int height) {
+        gamePort.update(width, height);
     }
 
     @Override
-    public void pause(){
-
-    }
-
-    @Override
-    public void resume(){
+    public void pause() {
 
     }
 
     @Override
-    public void hide(){
+    public void resume() {
 
     }
 
     @Override
-    public void dispose(){
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
         map.dispose();
         renderer.dispose();
         world.dispose();
@@ -775,24 +718,21 @@ public class PlayScreen implements Playable {
     /**
      * The add to Hud function is used to displace text towards the bottom of the screen. This can be used to provide the plyer visual feedback
      * as to things theye have done in the game world like buying a chopping board
+     *
      * @param Text - the message to be displayed
      */
 
-    public void addToHud(String Text){
-
+    public void addToHud(String Text) {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle(hud.font, Color.WHITE);
         messageLabel = new Label(Text, labelStyle);
         //messageLabel.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
-        messageLabel.setPosition(50,0);
+        messageLabel.setPosition(50, 0);
         //messageLabel.setAlignment(Align.center);
 
         hud.stage.addActor(messageLabel);
 
         // Fade out the label over 2 seconds
-    }
-    public void removeLabel(){
-        messageLabel.remove();
     }
 
     public void setDifficultyScore(double difficultyScore) {
@@ -804,7 +744,7 @@ public class PlayScreen implements Playable {
         this.activateShop = !activateShop;
     }
 
-    public void buyChoppingBoard(){
+    public void buyChoppingBoard() {
         if (additionChopCount < 4 && hud.getScore() >= 5) {
             hud.purchase(5);
             System.out.println("buying chopping baords");
@@ -818,24 +758,9 @@ public class PlayScreen implements Playable {
         }
     }
 
-    public void buyPan(){
+    public void buyPan() {
         System.out.println("buying pans");
-        if (addictionPanCount < 3 && hud.getScore() >= 5) {
-            hud.purchase(5);
-            kitchenEdit.editCVSFile(9, 5 - addictionPanCount, "9");
-            addictionPanCount++;
-            messageLabel.remove();
-            addToHud("bought pans");
-            messageUp = true;
-            shopMessageTimer = TimeUtils.millis();
-            reRender();
-        }
-        else {
-            messageLabel.remove();
-            addToHud("lack of money or at max pans");
-            messageUp = true;
-            shopMessageTimer = TimeUtils.millis();
-        }
+        panCheck();
     }
 }
 

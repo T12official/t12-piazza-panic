@@ -7,36 +7,36 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
+import com.team13.piazzapanic.IdleScreen;
 import com.team13.piazzapanic.MainGame;
 import com.team13.piazzapanic.PlayScreen;
-import com.team13.piazzapanic.IdleScreen;
 
 /**
  * B2WorldCreator is a class used to create Box2D World objects from a TiledMap.
  * This class uses the map objects to create various objects like worktop, plates,
  * chopperboard, bin, etc. based on the name assigned to the objects in the TiledMap.
- *
+ * <p>
  * The class is instantiated with a World object, TiledMap object and PlayScreen object.
  * It then uses the first layer of the TiledMap to create the objects and assign their
  * positions. The objects are created as BodyDef objects and are passed to different sprite
  * classes, where they are further defined and added to the world.
- *
  */
 public class B2WorldCreator {
 
-/**
- * Constructor method for B2WorldCreator. It accepts a World, TiledMap and PlayScreen
- * objects. The method then iterates over the cells in the first layer of the TiledMap and
- * uses the map objects to create various objects like worktop, plates, chopperboard,
- * bin, etc. based on the name assigned to the objects in the TiledMap.
- *
- * The objects are created as BodyDef objects and are passed to different sprite classes,
- * where they are further defined and added to the world.
- *
- * @param world The Box2D World object.
- * @param map The TiledMap object.
- * */
+    /**
+     * Constructor method for B2WorldCreator. It accepts a World, TiledMap and PlayScreen
+     * objects. The method then iterates over the cells in the first layer of the TiledMap and
+     * uses the map objects to create various objects like worktop, plates, chopperboard,
+     * bin, etc. based on the name assigned to the objects in the TiledMap.
+     * <p>
+     * The objects are created as BodyDef objects and are passed to different sprite classes,
+     * where they are further defined and added to the world.
+     *
+     * @param world The Box2D World object.
+     * @param map   The TiledMap object.
+     */
 
     public B2WorldCreator(World world, TiledMap map, PlayScreen screen) {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
@@ -90,14 +90,11 @@ public class B2WorldCreator {
                 } else if (mapObject.getName().equals("order_top")) {
                     PlayScreen.trayX = rectangle.x;
                     PlayScreen.trayY = rectangle.y;
-                }
-                else if (mapObject.getName().equals("cheese")){
+                } else if (mapObject.getName().equals("cheese")) {
                     new potatoesStation(world, map, bdef, rectangle);
-                }
-                else if (mapObject.getName().equals("potato")){
+                } else if (mapObject.getName().equals("potato")) {
                     new cheeseStation(world, map, bdef, rectangle);
-                }
-                else if (mapObject.getName().equals("pizzaDough")){
+                } else if (mapObject.getName().equals("pizzaDough")) {
                     new pizzaDoughStation(world, map, bdef, rectangle);
                 }
 

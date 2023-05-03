@@ -8,13 +8,12 @@ import com.team13.piazzapanic.PlayScreen;
 /**
  * saveGameData is a class of static functions that are used to either write the state of the game into a text file,
  * or load the state of a same gave from a text file
- *
  */
 public class gameSaveTool {
-    public static void saveMyGame(PlayScreen game){
+    public static void saveMyGame(PlayScreen game) {
         FileHandle file = Gdx.files.local("gameSave.txt"); // create a file handle for a local file
         saveGameData data = new saveGameData();
-        populateData(game,data);
+        populateData(game, data);
         Json json = new Json();
         String jsonString = json.toJson(data);
         file.writeString(jsonString, false);
@@ -23,7 +22,7 @@ public class gameSaveTool {
         System.out.println(jsonString);
     }
 
-    private static void saveKitchenState(){
+    private static void saveKitchenState() {
 
         FileHandle tmxFile = Gdx.files.internal("kitchenTemp.tmx");
         String tmxContents = tmxFile.readString();
@@ -32,7 +31,7 @@ public class gameSaveTool {
         saveFile.writeString(tmxContents, false);
     }
 
-    public static boolean loadMyGame(PlayScreen game){
+    public static boolean loadMyGame(PlayScreen game) {
         FileHandle file = Gdx.files.local("gameSave.txt");
         if (!file.exists()) {
             return false;
@@ -49,7 +48,7 @@ public class gameSaveTool {
 
         game.getChef2().b2body.setTransform(data.chef2Posx, data.chef2PosY, 0);
 
-        game.getChef3().b2body.setTransform(data.chef3Posx, data.chef3PosY,0);
+        game.getChef3().b2body.setTransform(data.chef3Posx, data.chef3PosY, 0);
 
         game.getHud().setScore(data.money);
         game.getHud().setWorldTimerM(data.minutes);
@@ -58,7 +57,7 @@ public class gameSaveTool {
         return true;
     }
 
-    private static void populateData(PlayScreen game, saveGameData data){
+    private static void populateData(PlayScreen game, saveGameData data) {
         data.chef1Posx = game.getChef1().b2body.getTransform().getPosition().x;
         data.chef1PosY = game.getChef1().b2body.getTransform().getPosition().y;
         data.chef2Posx = game.getChef2().b2body.getTransform().getPosition().x;

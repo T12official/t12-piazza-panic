@@ -12,16 +12,14 @@ import com.team13.piazzapanic.MainGame;
 import com.team13.piazzapanic.StartScreen;
 
 public class StartScreenButton {
-    public TextButton getButton() {
-        return button;
-    }
     TextButton button;
-    public StartScreenButton(String displayText, final PlayScreenButton.Functionality f, final StartScreen screen){
+
+    public StartScreenButton(String displayText, final PlayScreenButton.Functionality f, final StartScreen screen) {
         initialiseButton(displayText);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                switch (f){
+                switch (f) {
                     case EASY:
                         screen.setDiff(MainGame.EASY_DIFFICULTY);
                     case NORMAL:
@@ -41,8 +39,12 @@ public class StartScreenButton {
 
 
     }
-    
-    public void initialiseButton(String displayText){
+
+    public TextButton getButton() {
+        return button;
+    }
+
+    public void initialiseButton(String displayText) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);

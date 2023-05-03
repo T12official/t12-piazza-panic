@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * The ChoppingBoard class extends the InteractiveTileObject class.
- *
+ * <p>
  * This class is used to define a chopping board object in the game that can chop up steak into a patty and
  * to cut up fruit and vegetables
  */
@@ -18,11 +18,11 @@ public class ChoppingBoard extends InteractiveTileObject {
 
     }
 
-    public float getX(){
+    public float getX() {
         return super.bdefNew.position.x;
     }
 
-    public float getY(){
+    public float getY() {
         return super.bdefNew.position.y;
     }
 }

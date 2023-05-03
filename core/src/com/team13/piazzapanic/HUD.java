@@ -1,66 +1,43 @@
 package com.team13.piazzapanic;
 
-import Tools.Overlay;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
-import java.awt.*;
-
 
 public class HUD implements Disposable {
     public Stage stage;
-    private Boolean scenarioComplete;
-
-    private Integer worldTimerM;
-    private Integer worldTimerS;
-
-    private Integer score;
-    Integer repPoints = 3;
-
-    Boolean boost = false;
-
     public String timeStr;
-
     public Table table;
-
-
-
+    public BitmapFont font;
+    Integer repPoints = 3;
+    Boolean boost = false;
     Label timeLabelT;
     Label timeLabel;
-
     Label scoreLabel;
     Label scoreLabelT;
     Label orderNumL;
     Label orderNumLT;
-
     Label reputation;
-    public BitmapFont font;
     Label reputationT;
     Label powerUpTextLabel;
+    private Boolean scenarioComplete;
+    private Integer worldTimerM;
+    private Integer worldTimerS;
+    private Integer score;
 
-    public HUD(SpriteBatch sb){
-        this.scenarioComplete = Boolean.FALSE;
+    public HUD(SpriteBatch sb) {
+        this.scenarioComplete = false;
         worldTimerM = 0;
         worldTimerS = 0;
-        score = 0;//score = money in game
+        score = 0;  // score = money
         timeStr = String.format("%d", worldTimerM) + " : " + String.format("%d", worldTimerS);
         float fontX = 0.5F;
         float fontY = 0.3F;
@@ -68,13 +45,10 @@ public class HUD implements Disposable {
         //textButtonStyle.font = Font.ITALIC;
         textButtonStyle.fontColor = Color.WHITE;
 
-
         font = new BitmapFont();
         font.getData().setScale(fontX, fontY);
         Viewport viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
-
-
 
         table = new Table();
         table.left().top();
@@ -94,11 +68,10 @@ public class HUD implements Disposable {
         Label powerUpLabel = new Label("PowerUp:", new Label.LabelStyle(font, Color.BLACK));
         powerUpTextLabel = new Label("None", new Label.LabelStyle(font, Color.GREEN));
 
-
         table.add(timeLabelT).padTop(2).padLeft(2);
         table.add(scoreLabelT).padTop(2).padLeft(2);
         table.add(orderNumLT).padTop(2).padLeft(2);
-        table.add(reputationT).padTop(2).padLeft(2);;
+        table.add(reputationT).padTop(2).padLeft(2);
         table.row();
         table.add(timeLabel).padTop(2).padLeft(2);
         table.add(scoreLabel).padTop(2).padLeft(2);
@@ -110,10 +83,6 @@ public class HUD implements Disposable {
 
         table.left().top();
         stage.addActor(table);
-
-        //labelStyle.font = new BitmapFont(); // replace with your desired font
-
-        //stage.addActor(new TextButton("Custom Btn ", textButtonStyle));
     }
 
     /**
@@ -121,8 +90,8 @@ public class HUD implements Disposable {
      *
      * @param scenarioComplete Whether the game scenario has been completed.
      */
-    public void updateTime(Boolean scenarioComplete){
-        if(scenarioComplete){
+    public void updateTime(Boolean scenarioComplete) {
+        if (scenarioComplete) {
             timeLabel.setColor(Color.GREEN);
             timeStr = String.format("%d", worldTimerM) + ":" + String.format("%d", worldTimerS);
             timeLabel.setText(String.format("TIME: " + timeStr + " MONEY: %d", score));
@@ -130,8 +99,7 @@ public class HUD implements Disposable {
             table.center().top();
             stage.addActor(table);
             return;
-        }
-        else {
+        } else {
             if (worldTimerS == 59) {
                 worldTimerM += 1;
                 worldTimerS = 0;
@@ -140,64 +108,50 @@ public class HUD implements Disposable {
             }
         }
         table.left().top();
-        if(worldTimerS < 10){
+        if (worldTimerS < 10) {
             timeStr = String.format("%d", worldTimerM) + ":0" + String.format("%d", worldTimerS);
-        }
-        else {
+        } else {
             timeStr = String.format("%d", worldTimerM) + ":" + String.format("%d", worldTimerS);
         }
         timeLabel.setText(timeStr);
         stage.addActor(table);
-
     }
 
     /**
      * Calculates the user's score per order and updates the label.
      *
      * @param scenarioComplete Whether the game scenario has been completed.
-     * @param expectedTime The expected time an order should be completed in.
+     * @param expectedTime     The expected time an order should be completed in.
      */
-    public void updateScore(Boolean scenarioComplete, Integer expectedTime, float orderTime){
+    public void updateScore(Boolean scenarioComplete, Integer expectedTime, float orderTime) {
         int addScore;
         int currentTime;
 
-
-        if(this.scenarioComplete == Boolean.FALSE){
+        if (!this.scenarioComplete) {
             currentTime = (worldTimerM * 60) + worldTimerS;
-
             if (orderTime > 0) {
-                if (boost == Boolean.TRUE){
+                if (boost) {
                     addScore = 100;
-                    boost = Boolean.FALSE;}
-                else {
+                    boost = false;
+                } else {
                     addScore = 50;
                 }
-            }
-            else{
-                if (boost == Boolean.TRUE){
+            } else {
+                if (boost) {
                     addScore = 40;
-                    boost = Boolean.FALSE;
-                }
-                else{
+                    boost = false;
+                } else {
                     addScore = 20;
                 }
-                if(currentTime < 0){
+                if (currentTime < 0) {
                     addScore = 20;
                 }
             }
             score += addScore;
         }
 
-
-        if(scenarioComplete==Boolean.TRUE){
-            scoreLabel.setColor(Color.GREEN);
-            scoreLabel.setText("");
-            scoreLabelT.setText("");
-            scoreLabelT.remove();
-            scoreLabel.remove();
-            table.center().top();
-            stage.addActor(table);
-            this.scenarioComplete = Boolean.TRUE;
+        if (scenarioComplete) {
+            updateScore();
             return;
         }
 
@@ -207,14 +161,25 @@ public class HUD implements Disposable {
 
     }
 
+    private void updateScore() {
+        scoreLabel.setColor(Color.GREEN);
+        scoreLabel.setText("");
+        scoreLabelT.setText("");
+        scoreLabelT.remove();
+        scoreLabel.remove();
+        table.center().top();
+        stage.addActor(table);
+        this.scenarioComplete = true;
+    }
+
     /**
      * Updates the order label.
      *
      * @param scenarioComplete Whether the game scenario has been completed.
-     * @param orderNum The index number of the order.
+     * @param orderNum         The index number of the order.
      */
-    public void updateOrder(Boolean scenarioComplete, Integer orderNum){
-        if(scenarioComplete==Boolean.TRUE){
+    public void updateOrder(Boolean scenarioComplete, Integer orderNum) {
+        if (scenarioComplete) {
             orderNumL.remove();
             orderNumLT.remove();
             table.center().top();
@@ -229,20 +194,16 @@ public class HUD implements Disposable {
 
     }
 
-    public int decrementReps(){
+    public void decrementReps() {
         System.out.println("I ran");
-        repPoints --;
+        repPoints--;
         reputation.setText(String.format("%d", repPoints));
-
         stage.addActor(table);
-        return  repPoints;
     }
 
     public Integer getRepPoints() {
         return repPoints;
     }
-
-
 
     @Override
     public void dispose() {
@@ -253,107 +214,77 @@ public class HUD implements Disposable {
         return score;
     }
 
+    public void setScore(Integer expectedTime) {
+        int addScore;
+        int currentTime;
+
+        currentTime = (worldTimerM * 60) + worldTimerS;
+        if (currentTime <= expectedTime) {
+            addScore = 100;
+        } else {
+            addScore = 100 - (5 * (currentTime - expectedTime));
+            if (addScore < 0) {
+                addScore = 0;
+            }
+        }
+        score = expectedTime;
+
+        if (scenarioComplete) {
+            updateScore();
+        }
+
+        table.left().top();
+        scoreLabel.setText(String.format("%d", score));
+        stage.addActor(table);
+
+    }
+
     public Integer getWorldTimerM() {
         return worldTimerM;
+    }
+
+    public void setWorldTimerM(Integer worldTimerM) {
+        this.worldTimerM = worldTimerM;
     }
 
     public Integer getWorldTimerS() {
         return worldTimerS;
     }
 
-
-
-
-    public void setScore(Integer expectedTime){
-        int addScore;
-        int currentTime;
-
-        if(true){
-            currentTime = (worldTimerM * 60) + worldTimerS;
-            if (currentTime <= expectedTime) {
-                addScore = 100;
-            }
-            else{
-                addScore = 100 - (5 * (currentTime -expectedTime));
-                if(addScore < 0){
-                    addScore = 0;
-                }
-            }
-            score = expectedTime;
-        }
-
-
-        if(scenarioComplete==Boolean.TRUE){
-            scoreLabel.setColor(Color.GREEN);
-            scoreLabel.setText("");
-            scoreLabelT.setText("");
-            scoreLabelT.remove();
-            scoreLabel.remove();
-            table.center().top();
-            stage.addActor(table);
-            this.scenarioComplete = Boolean.TRUE;
-            return;
-        }
-
-        table.left().top();
-        scoreLabel.setText(String.format("%d", score));
-        stage.addActor(table);
-
-    }
-
-
-    public void purchase(Integer price){
-        score -= price;
-        if(scenarioComplete==Boolean.TRUE){
-            scoreLabel.setColor(Color.GREEN);
-            scoreLabel.setText("");
-            scoreLabelT.setText("");
-            scoreLabelT.remove();
-            scoreLabel.remove();
-            table.center().top();
-            stage.addActor(table);
-            this.scenarioComplete = Boolean.TRUE;
-            return;
-        }
-
-        table.left().top();
-        scoreLabel.setText(String.format("%d", score));
-        stage.addActor(table);
-
-    }
-
-
-
-
-    public void setWorldTimerM(Integer worldTimerM) {
-        this.worldTimerM = worldTimerM;
-    }
-
-
-    public int setRepPoints(Integer repPoint){
-        //System.out.println("I ran");
-        repPoints = repPoint;
-        reputation.setText(String.format("%d", repPoints));
-
-        stage.addActor(table);
-        return  repPoints;
-    }
-
     public void setWorldTimerS(Integer worldTimerS) {
         this.worldTimerS = worldTimerS;
     }
+
+    public void purchase(Integer price) {
+        score -= price;
+        if (scenarioComplete) {
+            updateScore();
+        }
+        table.left().top();
+        scoreLabel.setText(String.format("%d", score));
+        stage.addActor(table);
+    }
+
+    public void setRepPoints(Integer repPoint) {
+        //System.out.println("I ran");
+        repPoints = repPoint;
+        reputation.setText(String.format("%d", repPoints));
+        stage.addActor(table);
+    }
+
     public void addRep() {
         repPoints += 1;
         System.out.println("Added reputation you now you have a reputation of " + repPoints);
         setRepPoints(repPoints);
     }
+
     public void doublePoints() {
-        boost = Boolean.TRUE;
+        boost = true;
         System.out.println("Double Points for next order");
     }
+
     public void updatePowerUp(int powerUpType) {
         String powerUpText;
-
         // Determine the power up text based on the powerUpType integer input
         switch (powerUpType) {
             case 0:
@@ -375,10 +306,7 @@ public class HUD implements Disposable {
                 powerUpText = "None";
                 break;
         }
-
-        // Set the text of the powerUpTextLabel to the power up text
         powerUpTextLabel.setText(powerUpText);
         System.out.println(powerUpTextLabel);
     }
 }
-

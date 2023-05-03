@@ -20,8 +20,8 @@ public class TomatoStation extends InteractiveTileObject {
         fixture.setUserData(this);
     }
 
-    public Ingredient getIngredient(){
-        return new Tomato(2,0, 0);
+    public Ingredient getIngredient() {
+        return new Tomato(2, 0, 0);
     }
 }
 

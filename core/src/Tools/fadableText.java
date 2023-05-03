@@ -1,2 +1,4 @@
-package Tools;public class fadableText {
+package Tools;
+
+public class fadableText {
 }

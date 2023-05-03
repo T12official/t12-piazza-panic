@@ -1,11 +1,11 @@
 package com.team13.piazzapanic;
 
 import Ingredients.*;
-import Recipe.*;
-import Sprites.Chef;
-import Sprites.CompletedDishStation;
+import Recipe.BurgerRecipe;
+import Recipe.Recipe;
+import Recipe.SaladRecipe;
+import Recipe.jacketPotato;
 import Sprites.PlateStation;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -13,11 +13,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sun.org.apache.xpath.internal.axes.OneStepIterator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(GdxTestRunner.class)
 public class RecipeTests {
@@ -27,11 +27,11 @@ public class RecipeTests {
     public MainGame game = new MainGame();
 
     @Test
-    public void MakeSaladRecipeTest(){
+    public void MakeSaladRecipeTest() {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
-        Onion onion = new Onion(0, 0,0);
-        Tomato tomato = new Tomato(0, 0,0);
-        Lettuce lettuce = new Lettuce(0, 0,0);
+        Onion onion = new Onion(0, 0, 0);
+        Tomato tomato = new Tomato(0, 0, 0);
+        Lettuce lettuce = new Lettuce(0, 0, 0);
 
         onion.setPrepared();
         tomato.setPrepared();
@@ -42,15 +42,15 @@ public class RecipeTests {
         plate.dropItem(lettuce);
 
         assertEquals("This will only pass if salad contains correct ingredients",
-                    new SaladRecipe(), plate.getCompletedRecipe());
+                new SaladRecipe(), plate.getCompletedRecipe());
     }
 
     @Test
-    public void IncorrectSaladRecipeTest(){
+    public void IncorrectSaladRecipeTest() {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
-        Onion onion = new Onion(0, 0,0);
-        Tomato tomato = new Tomato(0, 0,0);
-        Lettuce lettuce = new Lettuce(0, 0,0);
+        Onion onion = new Onion(0, 0, 0);
+        Tomato tomato = new Tomato(0, 0, 0);
+        Lettuce lettuce = new Lettuce(0, 0, 0);
 
         plate.dropItem(onion);
         plate.dropItem(tomato);
@@ -61,7 +61,7 @@ public class RecipeTests {
     }
 
     @Test
-    public void MakeBurgerRecipeTest(){
+    public void MakeBurgerRecipeTest() {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
         Steak steak = new Steak(0, 0, 0);
         Bun bun = new Bun(0, 0, 0);
@@ -75,8 +75,9 @@ public class RecipeTests {
         assertEquals("This will only pass if burger contains correct ingredients",
                 new BurgerRecipe(), plate.getCompletedRecipe());
     }
+
     @Test
-    public void IncorrectBurgerRecipeTest(){
+    public void IncorrectBurgerRecipeTest() {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
         Steak steak = new Steak(0, 0, 0);
         Bun bun = new Bun(0, 0, 0);
@@ -85,13 +86,14 @@ public class RecipeTests {
         plate.dropItem(bun);
 
         assertNull("This will only pass if burger contains incorrect ingredients",
-               plate.getCompletedRecipe());
+                plate.getCompletedRecipe());
     }
+
     @Test
-    public void MakeJacketPotatoTest(){
+    public void MakeJacketPotatoTest() {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
         Potatoes potatoes = new Potatoes(0, 0, 0);
-        Cheese cheese = new Cheese(0,0,0);
+        Cheese cheese = new Cheese(0, 0, 0);
 
         potatoes.setPrepared();
         cheese.setPrepared();
@@ -105,11 +107,11 @@ public class RecipeTests {
     }
 
     @Test
-    public void IncorrectJacketPotatoTest(){
+    public void IncorrectJacketPotatoTest() {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
         Potatoes potatoes = new Potatoes(0, 0, 0);
-        Cheese cheese = new Cheese(0,0,0);
-        Lettuce lettuce = new Lettuce(0, 0,0);
+        Cheese cheese = new Cheese(0, 0, 0);
+        Lettuce lettuce = new Lettuce(0, 0, 0);
 
         plate.dropItem(potatoes);
         plate.dropItem(lettuce);
@@ -119,11 +121,11 @@ public class RecipeTests {
     }
 
     @Test
-    public void MakePizzaTest(){
+    public void MakePizzaTest() {
         PlateStation plate = new PlateStation(world, map, new BodyDef(), new Rectangle());
-        pizzaDough pd = new pizzaDough(0,0,0);
-        Cheese cheese = new Cheese(0,0,0);
-        Tomato tomato = new Tomato(0,0,0);
+        pizzaDough pd = new pizzaDough(0, 0, 0);
+        Cheese cheese = new Cheese(0, 0, 0);
+        Tomato tomato = new Tomato(0, 0, 0);
 
         pd.setPrepared();
         cheese.setPrepared();

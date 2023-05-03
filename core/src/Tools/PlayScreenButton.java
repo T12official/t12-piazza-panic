@@ -10,21 +10,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.team13.piazzapanic.PlayScreen;
 
-public class PlayScreenButton{
+public class PlayScreenButton {
     TextButton button;
 
-    public enum Functionality {
-        SHOP, CHOP, PAN, SAVEGAME, LOAD,
-        EASY, NORMAL, HARD, SCENARIO, ENDLESS
-
-    }
-
-    public PlayScreenButton(String displayText, final Functionality f, final PlayScreen playScreen){
+    public PlayScreenButton(String displayText, final Functionality f, final PlayScreen playScreen) {
         initialiseButton(displayText);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                switch (f){
+                switch (f) {
                     case SHOP:
                         playScreen.toggleShop();
                     case CHOP:
@@ -40,7 +34,7 @@ public class PlayScreenButton{
         });
     }
 
-    private void initialiseButton(String displayText){
+    private void initialiseButton(String displayText) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -59,10 +53,15 @@ public class PlayScreenButton{
         button = new TextButton(displayText, skin);
     }
 
-    public TextButton getButton(){
+    public TextButton getButton() {
         return button;
     }
 
+    public enum Functionality {
+        SHOP, CHOP, PAN, SAVEGAME, LOAD,
+        EASY, NORMAL, HARD, SCENARIO, ENDLESS
+
+    }
 
 
 }

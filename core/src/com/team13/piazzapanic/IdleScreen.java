@@ -9,7 +9,6 @@ import Tools.WorldContactListener;
 import Tools.chefAI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,95 +25,77 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 public class IdleScreen implements Playable {
-
+    public static float trayX;
+    public static float trayY;
+    public final TiledMap map;
+    public final Chef chef1;
+    public final Chef chef2;
     private final MainGame game;
     private final TextButton returnToGame;
-    private final OrthographicCamera gamecam;
-    private final Viewport gameport;
+    private final OrthographicCamera gameCam;
+    private final Viewport gamePort;
     private final HUD hud;
-
+    private final OrthogonalTiledMapRenderer renderer;
+    private final World world;
+    private final chefAI aiChef;
+    public ArrayList<Order> ordersArray;
+    public PlateStation plateStation;
+    public Boolean scenarioComplete;
+    public Boolean createdOrder;
     private OrderTimer orderTimer;
     private float orderTime = 1;
     private boolean isActiveOrder = false;
-    private GameOverScreen gameover;
-    public final TiledMap map;
-    private final OrthogonalTiledMapRenderer renderer;
-
-    private final World world;
-    public final Chef chef1;
-    public final Chef chef2;
-
     private Chef controlledChef;
-
-    public ArrayList<Order> ordersArray;
-
-    public PlateStation plateStation;
-
-
-    public Boolean scenarioComplete;
-    public Boolean createdOrder;
-
-    public static float trayX;
-    public static float trayY;
-
     private float timeSeconds = 0f;
-
     private float timeSecondsCount = 0f;
-    private chefAI aiChef;
 
     /**
      * PlayScreen constructor initializes the game instance, sets initial conditions for scenarioComplete and createdOrder,
      * creates and initializes game camera and viewport,
      * creates and initializes HUD and orders hud, loads and initializes the map,
      * creates and initializes world, creates and initializes chefs and sets them, sets contact listener for world, and initializes ordersArray.
+     *
      * @param game The MainGame instance that the PlayScreen will be a part of.
      */
 
-    public IdleScreen(MainGame game){
+    public IdleScreen(MainGame game) {
         returnToGame = getButton("Press X to return to game");
-
         this.game = game;
+        new GameOverScreen(game);
 
-        gameover = new GameOverScreen(game);
-
-        scenarioComplete = Boolean.FALSE;
-        createdOrder = Boolean.FALSE;
-        gamecam = new OrthographicCamera();
+        scenarioComplete = false;
+        createdOrder = false;
+        gameCam = new OrthographicCamera();
         // FitViewport to maintain aspect ratio whilst scaling to screen size
-        gameport = new FitViewport(MainGame.V_WIDTH / MainGame.PPM, MainGame.V_HEIGHT / MainGame.PPM, gamecam);
+        gamePort = new FitViewport(MainGame.V_WIDTH / MainGame.PPM, MainGame.V_HEIGHT / MainGame.PPM, gameCam);
         // create HUD for score & time
         hud = new HUD(game.batch);
         // create orders hud
-        Orders orders = new Orders(game.batch);
+        new Orders(game.batch);
         // create map
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
         map = mapLoader.load("Kitchen.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
-        gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
+        gameCam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight() / 2, 0);
 
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0, 0), true);
         new B2WorldCreator(world, map, this);
 
-
-        chef1 = new Chef(this, 31.5F,65);
-        chef2 = new Chef(this, 128,65);
+        chef1 = new Chef(this, 31.5F, 65);
+        chef2 = new Chef(this, 128, 65);
         aiChef = new chefAI(this);
         controlledChef = chef1;
         //TODO FIX THE NEED FOR PASSING A MAIN GAME IN THE IDLE SCREEN AKA MAKE THIS INHERIT FROM PLAYSCREEN OR HAVE A DIFFERENT CONTACT LISTENER
         world.setContactListener(new WorldContactListener(world, new PlayScreen(this.game), orderTimer, hud));
-
         controlledChef.notificationSetBounds("Down");
-
         ordersArray = new ArrayList<>();
-
     }
 
-
-    public World getWorld(){
+    public World getWorld() {
         return world;
     }
 
@@ -129,28 +110,24 @@ public class IdleScreen implements Playable {
     }
 
     @Override
-    public void show(){
+    public void show() {
 
     }
 
-
     /**
-
-            The handle input is simalr to the handle input in the playscreen implemention but with one very key difference.
-            @param AIinput -  AIinput is the input key press that is requested by the AI playing the game. This is how the AI is able to make
-                            "keyboard inputs" into the game
+     * The handle input is similar to the handle input in the playScreen implementation, but with one very key difference.
+     *
+     * @param AIinput -  AIinput is the input key press that is requested by the AI playing the game. This is how the AI is able to make
+     *                "keyboard inputs" into the game
      */
 
-    public void handleInput(float dt, String AIinput){
-        /**
-         * The X key has been mapped to the ability to go from the idle screen back to the main game
-         */
-        if (Gdx.input.isKeyJustPressed(Input.Keys.X)){
+    public void handleInput(float dt, String AIinput) {
+        // Pressing X returns you to the main game.
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
             game.disableIdle();
         }
 
-
-        if ((AIinput == "r"  &&
+        if ((Objects.equals(AIinput, "r") &&
                 chef1.getUserControlChef() &&
                 chef2.getUserControlChef())) {
 
@@ -162,11 +139,11 @@ public class IdleScreen implements Playable {
                 controlledChef = chef1;
             }
         }
-        if (!controlledChef.getUserControlChef()){
-            if (chef1.getUserControlChef()){
+        if (!controlledChef.getUserControlChef()) {
+            if (chef1.getUserControlChef()) {
                 controlledChef.b2body.setLinearVelocity(0, 0);
                 controlledChef = chef1;
-            } else if(chef2.getUserControlChef()) {
+            } else if (chef2.getUserControlChef()) {
                 controlledChef.b2body.setLinearVelocity(0, 0);
                 controlledChef = chef2;
             }
@@ -175,39 +152,37 @@ public class IdleScreen implements Playable {
             float xVelocity = 0;
             float yVelocity = 0;
 
-            if (AIinput == "w") {
+            if (Objects.equals(AIinput, "w")) {
                 yVelocity += 0.5f;
             }
-            if (AIinput == "a") {
+            if (Objects.equals(AIinput, "a")) {
                 xVelocity -= 0.5f;
             }
-            if (AIinput == "s") {
+            if (Objects.equals(AIinput, "s")) {
                 yVelocity -= 0.5f;
             }
-            if (AIinput == "d") {
+            if (Objects.equals(AIinput, "d")) {
                 xVelocity += 0.5f;
             }
             controlledChef.b2body.setLinearVelocity(xVelocity, yVelocity);
-        }
-        else {
+        } else {
             controlledChef.b2body.setLinearVelocity(0, 0);
         }
-        if (controlledChef.b2body.getLinearVelocity().x > 0){
+        if (controlledChef.b2body.getLinearVelocity().x > 0) {
             controlledChef.notificationSetBounds("Right");
         }
-        if (controlledChef.b2body.getLinearVelocity().x < 0){
+        if (controlledChef.b2body.getLinearVelocity().x < 0) {
             controlledChef.notificationSetBounds("Left");
         }
-        if (controlledChef.b2body.getLinearVelocity().y > 0){
+        if (controlledChef.b2body.getLinearVelocity().y > 0) {
             controlledChef.notificationSetBounds("Up");
         }
-        if (controlledChef.b2body.getLinearVelocity().y < 0){
+        if (controlledChef.b2body.getLinearVelocity().y < 0) {
             controlledChef.notificationSetBounds("Down");
         }
 
-
-        if(AIinput == "e"){
-            if(controlledChef.getTouchingTile() != null){
+        if (Objects.equals(AIinput, "e")) {
+            if (controlledChef.getTouchingTile() != null) {
                 InteractiveTileObject tile = (InteractiveTileObject) controlledChef.getTouchingTile().getUserData();
                 String tileName = tile.getClass().getName();
                 if (controlledChef.getInHandsIng() == null && controlledChef.getInHandsRecipe() == null) {
@@ -238,11 +213,9 @@ public class IdleScreen implements Playable {
                             controlledChef.setChefSkin(controlledChef.getInHandsIng());
                             break;
                         case "Sprites.PlateStation":
-                            if(plateStation.getPlate().size() > 0 || plateStation.getCompletedRecipe() != null){
+                            if (plateStation.getPlate().size() > 0 || plateStation.getCompletedRecipe() != null) {
                                 controlledChef.pickUpItemFrom(tile);
-
                             }
-
                     }
                 } else {
                     switch (tileName) {
@@ -253,46 +226,47 @@ public class IdleScreen implements Playable {
                             break;
 
                         case "Sprites.ChoppingBoard":
-                            if(controlledChef.getInHandsIng() != null){
-                                if(controlledChef.getInHandsIng().prepareTime > 0){
+                            if (controlledChef.getInHandsIng() != null) {
+                                if (controlledChef.getInHandsIng().prepareTime > 0) {
                                     controlledChef.setUserControlChef(false);
                                 }
                             }
                             break;
                         case "Sprites.PlateStation":
-                            if (controlledChef.getInHandsRecipe() == null){
+                            if (controlledChef.getInHandsRecipe() == null) {
                                 controlledChef.dropItemOn(tile, controlledChef.getInHandsIng());
                                 controlledChef.setChefSkin(null);
                             }
                             break;
                         case "Sprites.Pan":
-                            if(controlledChef.getInHandsIng() != null) {
-                                if (controlledChef.getInHandsIng().isPrepared() && controlledChef.getInHandsIng().cookTime > 0){
+                            if (controlledChef.getInHandsIng() != null) {
+                                if (controlledChef.getInHandsIng().isPrepared() && controlledChef.getInHandsIng().cookTime > 0) {
                                     controlledChef.setUserControlChef(false);
                                 }
                             }
-
                             break;
                         case "Sprites.CompletedDishStation":
-                            if (controlledChef.getInHandsRecipe() != null){
-                                if(controlledChef.getInHandsRecipe().getClass().equals(ordersArray.get(0).recipe.getClass())){
+                            if (controlledChef.getInHandsRecipe() != null) {
+                                if (controlledChef.getInHandsRecipe().getClass().equals(ordersArray.get(0).recipe.getClass())) {
                                     //TODO UPDATE CHANGE LOG FOR THIS
-                                    if (orderTime == 0){
+                                    if (orderTime == 0) {
                                         hud.decrementReps();
-                                        if (hud.getRepPoints() == 0){System.out.println("game over"); game.goToGameOver();}
+                                        if (hud.getRepPoints() == 0) {
+                                            System.out.println("game over");
+                                            game.goToGameOver();
+                                        }
                                     }
                                     controlledChef.dropItemOn(tile);
                                     ordersArray.get(0).orderComplete = true;
                                     controlledChef.setChefSkin(null);
-                                    if(ordersArray.size()==1){
-                                        scenarioComplete = Boolean.TRUE;
+                                    if (ordersArray.size() == 1) {
+                                        scenarioComplete = true;
                                     }
                                 }
                             }
                             break;
                     }
                 }
-
             }
         }
     }
@@ -300,25 +274,20 @@ public class IdleScreen implements Playable {
     /**
      * The update method updates the game elements, such as camera and characters,
      * based on a specified time interval "dt".
+     *
      * @param dt time interval for the update
      */
-    public void update(float dt){
+    public void update(float dt) {
 
         hud.stage.addActor(returnToGame);
-
-        /**
-         * The update function has been adapted to request a keybaord input from the AI, given the state of the current game world
-         */
         aiChef.returnKeyboardInput();
         handleInput(dt, aiChef.returnKeyboardInput());
 
-        gamecam.update();
-        renderer.setView(gamecam);
+        gameCam.update();
+        renderer.setView(gameCam);
         chef1.update(dt);
         chef2.update(dt);
-        world.step(1/60f, 6, 2);
-        //aiChef.defineShortestPath(6,1, 7,6);
-
+        world.step(1 / 60f, 6, 2);
     }
 
     /**
@@ -327,39 +296,37 @@ public class IdleScreen implements Playable {
     public void createOrder() {
         isActiveOrder = true;
         orderTime = 1;
-
         int randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
         Texture burger_recipe = new Texture("Food/burger_recipe.png");
         Texture salad_recipe = new Texture("Food/salad_recipe.png");
         Order order;
 
-        for(int i = 0; i<5; i++){
-            if(randomNum==1) {
+        for (int i = 0; i < 5; i++) {
+            if (randomNum == 1) {
                 order = new Order(PlateStation.burgerRecipe, burger_recipe);
-            }
-            else {
+            } else {
                 order = new Order(PlateStation.saladRecipe, salad_recipe);
             }
             ordersArray.add(order);
             randomNum = ThreadLocalRandom.current().nextInt(1, 2 + 1);
         }
-        hud.updateOrder(Boolean.FALSE, 1);
+        hud.updateOrder(false, 1);
     }
 
     /**
      * Updates the orders as they are completed, or if the game scenario has been completed.
      */
-    public void updateOrder(){
-        if(scenarioComplete==Boolean.TRUE) {
-            hud.updateScore(Boolean.TRUE, (6 - ordersArray.size()) * 35, orderTimer.getOrderTime());
-            hud.updateOrder(Boolean.TRUE, 0);
+    public void updateOrder() {
+        if (scenarioComplete) {
+            hud.updateScore(true, (6 - ordersArray.size()) * 35, orderTimer.getOrderTime());
+            hud.updateOrder(true, 0);
             return;
         }
-        if(ordersArray.size() != 0) {
+        if (ordersArray.size() != 0) {
             if (ordersArray.get(0).orderComplete) {
-                hud.updateScore(Boolean.FALSE, (6 - ordersArray.size()) * 35, orderTimer.getOrderTime());
+                hud.updateScore(false, (6 - ordersArray.size()) * 35, orderTimer.getOrderTime());
                 ordersArray.remove(0);
-                hud.updateOrder(Boolean.FALSE, 6 - ordersArray.size());
+                hud.updateOrder(false, 6 - ordersArray.size());
                 return;
             }
             ordersArray.get(0).create(trayX, trayY, game.batch);
@@ -367,29 +334,27 @@ public class IdleScreen implements Playable {
     }
 
     /**
-
-     The render method updates the screen by calling the update method with the given delta time, and rendering the graphics of the game.
-
-     It updates the HUD time, clears the screen, and renders the renderer and the hud.
-
-     Additionally, it checks the state of the game and draws the ingredients, completed recipes, and notifications on the screen.
-
-     @param delta The time in seconds since the last frame.
+     * The render method updates the screen by calling the update method with the given delta time, and rendering the graphics of the game.
+     * <p>
+     * It updates the HUD time, clears the screen, and renders the renderer and the hud.
+     * <p>
+     * Additionally, it checks the state of the game and draws the ingredients, completed recipes, and notifications on the screen.
+     *
+     * @param delta The time in seconds since the last frame.
      */
     @Override
-    public void render(float delta){
+    public void render(float delta) {
         update(delta);
-
-        //Execute handleEvent each 1 second
-        timeSeconds +=Gdx.graphics.getRawDeltaTime();
+        // Execute handleEvent each 1 second
+        timeSeconds += Gdx.graphics.getRawDeltaTime();
         timeSecondsCount += Gdx.graphics.getDeltaTime();
 
-        if(Math.round(timeSecondsCount) == 5 && createdOrder == Boolean.FALSE){
-            createdOrder = Boolean.TRUE;
+        if (Math.round(timeSecondsCount) == 5 && !createdOrder) {
+            createdOrder = true;
             createOrder();
         }
         float period = 1f;
-        if(timeSeconds > period) {
+        if (timeSeconds > period) {
             timeSeconds -= period;
             hud.updateTime(scenarioComplete);
         }
@@ -398,31 +363,27 @@ public class IdleScreen implements Playable {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
-
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-        game.batch.setProjectionMatrix(gamecam.combined);
+        game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
 
         updateOrder();
         chef1.draw(game.batch);
         chef2.draw(game.batch);
         controlledChef.drawNotification(game.batch);
-        if (isActiveOrder){
-
-        }
-        if (plateStation.getPlate().size() > 0){
-            for(Object ing : plateStation.getPlate()){
+        if (plateStation.getPlate().size() > 0) {
+            for (Object ing : plateStation.getPlate()) {
                 Ingredient ingNew = (Ingredient) ing;
-                ingNew.create(plateStation.getX(), plateStation.getY(),game.batch);
+                ingNew.create(plateStation.getX(), plateStation.getY(), game.batch);
             }
-        } else if (plateStation.getCompletedRecipe() != null){
+        } else if (plateStation.getCompletedRecipe() != null) {
             Recipe recipeNew = plateStation.getCompletedRecipe();
             recipeNew.create(plateStation.getX(), plateStation.getY(), game.batch);
         }
         if (!chef1.getUserControlChef()) {
-            if (chef1.getTouchingTile() != null && chef1.getInHandsIng() != null){
-                if (chef1.getTouchingTile().getUserData() instanceof InteractiveTileObject){
+            if (chef1.getTouchingTile() != null && chef1.getInHandsIng() != null) {
+                if (chef1.getTouchingTile().getUserData() instanceof InteractiveTileObject) {
                     chef1.displayIngStatic(game.batch);
                 }
             }
@@ -434,43 +395,42 @@ public class IdleScreen implements Playable {
                 }
             }
         }
-        if (chef1.previousInHandRecipe != null){
+        if (chef1.previousInHandRecipe != null) {
             chef1.displayIngDynamic(game.batch);
         }
-        if (chef2.previousInHandRecipe != null){
+        if (chef2.previousInHandRecipe != null) {
             chef2.displayIngDynamic(game.batch);
         }
         game.batch.end();
     }
 
     @Override
-    public void resize(int width, int height){
-        gameport.update(width, height);
+    public void resize(int width, int height) {
+        gamePort.update(width, height);
     }
 
     @Override
-    public void pause(){
-
-    }
-
-    @Override
-    public void resume(){
+    public void pause() {
 
     }
 
     @Override
-    public void hide(){
+    public void resume() {
 
     }
 
     @Override
-    public void dispose(){
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
         map.dispose();
         renderer.dispose();
         world.dispose();
         hud.dispose();
     }
-
 
 
     private TextButton getButton(final String message) {
@@ -493,15 +453,11 @@ public class IdleScreen implements Playable {
 
         button.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
             }
         });
 
-
-
         return button;
-
-
     }
 }
 

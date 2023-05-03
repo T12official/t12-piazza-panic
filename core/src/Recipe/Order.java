@@ -10,17 +10,23 @@ import com.team13.piazzapanic.MainGame;
  * in the game.
  */
 public class Order extends Sprite {
-    /** The `Recipe` object associated with this order. */
+    /**
+     * The `Recipe` object associated with this order.
+     */
     public Recipe recipe;
-    /** A flag indicating whether the order has been completed. */
+    /**
+     * A flag indicating whether the order has been completed.
+     */
     public Boolean orderComplete;
-    /** The image representing this order. */
+    /**
+     * The image representing this order.
+     */
     public Texture orderImg;
 
     /**
      * Constructor for the `Order` class.
      *
-     * @param recipe The `Recipe` object associated with this order.
+     * @param recipe   The `Recipe` object associated with this order.
      * @param orderImg The image representing this order.
      */
     public Order(Recipe recipe, Texture orderImg) {
@@ -32,8 +38,8 @@ public class Order extends Sprite {
     /**
      * Creates the order image and adds it to the given `SpriteBatch`.
      *
-     * @param x The x coordinate of the order image.
-     * @param y The y coordinate of the order image.
+     * @param x     The x coordinate of the order image.
+     * @param y     The y coordinate of the order image.
      * @param batch The `SpriteBatch` to add the order image to.
      */
     public void create(float x, float y, SpriteBatch batch) {

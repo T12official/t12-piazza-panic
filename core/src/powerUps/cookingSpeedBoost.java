@@ -1,6 +1,5 @@
 package powerUps;
-import Sprites.Chef;
-import com.badlogic.gdx.graphics.Texture;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,7 +15,6 @@ import com.team13.piazzapanic.MainGame;
 
 public class cookingSpeedBoost extends Sprite {
 
-    private World world;
     public TextureRegion textureRegion;
     public Body body;
     public powerUpGeneric powerUp;
@@ -36,13 +34,12 @@ public class cookingSpeedBoost extends Sprite {
          */
 
         super(textureRegion);
-        this.world = world;
         this.textureRegion = textureRegion;
         float chefWidth = 20 / MainGame.PPM;
         float chefHeight = 20 / MainGame.PPM;
         setBounds(x, y, chefWidth, chefHeight);
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(x,y);
+        bodyDef.position.set(x, y);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
         FixtureDef fdef = new FixtureDef();
@@ -60,7 +57,7 @@ public class cookingSpeedBoost extends Sprite {
 
     public void render(SpriteBatch batch) {
         /**
-         * Usedd to render the sprite itself
+         * Used to render the sprite itself
          */
         setRotation(body.getAngle() * MathUtils.radiansToDegrees);
         draw(batch);
@@ -75,11 +72,12 @@ public class cookingSpeedBoost extends Sprite {
     public void setBody(Body body) {
         this.body = body;
     }
+
     public void dispose() {
         getTexture().dispose(); // Dispose the texture used by the sprite
     }
 
-    public void onContractCreated(){
+    public void onContractCreated() {
         System.out.println("please resolve the contact");
     }
 
@@ -96,8 +94,9 @@ public class cookingSpeedBoost extends Sprite {
 
 
     }
-    public void DestroyBody(){
-        for (Fixture a :body.getFixtureList()){
+
+    public void DestroyBody() {
+        for (Fixture a : body.getFixtureList()) {
             body.destroyFixture(a);
         }
     }
