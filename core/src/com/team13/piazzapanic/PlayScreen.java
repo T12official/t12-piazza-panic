@@ -712,17 +712,18 @@ public class PlayScreen implements Playable {
     private void reRender(String inFile){ //loads a kitchen from perinant storage on game load
 
         FileHandle tmxFile = Gdx.files.internal("kitchenSave.txt");
-        String tmxContents = tmxFile.readString();
-
-        FileHandle saveFile = Gdx.files.local("kitchenTemp.tmx");
-        saveFile.writeString(tmxContents, false);
+        if (tmxFile.exists()){
+            String tmxContents = tmxFile.readString();
+            FileHandle saveFile = Gdx.files.local("kitchenTemp.tmx");
+            saveFile.writeString(tmxContents, false);
+            saveFile = null;
+        }
 
         TmxMapLoader mapLoader = new TmxMapLoader(new LocalFileHandleResolver());
         map = mapLoader.load("KitchenTemp.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / MainGame.PPM);
         //gamecam.position.set(gameport.getWorldWidth() / 2, gameport.getWorldHeight() / 2, 0);
         new B2WorldCreator(world, map, this);
-        saveFile = null;
         tmxFile = null;
 
     }
