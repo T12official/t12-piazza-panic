@@ -565,7 +565,7 @@ public class Chef extends Sprite implements InputProcessor {
      * @return userControlChef The boolean value indicating chef's control.
      */
     public boolean getUserControlChef() {
-        return Objects.requireNonNullElse(userControlChef, false);
+        return userControlChef || false;
     }
 
     /**
